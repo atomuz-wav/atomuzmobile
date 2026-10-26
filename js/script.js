@@ -34,9 +34,11 @@ import { createCodeField } from './modules/code-field.js';
 import { initI18n } from './modules/i18n.js';
 import { createMediaViewer } from './modules/media-viewer.js';
 import { initBookingForm } from './modules/booking-form.js';
+import { initTicketPicker } from './modules/ticket-picker.js';
 import { initLazyEmbeds } from './modules/lazy-embeds.js';
 import { createSectionOrbs } from './modules/section-orbs.js';
 import { createSectionSpectrum } from './modules/section-spectrum.js';
+import { createImageWave } from './modules/image-wave.js';
 
 const hero = document.querySelector('.hero');
 const stage = document.querySelector('[data-stage]');
@@ -211,7 +213,17 @@ const heroWave = createCodeField([hero], { rippleOnly: true });
 initI18n();
 // Fotos da MÍDIA: olho no hover e visualizador em tela cheia
 createMediaViewer(document.querySelector('#media'));
+// Onda líquida no hover das fotos da MÍDIA e da capa do lançamento (só no
+// computador; ver image-wave.js)
+const imageWave = createImageWave([
+  ...[...document.querySelectorAll('.media-item')]
+    .map((host) => ({ host, img: host.querySelector('img') })),
+  ...[...document.querySelectorAll('.release-art__frame')]
+    .map((host) => ({ host, img: host.querySelector('img') })),
+]);
 initBookingForm(document.querySelector('[data-booking-form]'));
+// AO VIVO: janelinha com as opções de ingresso (WhatsApp ou Sympla)
+initTicketPicker();
 // Players do Spotify/SoundCloud: só depois do load e perto da tela
 initLazyEmbeds(document.querySelector('.site-sections') || document);
 
@@ -224,6 +236,7 @@ function applyMotionPreference(reduce) {
     navSpectrum.disable();
     codeField.disable();
     heroWave.disable();
+    imageWave.disable();
   } else {
     sectionReveal.enable();
     atomDiagram.enable();
@@ -232,6 +245,7 @@ function applyMotionPreference(reduce) {
     navSpectrum.enable();
     codeField.enable();
     heroWave.enable();
+    imageWave.enable();
   }
 
   if (reduce) {
