@@ -17,7 +17,7 @@ import { t } from './i18n.js';
 const SWIPE_MIN = 50;   // px — deslize mínimo para trocar de foto
 
 const EYE_SVG = `
-  <svg class="media-item__eye" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+  <svg class="media-item__eye" viewBox="0 0 48 48" aria-hidden="true">
     <path d="M3 24C9 13 16 8 24 8s15 5 21 16c-6 11-13 16-21 16S9 35 3 24Z"/>
     <circle cx="24" cy="24" r="8.5"/>
     <circle class="media-item__pupil" cx="24" cy="24" r="3.4"/>
@@ -82,13 +82,13 @@ export function createMediaViewer(section) {
       </figcaption>
     </figure>
     <button class="photo-viewer__btn photo-viewer__btn--close" type="button" data-viewer="close">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
     </button>
     <button class="photo-viewer__btn photo-viewer__btn--prev" type="button" data-viewer="prev">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4l-8 8 8 8"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4l-8 8 8 8"/></svg>
     </button>
     <button class="photo-viewer__btn photo-viewer__btn--next" type="button" data-viewer="next">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4l8 8-8 8"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg>
     </button>`;
   document.body.append(dialog);
 

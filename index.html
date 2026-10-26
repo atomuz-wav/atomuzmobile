@@ -76,14 +76,14 @@
         "./js/modules/lazy-embeds.js": "./js/modules/lazy-embeds.js?v=67e5f021",
         "./js/modules/logo-energy.js": "./js/modules/logo-energy.js?v=5a87b636",
         "./js/modules/logo-matrix.js": "./js/modules/logo-matrix.js?v=44653e71",
-        "./js/modules/media-viewer.js": "./js/modules/media-viewer.js?v=8839a908",
+        "./js/modules/media-viewer.js": "./js/modules/media-viewer.js?v=4a9887f2",
         "./js/modules/particle-field.js": "./js/modules/particle-field.js?v=888e0e8d",
         "./js/modules/particle-webgl.js": "./js/modules/particle-webgl.js?v=a1584689",
         "./js/modules/section-orbs.js": "./js/modules/section-orbs.js?v=e6a6d760",
         "./js/modules/section-reveal.js": "./js/modules/section-reveal.js?v=2387fcad",
         "./js/modules/section-spectrum.js": "./js/modules/section-spectrum.js?v=f6606246",
         "./js/modules/ticket-picker.js": "./js/modules/ticket-picker.js?v=561747f8",
-        "./js/script.js": "./js/script.js?v=3b11ee56",
+        "./js/script.js": "./js/script.js?v=bd2ce4ab",
         "./js/utils/random.js": "./js/utils/random.js?v=296157a1",
         "./js/utils/svg.js": "./js/utils/svg.js?v=6b6d900b",
         "./js/vendor/thinking-orbs.js": "./js/vendor/thinking-orbs.js?v=429ddd79"
@@ -92,7 +92,7 @@
   </script>
 
   <!-- Pré-carrega os módulos locais em paralelo (evita a "cascata" de imports) -->
-  <link rel="modulepreload" href="js/script.js?v=3b11ee56">
+  <link rel="modulepreload" href="js/script.js?v=bd2ce4ab">
   <link rel="modulepreload" href="js/core/loop.js?v=078b6124">
   <link rel="modulepreload" href="js/core/motion.js?v=19092605">
   <link rel="modulepreload" href="js/core/interaction.js?v=8762fc9a">
@@ -114,7 +114,7 @@
   <link rel="modulepreload" href="js/modules/booking-form.js?v=23349b3a">
   <link rel="modulepreload" href="js/modules/code-field.js?v=66953139">
   <link rel="modulepreload" href="js/modules/i18n.js?v=6ef46a4d">
-  <link rel="modulepreload" href="js/modules/media-viewer.js?v=8839a908">
+  <link rel="modulepreload" href="js/modules/media-viewer.js?v=4a9887f2">
   <link rel="modulepreload" href="js/modules/lazy-embeds.js?v=67e5f021">
 
   <!--
@@ -200,7 +200,7 @@
     })();
   </script>
 
-  <script type="module" src="js/script.js?v=3b11ee56"></script>
+  <script type="module" src="js/script.js?v=bd2ce4ab"></script>
 
   <!-- Dados estruturados (schema.org): dizem ao Google que o site é de um artista musical -->
   <script type="application/ld+json">
@@ -234,7 +234,7 @@
     x 188 → 1858 e y 932 → 1090. O ponto central do "O" (≈ 823, 1009) é o
     núcleo atômico da Hero.
   -->
-  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <svg class="sprite" aria-hidden="true" width="0" height="0">
     <defs>
       <path id="wm-path" fill-rule="evenodd" clip-rule="evenodd" d="
         M297.6 935.1 L300.7 934.3 L307.0 933.9 L313.2 934.1 L317.9 934.6 L319.5 935.3 L322.6 935.9 L327.3 938.0 L332.0 940.7 L336.6 944.5 L342.1 950.7 L348.0 958.6 L417.0 1050.9 L421.7 1057.2 L423.4 1060.3 L424.1 1065.0 L423.5 1071.3 L421.8 1074.4 L418.1 1078.2 L414.9 1080.0 L411.8 1080.9 L408.7 1081.3 L405.6 1080.8 L402.4 1079.9 L399.3 1077.9 L397.3 1076.0 L392.6 1069.7 L321.1 974.2 L317.9 970.8 L314.8 968.0 L311.6 966.0 L308.5 965.6 L305.4 966.0 L302.3 967.9 L298.7 971.1 L292.5 978.9 L223.1 1071.3 L219.4 1076.0 L217.7 1077.5 L214.6 1079.7 L211.5 1080.7 L208.3 1081.3 L205.2 1081.0 L202.1 1080.0 L199.0 1078.3 L195.1 1074.4 L193.4 1071.3 L192.7 1066.6 L192.7 1065.0 L193.4 1060.3 L195.1 1057.2 L275.4 949.2 L280.3 944.1 L285.0 940.6 L289.7 937.9 L294.4 935.9 L297.6 935.1 Z
@@ -281,6 +281,27 @@
         <stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/>
         <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
       </linearGradient>
+      <!-- Ícones das redes (navbar e seção CONECTE): cor via currentColor -->
+      <symbol id="i-spotify" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+      </symbol>
+      <symbol id="i-soundcloud" viewBox="0 0 44 22">
+        <g fill="currentColor">
+          <rect x="0"    y="12.5" width="2" height="7"  rx="1"/>
+          <rect x="3.3"  y="9.5"  width="2" height="10" rx="1"/>
+          <rect x="6.6"  y="7.5"  width="2" height="12" rx="1"/>
+          <rect x="9.9"  y="5"    width="2" height="14.5" rx="1"/>
+          <rect x="13.2" y="4"    width="2" height="15.5" rx="1"/>
+          <path d="M16.6 19.5 V3.4 C18.1 2.5 19.9 2 21.8 2 C27 2 31.2 5.8 31.8 10.7 C32.5 10.4 33.3 10.3 34.1 10.3 C38.6 10.3 42 13.3 42 15 C42 17.7 39.8 19.5 37.1 19.5 Z"/>
+        </g>
+      </symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-width="2.3">
+          <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.8"/>
+          <circle cx="12" cy="12" r="5"/>
+        </g>
+        <circle cx="18.1" cy="5.9" r="1.45" fill="currentColor"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -289,7 +310,7 @@
        em todos os navegadores durante a rolagem do site inteiro. -->
   <header class="nav">
     <span class="nav__backdrop" aria-hidden="true"></span>
-    <svg class="nav__line" viewBox="0 0 2048 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <svg class="nav__line" viewBox="0 0 2048 160" preserveAspectRatio="none" aria-hidden="true">
       <path class="nav__trace" d="M0 146 H490 L546 91 H1415 L1473 146 H2048"/>
       <!-- Indicadores digitais segmentados -->
       <g class="nav__segments" data-segments>
@@ -308,10 +329,10 @@
     <a class="nav__brand" href="#inicio" aria-label="ATOMUZ — início">
       <!-- Brilho do logo numa camada parada, separada das letras animadas: o
            navegador desenha o desfoque uma vez só, e não a cada quadro -->
-      <svg class="nav__brand-glow" viewBox="184 928 1678 166" aria-hidden="true" focusable="false">
+      <svg class="nav__brand-glow" viewBox="184 928 1678 166" aria-hidden="true">
         <use href="#wm-path"/>
       </svg>
-      <svg viewBox="184 928 1678 166" aria-hidden="true" focusable="false">
+      <svg viewBox="184 928 1678 166" aria-hidden="true">
         <g class="nav__brand-glass">
           <use class="nav__brand-body" href="#wm-path"/>
           <!-- reflexo recortado no formato das letras -->
@@ -338,36 +359,19 @@
     <ul class="nav__social">
       <li>
         <a class="social social--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-          </svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spotify"/></svg>
         </a>
       </li>
       <li class="nav__divider" aria-hidden="true"></li>
       <li>
         <a class="social social--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
-          <svg viewBox="0 0 44 22" aria-hidden="true" focusable="false">
-            <g fill="currentColor">
-              <rect x="0"    y="12.5" width="2" height="7"  rx="1"/>
-              <rect x="3.3"  y="9.5"  width="2" height="10" rx="1"/>
-              <rect x="6.6"  y="7.5"  width="2" height="12" rx="1"/>
-              <rect x="9.9"  y="5"    width="2" height="14.5" rx="1"/>
-              <rect x="13.2" y="4"    width="2" height="15.5" rx="1"/>
-              <path d="M16.6 19.5 V3.4 C18.1 2.5 19.9 2 21.8 2 C27 2 31.2 5.8 31.8 10.7 C32.5 10.4 33.3 10.3 34.1 10.3 C38.6 10.3 42 13.3 42 15 C42 17.7 39.8 19.5 37.1 19.5 Z"/>
-            </g>
-          </svg>
+          <svg viewBox="0 0 44 22" aria-hidden="true"><use href="#i-soundcloud"/></svg>
         </a>
       </li>
       <li class="nav__divider" aria-hidden="true"></li>
       <li>
         <a class="social social--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="2.3">
-              <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.8"/>
-              <circle cx="12" cy="12" r="5"/>
-            </g>
-            <circle cx="18.1" cy="5.9" r="1.45" fill="currentColor"/>
-          </svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>
         </a>
       </li>
       <li class="nav__divider" aria-hidden="true"></li>
@@ -376,10 +380,10 @@
              Bolinha à esquerda com lua = escuro; à direita com sol = claro. -->
         <button class="theme-switch theme-toggle" type="button" aria-pressed="false" aria-label="Tema escuro">
           <span class="theme-switch__knob">
-            <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z"/>
             </svg>
-            <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
               <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
                 <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
                 <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
@@ -392,7 +396,7 @@
         <!-- Idioma (js/modules/i18n.js): mostra a bandeira do idioma para o qual
              o site vai mudar — Reino Unido no português, Brasil no inglês -->
         <button class="lang-switch" type="button" data-lang-toggle aria-label="Mudar o idioma para inglês" title="English">
-          <svg class="lang-switch__flag lang-switch__flag--en" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <svg class="lang-switch__flag lang-switch__flag--en" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <clipPath id="flag-uk-diag"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
             <path d="M0 0v30h60V0z" fill="#012169"/>
             <path d="M0 0l60 30m0-30L0 30" stroke="#FFFFFF" stroke-width="6"/>
@@ -400,7 +404,7 @@
             <path d="M30 0v30M0 15h60" stroke="#FFFFFF" stroke-width="10"/>
             <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
           </svg>
-          <svg class="lang-switch__flag lang-switch__flag--pt" viewBox="0 0 20 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <svg class="lang-switch__flag lang-switch__flag--pt" viewBox="0 0 20 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <rect width="20" height="14" fill="#009C3B"/>
             <path d="M10 1.6 18.4 7 10 12.4 1.6 7z" fill="#FFDF00"/>
             <circle cx="10" cy="7" r="3.5" fill="#002776"/>
@@ -441,7 +445,7 @@
         <div class="stage" data-stage aria-hidden="true">
 
           <!-- Definições compartilhadas por todas as camadas -->
-          <svg class="stage-defs" width="0" height="0" focusable="false">
+          <svg class="stage-defs" width="0" height="0">
             <defs>
               <!-- Brilho neon leve para linhas HUD (userSpaceOnUse evita corte em linhas retas) -->
               <filter id="f-line-glow" filterUnits="userSpaceOnUse" x="-100" y="400" width="2300" height="1200">
@@ -524,12 +528,12 @@
           </svg>
 
           <!-- Camada 0 · névoa verde suave (opacidade na entrada via CSS) -->
-          <svg class="stage-layer layer-haze" viewBox="0 520 2048 900" focusable="false">
+          <svg class="stage-layer layer-haze" viewBox="0 520 2048 900">
             <ellipse cx="1024" cy="1010" rx="980" ry="300" fill="url(#g-haze)"/>
           </svg>
 
           <!-- Camada 1 · ESTÁTICA: molduras HUD e circuitos (com brilho) -->
-          <svg class="stage-layer layer-base" viewBox="0 520 2048 900" focusable="false">
+          <svg class="stage-layer layer-base" viewBox="0 520 2048 900">
             <g class="layer-hud" filter="url(#f-line-glow)">
               <!-- Pontos de referência -->
               <g class="hud-dots">
@@ -588,13 +592,13 @@
           </svg>
 
           <!-- Camada 2 · ANIMADA (leve): pulsos de dados e terminais -->
-          <svg class="stage-layer layer-fx" viewBox="0 520 2048 900" focusable="false">
+          <svg class="stage-layer layer-fx" viewBox="0 520 2048 900">
             <!-- Pulsos de dados e terminais (gerados por js/modules/circuit-system.js) -->
             <g class="layer-circuits-fx" data-circuit-fx></g>
           </svg>
 
           <!-- Camada 3 · ANIMADA (leve): sistema orbital atrás do logo (parallax via CSS) -->
-          <svg class="stage-layer layer-orbits" viewBox="0 520 2048 900" focusable="false">
+          <svg class="stage-layer layer-orbits" viewBox="0 520 2048 900">
             <use href="#orbit-lines"/>
             <!-- Elétrons (só aparecem com animação ativa; posicionados por atom-system.js).
                  Ficam atrás do logo: somem ao cruzar as letras, reforçando a profundidade. -->
@@ -616,7 +620,7 @@
           <div class="stage-logo" data-logo>
 
             <!-- Camada 4a · ESTÁTICA: halo (a oscilação do brilho é opacidade CSS) -->
-            <svg class="stage-layer layer-logo-halo" viewBox="0 520 2048 900" focusable="false">
+            <svg class="stage-layer layer-logo-halo" viewBox="0 520 2048 900">
               <use class="logo-halo" href="#wm-path" filter="url(#f-logo-halo)"/>
               <use class="logo-halo logo-halo--tight" href="#wm-path" filter="url(#f-logo-halo-tight)"/>
             </svg>
@@ -624,7 +628,7 @@
             <!-- Camada 4b · letras do logo oficial (degradê verde). Na revelação da
                  chuva (--matrix, js/modules/logo-matrix.js) o corpo escurece e a
                  borda acende por dentro -->
-            <svg class="stage-layer layer-logo-body" viewBox="0 520 2048 900" focusable="false">
+            <svg class="stage-layer layer-logo-body" viewBox="0 520 2048 900">
               <use class="logo-body" href="#wm-path"/>
               <use class="logo-body logo-body--dark" href="#wm-path"/>
               <g class="logo-inner" clip-path="url(#wm-clip)">
@@ -634,7 +638,7 @@
 
             <!-- Camada 5 · ANIMADA (sem desfoque): contorno, pulsos de energia,
                  reflexo das órbitas e núcleo -->
-            <svg class="stage-layer layer-logo-fx" viewBox="0 520 2048 900" focusable="false">
+            <svg class="stage-layer layer-logo-fx" viewBox="0 520 2048 900">
               <!-- Textura digital (colunas de caracteres) gerada por js/modules/logo-matrix.js -->
               <g clip-path="url(#wm-clip)">
                 <g class="logo-matrix" data-logo-matrix></g>
@@ -668,7 +672,7 @@
           <span>PSYTRANCE</span><span class="manifesto__dot" aria-hidden="true">•</span><span>SCIENCE</span><span class="manifesto__dot" aria-hidden="true">•</span><span>TECHNOLOGY</span>
         </p>
 
-        <svg class="ornament" viewBox="560 1714 926 126" aria-hidden="true" focusable="false">
+        <svg class="ornament" viewBox="560 1714 926 126" aria-hidden="true">
           <defs>
             <radialGradient id="g-ornament-core-glow">
               <stop offset=".35" stop-color="#00FF00" stop-opacity=".8"/>
@@ -710,18 +714,18 @@
           <!-- Sem JS: âncora comum para #explorar.
                Com JS: transição animada (js/modules/enter-transition.js). -->
           <a class="enter" href="#explorar">
-            <svg class="enter__frame" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <svg class="enter__frame" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true">
               <path class="enter__outline" d="M10 1.5 H102 L106 5.5 H322 L340.5 24 V78 L326 92.5 H232 L227 88.5 H17 L1.5 72 V10 Z"/>
               <path class="enter__accent" d="M13 5 H100 M234 89 H323"/>
             </svg>
             <!-- Preenchimento do hover (recortado no formato chanfrado do botão) -->
             <span class="enter__fill" aria-hidden="true"><span class="enter__fill-bar"></span></span>
             <!-- Borda que "acende" em sequência no hover -->
-            <svg class="enter__frame enter__frame--trace" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <svg class="enter__frame enter__frame--trace" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true">
               <path class="enter__trace" pathLength="100" d="M10 1.5 H102 L106 5.5 H322 L340.5 24 V78 L326 92.5 H232 L227 88.5 H17 L1.5 72 V10 Z"/>
             </svg>
             <span class="enter__label">ENTER</span>
-            <svg class="enter__arrow" viewBox="0 0 24 20" aria-hidden="true" focusable="false">
+            <svg class="enter__arrow" viewBox="0 0 24 20" aria-hidden="true">
               <path d="M2 10 H21 M13.5 2.5 L21 10 L13.5 17.5"/>
             </svg>
           </a>
@@ -735,7 +739,7 @@
          Só visual — o ENTER e o "Pular introdução" já levam ao conteúdo. -->
     <div class="scroll-hint" aria-hidden="true">
       <span class="scroll-hint__label">ROLE PARA EXPLORAR</span>
-      <svg class="scroll-hint__chevron" viewBox="0 0 24 14" focusable="false">
+      <svg class="scroll-hint__chevron" viewBox="0 0 24 14">
         <path d="M2 2 L12 11 L22 2"/>
       </svg>
     </div>
@@ -994,13 +998,7 @@
           <li>
             <a class="net-card net-card--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
               <span class="net-card__index" aria-hidden="true">01</span>
-              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <g fill="none" stroke="currentColor" stroke-width="2.3">
-                  <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.8"/>
-                  <circle cx="12" cy="12" r="5"/>
-                </g>
-                <circle cx="18.1" cy="5.9" r="1.45" fill="currentColor"/>
-              </svg></span>
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg></span>
               <span class="net-card__label">INSTAGRAM</span>
               <span class="net-card__handle">@atomuz_</span>
               <span class="net-card__arrow" aria-hidden="true">↗</span>
@@ -1009,9 +1007,7 @@
           <li>
             <a class="net-card net-card--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
               <span class="net-card__index" aria-hidden="true">02</span>
-              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-              </svg></span>
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spotify"/></svg></span>
               <span class="net-card__label">SPOTIFY</span>
               <span class="net-card__handle">Atomuz</span>
               <span class="net-card__arrow" aria-hidden="true">↗</span>
@@ -1020,16 +1016,7 @@
           <li>
             <a class="net-card net-card--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
               <span class="net-card__index" aria-hidden="true">03</span>
-              <span class="net-card__icon"><svg viewBox="0 0 44 22" aria-hidden="true" focusable="false">
-                <g fill="currentColor">
-                  <rect x="0"    y="12.5" width="2" height="7"  rx="1"/>
-                  <rect x="3.3"  y="9.5"  width="2" height="10" rx="1"/>
-                  <rect x="6.6"  y="7.5"  width="2" height="12" rx="1"/>
-                  <rect x="9.9"  y="5"    width="2" height="14.5" rx="1"/>
-                  <rect x="13.2" y="4"    width="2" height="15.5" rx="1"/>
-                  <path d="M16.6 19.5 V3.4 C18.1 2.5 19.9 2 21.8 2 C27 2 31.2 5.8 31.8 10.7 C32.5 10.4 33.3 10.3 34.1 10.3 C38.6 10.3 42 13.3 42 15 C42 17.7 39.8 19.5 37.1 19.5 Z"/>
-                </g>
-              </svg></span>
+              <span class="net-card__icon"><svg viewBox="0 0 44 22" aria-hidden="true"><use href="#i-soundcloud"/></svg></span>
               <span class="net-card__label">SOUNDCLOUD</span>
               <span class="net-card__handle">soundcloud.com/atomuz</span>
               <span class="net-card__arrow" aria-hidden="true">↗</span>
@@ -1038,7 +1025,7 @@
           <li>
             <a class="net-card net-card--mail" href="mailto:atomuz.audio@gmail.com" aria-label="Enviar e-mail para atomuz.audio@gmail.com">
               <span class="net-card__index" aria-hidden="true">04</span>
-              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true">
                 <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round">
                   <rect x="2" y="4.5" width="20" height="15" rx="2"/>
                   <path d="M3 6 L12 13 L21 6"/>
@@ -1129,7 +1116,7 @@
               </li>
             </ul>
             <button class="ticket-picker__close" type="button" data-tickets-close aria-label="Fechar">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 5l14 14M19 5L5 19"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
             </button>
           </div>
         </dialog>
@@ -1299,85 +1286,7 @@
                     loading="lazy" decoding="async">
                 </picture>
               </li>
-            <!-- cópia da fileira (só visual) para o loop não ter emenda -->
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-01-sm.avif 800w, assets/media/media-01.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-01-sm.webp 800w, assets/media/media-01.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-01.jpg"
-                    srcset="assets/media/media-01-sm.jpg 800w, assets/media/media-01.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-02-sm.avif 800w, assets/media/media-02.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-02-sm.webp 800w, assets/media/media-02.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-02.jpg"
-                    srcset="assets/media/media-02-sm.jpg 800w, assets/media/media-02.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1066" height="1600"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-03-sm.avif 800w, assets/media/media-03.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-03-sm.webp 800w, assets/media/media-03.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-03.jpg"
-                    srcset="assets/media/media-03-sm.jpg 800w, assets/media/media-03.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-04-sm.avif 800w, assets/media/media-04.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-04-sm.webp 800w, assets/media/media-04.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-04.jpg"
-                    srcset="assets/media/media-04-sm.jpg 800w, assets/media/media-04.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1066" height="1600"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-05-sm.avif 800w, assets/media/media-05.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-05-sm.webp 800w, assets/media/media-05.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-05.jpg"
-                    srcset="assets/media/media-05-sm.jpg 800w, assets/media/media-05.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-06-sm.avif 800w, assets/media/media-06.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-06-sm.webp 800w, assets/media/media-06.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-06.jpg"
-                    srcset="assets/media/media-06-sm.jpg 800w, assets/media/media-06.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1200"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
+              <!-- clones para o loop contínuo: gerados por JS (script.js) -->
           </ul>
         </div>
         <div class="media-row media-row--left">
@@ -1460,85 +1369,7 @@
                     loading="lazy" decoding="async">
                 </picture>
               </li>
-            <!-- cópia da fileira (só visual) para o loop não ter emenda -->
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-07-sm.avif 800w, assets/media/media-07.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-07-sm.webp 800w, assets/media/media-07.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-07.jpg"
-                    srcset="assets/media/media-07-sm.jpg 800w, assets/media/media-07.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1066" height="1600"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-08-sm.avif 800w, assets/media/media-08.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-08-sm.webp 800w, assets/media/media-08.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-08.jpg"
-                    srcset="assets/media/media-08-sm.jpg 800w, assets/media/media-08.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-09-sm.avif 800w, assets/media/media-09.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-09-sm.webp 800w, assets/media/media-09.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-09.jpg"
-                    srcset="assets/media/media-09-sm.jpg 800w, assets/media/media-09.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1066" height="1600"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-10-sm.avif 800w, assets/media/media-10.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-10-sm.webp 800w, assets/media/media-10.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-10.jpg"
-                    srcset="assets/media/media-10-sm.jpg 800w, assets/media/media-10.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-11-sm.avif 800w, assets/media/media-11.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-11-sm.webp 800w, assets/media/media-11.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-11.jpg"
-                    srcset="assets/media/media-11-sm.jpg 800w, assets/media/media-11.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
-              <li class="media-item media-item--clone" aria-hidden="true">
-                <picture>
-                  <source type="image/avif" srcset="assets/media/media-12-sm.avif 800w, assets/media/media-12.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <source type="image/webp" srcset="assets/media/media-12-sm.webp 800w, assets/media/media-12.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
-                  <img class="media-item__img"
-                    src="assets/media/media-12.jpg"
-                    srcset="assets/media/media-12-sm.jpg 800w, assets/media/media-12.jpg 1600w"
-                    sizes="(max-width: 760px) 70vw, 40vw"
-                    width="1600" height="1066"
-                    alt=""
-                    loading="lazy" decoding="async">
-                </picture>
-              </li>
+              <!-- clones para o loop contínuo: gerados por JS (script.js) -->
           </ul>
         </div>
       </div>

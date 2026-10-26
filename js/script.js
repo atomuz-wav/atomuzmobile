@@ -211,6 +211,19 @@ const codeField = createCodeField(
 const heroWave = createCodeField([hero], { rippleOnly: true });
 // Idioma antes do formulário (ele lê os textos no idioma atual)
 initI18n();
+// Cópias das fotos da MÍDIA para o loop contínuo: o CSS desliza cada fileira
+// 50 %, então ela precisa estar repetida uma vez. As cópias são só visuais
+// (sem texto alternativo, fora do leitor de tela) e o CSS só as mostra com o
+// loop ligado. Precisam existir antes do visualizador e da onda líquida.
+for (const track of document.querySelectorAll('#media .media-row__track')) {
+  for (const item of [...track.children]) {
+    const clone = item.cloneNode(true);
+    clone.classList.add('media-item--clone');
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelector('img').alt = '';
+    track.append(clone);
+  }
+}
 // Fotos da MÍDIA: olho no hover e visualizador em tela cheia
 createMediaViewer(document.querySelector('#media'));
 // Onda líquida no hover das fotos da MÍDIA e da capa do lançamento (só no
