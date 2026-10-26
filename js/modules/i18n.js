@@ -84,7 +84,7 @@ const EN = {
   'Enviar e-mail para atomuz.audio@gmail.com': 'Send an e-mail to atomuz.audio@gmail.com',
 
   // 05 · Ao vivo
-  '/ TRANSMISSÕES': '/ TRANSMISSIONS',
+  '/ APRESENTAÇÕES': '/ PERFORMANCES',
   'PRÓXIMAS DATAS': 'UPCOMING DATES',
   'Nenhuma data anunciada no momento. As novas apresentações são divulgadas primeiro no Instagram.':
     'No dates announced yet. New shows are announced first on Instagram.',
