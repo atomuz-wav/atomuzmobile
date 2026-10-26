@@ -1,0 +1,2730 @@
+/* =========================================================================
+   ATOMUZ — Hero Section
+   -------------------------------------------------------------------------
+   SISTEMA DE ESCALA
+   A composição usa a "unidade de design" --u: 1 --u = 1 px da imagem de
+   referência (2048 px de largura). Assim os números do CSS/SVG batem
+   diretamente com as medidas da referência, e tudo escala junto.
+   A altura de design (1480) é a referência com os espaços em branco
+   verticais comprimidos para caber em telas paisagem (100vh).
+
+   Navbar e área inferior (textos e botões) usam um piso de escala
+   (--u-ui) para nunca ficarem pequenos demais em telas menores.
+   ========================================================================= */
+
+:root {
+  /* Paleta oficial (CLAUDE.md / BRIEFING.md) */
+  --c-white: #FFFFFF;
+  --c-neon: #00FF00;
+  --c-tech: #00CC22;
+  --c-deep: #008C18;
+  --c-black: #071009;
+  --c-holo: rgba(0, 255, 0, 0.15);
+
+  /* Tons auxiliares derivados da paleta */
+  --c-line: #12C92E;        /* linhas HUD/circuitos (entre tech e neon) */
+  --c-dim: #8FDD9A;         /* indicador atenuado */
+  --c-red: #FF2D3A;         /* acento: pontos do manifesto (mesmo vermelho do núcleo do ATOM) */
+
+  /* Tokens de TEMA (claro = padrão, fiel à referência).
+     O tema escuro redefine só estes valores — ver :root[data-theme="dark"] */
+  --c-bg: var(--c-white);                  /* fundo da página */
+  --c-fg: var(--c-black);                  /* texto de interface */
+  --c-surface: rgba(255, 255, 255, 0.85);  /* interior do botão ENTER */
+  --c-text-muted: var(--c-deep);           /* textos secundários */
+  --c-panel: #F4FFF5;                      /* painéis/capas sobre o fundo */
+  /* Cinzas neutros (levemente esverdeados) para elementos secundários da
+     Hero: o verde fica reservado ao que é ação/foco (ENTER, retícula) */
+  --c-gray-text: #6E7770;                  /* manifesto (contraste ≥ 4.5:1 no branco) */
+  --c-gray-line: #B4BCB6;                  /* linhas de apoio */
+  --c-gray-orbit: #A2ABA4;                 /* órbitas e eixo do átomo da Hero */
+
+  /* Tipografia */
+  --f-display: "Orbitron", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* Texto corrido: a Orbitron é de display (larga e geométrica), cansa em
+     parágrafos. Ela continua no logo, títulos, menu, botões e nomes. */
+  --f-body: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+
+  /* Escala tipográfica: todo texto fora da composição da Hero usa um destes
+     tamanhos. Nenhum texto abaixo de 12 px. */
+  --fs-xs:   12px;                          /* rótulos HUD (mínimo absoluto) */
+  --fs-sm:   14px;                          /* metadados, legendas */
+  --fs-base: clamp(16px, 1.2vw, 17px);      /* parágrafos */
+  --fs-lg:   clamp(18px, 1.8vw, 24px);      /* subtítulos, nomes de sets */
+  --fs-xl:   clamp(22px, 2.6vw, 34px);      /* destaques/manifesto */
+  --fs-h2:   clamp(28px, 4.2vw, 54px);      /* título do lançamento */
+  --fs-h1:   clamp(40px, 7vw, 88px);        /* títulos das seções */
+
+  /* Unidade de design */
+  --design-w: 2048;
+  --design-h: 1480;
+  --u: min(calc(100vw / 2048), calc(100vh / 1480));
+  /* Piso para elementos de interface: ~10 px de texto no manifesto, ENTER ≥ 113 px */
+  --u-ui: max(var(--u), 0.42px);
+  /* Navbar fixa: largura da moldura e espaço que ela reserva no topo da Hero.
+     Calculadas aqui na raiz para usar o --u global (a .nav redefine --u). */
+  --frame-w: calc(var(--design-w) * var(--u));
+  --nav-h: calc(160 * var(--u-ui));
+  --nav-gap: 0px;     /* espaço extra abaixo da navbar (menu em linha própria) */
+  --nav-under: 0px;   /* quanto o fundo da navbar fixa desce além dela */
+}
+
+@supports (height: 100svh) {
+  :root { --u: min(calc(100vw / 2048), calc(100svh / 1480)); }
+}
+
+/* ------------------------------------------------------------------------
+   TEMA ESCURO (opcional, escolhido pelo visitante no botão sol/lua)
+   O padrão continua sendo o branco da referência. No escuro, o verde neon
+   vira a fonte de luz sobre um fundo preto-esverdeado da paleta.
+   ------------------------------------------------------------------------ */
+:root[data-theme="dark"] {
+  --c-bg: #040805;
+  --c-fg: #DFFFE3;
+  --c-surface: rgba(4, 8, 5, 0.85);
+  --c-text-muted: var(--c-tech);
+  --c-dim: #2F6B3A;
+  --c-panel: #07110A;
+  --c-gray-text: #8E9890;
+  --c-gray-line: #3A433C;
+  --c-gray-orbit: #5C665E;
+  color-scheme: dark;
+}
+
+/* Troca de tema suave (sem animação para quem pede movimento reduzido) */
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  .hero { transition: background-color 0.4s ease, color 0.4s ease; }
+}
+
+/* Dentro da navbar e da área inferior, --u passa a respeitar o piso.
+   (--u-ui já chega calculado da raiz, então não há referência circular.) */
+.nav,
+.access { --u: var(--u-ui); }
+
+/* ------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* âncoras do menu param abaixo da navbar fixa */
+  scroll-padding-top: calc(var(--nav-h) + var(--nav-under));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-fg);
+  font-family: var(--f-display);
+  overflow-x: hidden;            /* fallback */
+  overflow-x: clip;              /* evita rolagem horizontal sem criar contexto de scroll */
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-tech);
+  outline-offset: 4px;
+}
+
+/* Texto só para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Antes da sequência de entrada começar (classe aplicada no <head>) */
+.is-booting .hero__frame,
+.is-booting .nav { visibility: hidden; }
+.is-booting .hero__particles { opacity: 0 !important; }
+
+/* ------------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------------ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--c-bg);
+  isolation: isolate;
+}
+
+/* Canvas de partículas: ocupa toda a hero (full-bleed), atrás da composição */
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+/* O canvas aparece suavemente quando o primeiro quadro está pronto */
+.hero__particles.is-ready { opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__particles { transition: opacity 1.2s ease; }
+}
+
+.hero__frame {
+  position: relative;
+  z-index: 1;
+  width: calc(var(--design-w) * var(--u));
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  display: grid;
+  /* coluna fixa na largura da moldura: itens mais largos (navbar no modo
+     compacto, palco ampliado no celular) não alargam a grade */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+}
+/* Reserva no topo da grade o espaço da navbar (ela é fixa, fora do fluxo) */
+.hero__frame::before {
+  content: "";
+  height: calc(var(--nav-h) + var(--nav-gap));
+}
+
+/* ------------------------------------------------------------------------
+   Navbar (Navigation HUD)
+   ------------------------------------------------------------------------ */
+.nav {
+  /* Fixa no topo: acompanha a rolagem pelo site inteiro */
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 20;
+  width: var(--frame-w);
+  height: var(--nav-h);
+  transform: translateX(-50%);
+}
+
+/* Fundo da navbar: invisível sobre a Hero, aparece quando a página rola
+   (classe is-scrolled no <html>, script embutido no <head>) */
+.nav__backdrop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: calc(100% + var(--nav-under));
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(18, 201, 46, 0.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+:root[data-theme="dark"] .nav__backdrop { background: rgba(4, 8, 5, 0.88); }
+.is-scrolled .nav__backdrop { opacity: 1; }
+/* Celular: sem o desfoque do que passa por trás (backdrop-filter), que é
+   recalculado a cada quadro da rolagem. Fundo quase opaco no lugar. */
+@media (max-width: 768px) {
+  .nav__backdrop {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgb(255 255 255 / 0.96);
+  }
+  :root[data-theme="dark"] .nav__backdrop { background: rgb(4 8 5 / 0.92); }
+}
+
+.nav__line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Espectro da aba central: só no celular (ver @media max-width: 760px) */
+.nav__spectrum { display: none; }
+
+.nav__trace {
+  fill: none;
+  stroke: var(--c-line);
+  stroke-width: max(1px, calc(3 * var(--u)));
+  vector-effect: non-scaling-stroke;
+}
+
+.nav__segments path { fill: var(--c-tech); }
+
+/* Prolonga a linha inferior até as bordas da janela em telas largas */
+.nav::before,
+.nav::after {
+  content: "";
+  position: absolute;
+  top: calc(100% * 146 / 160);
+  width: 50vw;
+  height: max(1px, calc(3 * var(--u)));
+  /* --nav-reveal (0 → 1) é animado na sequência de entrada */
+  transform: translateY(-50%) scaleX(var(--nav-reveal, 1));
+  background: var(--c-line);
+}
+.nav::before { right: 100%; transform-origin: 100% 50%; }
+.nav::after  { left: 100%; transform-origin: 0% 50%; }
+
+.nav__brand {
+  position: absolute;
+  left: calc(66 * var(--u));
+  top: calc(65 * var(--u));
+  width: calc(358 * var(--u));
+  display: block;
+  line-height: 0;
+  border-radius: 2px;
+}
+.nav__brand svg {
+  display: block;
+  width: 100%;
+  height: auto;   /* proporção do logo oficial */
+  overflow: visible;
+}
+
+/* Logo da navbar em vidro: corpo claro com brilho suave, um reflexo que
+   atravessa as letras de tempos em tempos e uma flutuação lenta.
+   No tema claro o vidro é grafite (branco sumiria no fundo branco). */
+.nav__brand-body {
+  fill: url(#g-wm-glass-dark);
+}
+:root[data-theme="dark"] .nav__brand-body { fill: url(#g-wm-glass); }
+/* Brilho branco no tema escuro: fica numa camada parada atrás das letras
+   (svg.nav__brand-glow). Com o filtro nas letras, que flutuam e têm reflexo
+   animado, o navegador recalculava o desfoque a cada quadro. */
+.nav__brand svg { position: relative; }   /* letras por cima do brilho */
+.nav__brand .nav__brand-glow {
+  position: absolute;
+  inset: 0;
+  display: none;
+  fill: url(#g-wm-glass);
+}
+:root[data-theme="dark"] .nav__brand-glow {
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
+}
+.nav__brand-shine {
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+:root:not([data-theme="dark"]) .nav__brand-shine { mix-blend-mode: normal; }
+
+/* Animações só com movimento ativo (classe .reveal-on, ver section-reveal.js) */
+.reveal-on .nav__brand-glass {
+  animation: brand-float 5.5s ease-in-out infinite;
+}
+.reveal-on .nav__brand-shine {
+  animation: brand-shine 5s cubic-bezier(0.45, 0, 0.25, 1) infinite 1.5s;
+}
+@keyframes brand-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }   /* unidades do logo (~2 px na tela) */
+}
+@keyframes brand-shine {
+  0%   { opacity: 0; transform: translateX(0) skewX(-22deg); }
+  6%   { opacity: 1; }
+  38%  { opacity: 1; }
+  44%  { opacity: 0; transform: translateX(3200px) skewX(-22deg); }
+  100% { opacity: 0; transform: translateX(3200px) skewX(-22deg); }
+}
+
+.nav__social {
+  position: absolute;
+  right: calc(86 * var(--u));
+  top: calc(52 * var(--u));
+  height: calc(62 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: calc(28 * var(--u));  /* menor para a chave de tema caber longe da aba central */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__social li { display: flex; align-items: center; }
+/* Tablets em pé (761–899 px): a escala do desenho fica pequena, os tamanhos
+   mínimos em px dos ícones pesam mais e o Spotify cairia sobre a diagonal da
+   aba da linha HUD. Mais perto da borda (16 px, como no celular) e com os
+   ícones um pouco mais juntos, a fileira volta a caber à direita da aba. */
+@media (min-width: 761px) and (max-width: 899px) {
+  .nav__social { right: 16px; gap: 8px; }
+}
+
+.nav__divider {
+  width: max(1px, calc(2 * var(--u)));
+  height: calc(40 * var(--u));
+  background: var(--c-tech);
+  opacity: 0.35;
+}
+
+.social {
+  position: relative;
+  display: block;
+  color: var(--c-tech);
+  line-height: 0;
+  border-radius: 4px;
+  transition: color 0.25s ease, transform 0.25s ease, filter 0.25s ease;
+}
+.social svg { display: block; width: 100%; height: auto; }
+.social--spotify    { width: calc(46 * var(--u)); }
+.social--soundcloud { width: calc(64 * var(--u)); }
+.social--instagram  { width: calc(40 * var(--u)); }
+
+/* ---------- Chave de tema (caixinha) ----------
+   Pílula com contorno verde e uma bolinha verde que desliza:
+   escuro = bolinha à esquerda com lua; claro = à direita com sol. */
+.theme-switch {
+  --sw-w: max(46px, calc(96 * var(--u)));
+  --sw-h: max(26px, calc(56 * var(--u)));
+  --sw-pad: max(3px, calc(6 * var(--u)));
+  --sw-knob: calc(var(--sw-h) - var(--sw-pad) * 2 - 3px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: var(--sw-w);
+  height: var(--sw-h);
+  padding: 0 var(--sw-pad);
+  border: max(1.5px, calc(3 * var(--u))) solid var(--c-tech);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.theme-switch__knob {
+  display: grid;
+  place-items: center;
+  width: var(--sw-knob);
+  height: var(--sw-knob);
+  border-radius: 50%;
+  background: var(--c-tech);
+  color: var(--c-black);
+  /* claro (padrão): à direita */
+  transform: translateX(calc(var(--sw-w) - var(--sw-knob) - var(--sw-pad) * 2 - 3px));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease;
+}
+:root[data-theme="dark"] .theme-switch__knob { transform: translateX(0); }
+.theme-switch__knob svg { width: 62%; height: 62%; display: block; }
+/* o ícone mostra o tema atual */
+.theme-toggle__moon { display: none !important; }
+:root[data-theme="dark"] .theme-toggle__moon { display: block !important; }
+:root[data-theme="dark"] .theme-toggle__sun { display: none !important; }
+.theme-switch:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+@media (hover: hover) {
+  .theme-switch:hover { border-color: var(--c-neon); box-shadow: 0 0 10px rgba(0, 255, 0, 0.45); }
+  .theme-switch:hover .theme-switch__knob { background: var(--c-neon); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch__knob { transition: none; }
+}
+
+/* ---------- Idioma (bandeira redonda) ----------
+   Do tamanho da altura da chave de tema; contorno verde como ela. A bandeira
+   é a do idioma de destino (Reino Unido no português, Brasil no inglês). */
+.lang-switch {
+  --flag: max(26px, calc(56 * var(--u)));
+  display: block;
+  width: var(--flag);
+  height: var(--flag);
+  padding: 0;
+  border: max(1.5px, calc(3 * var(--u))) solid var(--c-tech);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--c-black);
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.lang-switch__flag { display: block; width: 100%; height: 100%; }
+.lang-switch__flag--pt { display: none; }
+:root[lang="en"] .lang-switch__flag--en { display: none; }
+:root[lang="en"] .lang-switch__flag--pt { display: block; }
+.lang-switch:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+@media (hover: hover) {
+  .lang-switch:hover {
+    border-color: var(--c-neon);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.45);
+    transform: translateY(-2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lang-switch { transition: none; }
+  .lang-switch:hover { transform: none; }
+}
+
+/* ---------- Menu de seções ----------
+   Desktop: centralizado dentro da "aba" elevada da linha HUD da navbar
+   (trecho entre x 546 e 1415 da referência, abaixo dos segmentos). */
+.nav__menu {
+  position: absolute;
+  left: calc(980 * var(--u));
+  top: calc(119 * var(--u));
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.nav__menu ul {
+  --menu-gap: max(14px, calc(40 * var(--u)));
+  display: flex;
+  gap: var(--menu-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav__menu a {
+  position: relative;
+  display: block;
+  padding: 6px 0;
+  font: 600 max(var(--fs-xs), calc(21 * var(--u)))/1 var(--f-display);
+  letter-spacing: 0.22em;
+  margin-right: -0.22em;
+  color: var(--c-fg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+/* Ponto vermelho separando os itens (como no manifesto), centrado no espaço
+   entre eles; decorativo: o texto alternativo vazio o esconde dos leitores */
+.nav__menu li { position: relative; }
+.nav__menu li + li::before {
+  content: "•";
+  content: "•" / "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--menu-gap) / -2);
+  transform: translate(-50%, -50%);
+  font: 400 max(10px, calc(18 * var(--u)))/1 var(--f-display);
+  color: var(--c-red);
+  pointer-events: none;
+}
+
+/* sublinhado neon que cresce da esquerda (mesma linguagem dos ícones) */
+.nav__menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.22em;
+  bottom: 0;
+  height: 2px;
+  background: var(--c-neon);
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.7);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nav__menu a:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+.nav__menu a:focus-visible::after { transform: scaleX(1); }
+/* O nome mantém a cor; só o sublinhado verde indica o hover */
+@media (hover: hover) {
+  .nav__menu a:hover::after { transform: scaleX(1); }
+}
+
+/* Telas menores e celular deitado: o menu vira uma linha centralizada logo
+   abaixo da navbar (dentro da aba não há espaço legível) */
+@media (max-width: 899px), (max-height: 500px) {
+  :root { --nav-gap: 34px; --nav-under: 48px; }
+  .nav__menu {
+    left: 50%;
+    top: calc(100% + 18px);
+  }
+  .nav__menu ul { --menu-gap: 16px; }
+  .nav__menu a { font-size: var(--fs-xs); letter-spacing: 0.12em; margin-right: -0.12em; }
+}
+@media (max-width: 380px) {
+  .nav__menu ul { --menu-gap: 11px; }
+  .nav__menu a { letter-spacing: 0.08em; margin-right: -0.08em; }
+}
+
+/* Microanimação do contorno: marcador HUD que se abre do centro */
+.social::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: min(-5px, calc(-16 * var(--u)));
+  height: 2px;
+  background: var(--c-neon);
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.7);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Estados "ativos": foco pelo teclado sempre; hover só em dispositivos com
+   mouse (em telas de toque o hover ficaria "preso" depois do toque) */
+.social:focus-visible {
+  color: var(--c-neon);
+  transform: translateY(-3px);
+  filter: drop-shadow(0 0 6px rgba(0, 255, 0, 0.55));
+}
+.social:focus-visible::after { transform: scaleX(1); }
+
+.nav__brand { transition: transform 0.25s ease, filter 0.25s ease; }
+.nav__brand:focus-visible {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 6px rgba(0, 255, 0, 0.5));
+}
+
+@media (hover: hover) {
+  .social:hover {
+    color: var(--c-neon);
+    transform: translateY(-3px);
+    filter: drop-shadow(0 0 6px rgba(0, 255, 0, 0.55));
+  }
+  .social:hover::after { transform: scaleX(1); }
+  .nav__brand:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 6px rgba(0, 255, 0, 0.5));
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Palco central (SVG)
+   ------------------------------------------------------------------------ */
+.hero__stage {
+  display: grid;
+  place-items: center;
+  padding-block: calc(20 * var(--u));
+}
+
+.stage {
+  position: relative;
+  display: block;
+  width: calc(2048 * var(--u));
+  height: calc(900 * var(--u));
+}
+
+/* Pilha de camadas: todas ocupam exatamente a área do palco */
+.stage-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.stage-layer,
+.stage-logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  /* camada própria na GPU: o que muda numa camada não obriga a redesenhar
+     as outras (principalmente as que têm desfoque) */
+  will-change: transform;
+}
+/* O grupo do logo escala em torno do centro do logotipo (1023, 1011) */
+.stage-logo { transform-origin: 49.95% 54.56%; will-change: transform, opacity; }
+.layer-logo-halo,
+.layer-haze { will-change: opacity; }
+
+/* HUD: pontos de referência */
+.hud-dots circle { fill: #10D42A; }
+
+/* Circuitos */
+.trace {
+  fill: none;
+  stroke: var(--c-line);
+  stroke-width: 2.4;
+  stroke-linejoin: miter;
+}
+.node {
+  fill: var(--c-bg);
+  stroke: var(--c-line);
+  stroke-width: 2.6;
+}
+
+/* Pulsos de dados e terminais acesos (Etapa 3; ocultos no quadro estático) */
+.trace-pulse,
+.trace-neon {
+  fill: none;
+  /* cor do feixe/neon sorteada a cada vez (circuit-system.js) */
+  stroke: var(--pulse, var(--c-neon));
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+.trace-pulse--halo { stroke-width: 14; }
+.trace-neon { stroke-width: 3.2; }
+.trace-neon--halo { stroke-width: 10; }
+.trace-neon--bloom { stroke-width: 24; }
+/* No escuro, o miolo fica quase branco e a cor vive no brilho: efeito neon */
+:root[data-theme="dark"] :is(.trace-pulse, .trace-neon):not(.trace-pulse--halo, .trace-neon--halo, .trace-neon--bloom) {
+  stroke: var(--pulse-hot, var(--pulse, var(--c-neon)));
+}
+.node-glow { opacity: 0; }
+.node-glow__halo { fill: var(--pulse-glow, url(#g-electron)); }
+.node-glow__core { fill: var(--pulse, var(--c-neon)); }
+
+/* Órbitas e eixos */
+/* Órbitas e eixo em cinza: o verde fica para o logo e o núcleo */
+.orbit {
+  fill: none;
+  stroke: var(--c-gray-orbit);
+  stroke-width: 2;
+}
+
+.layer-orbits-front { opacity: 0.28; }
+
+/* Logotipo central */
+/* A camada do halo tem opacidade-base 0,85 (ver .layer-logo-halo); os
+   valores aqui compensam isso para manter o brilho aprovado (0,72 e 0,9) */
+.logo-halo { fill: var(--c-neon); opacity: 0.85; }
+.logo-halo--tight { opacity: 1; }
+.layer-logo-halo { opacity: 0.85; }
+/* Logo verde neon; a chuva binária aparece em momentos (logo-matrix.js põe
+   o nível 0–1 em --matrix): o corpo escurece, a borda acende por dentro e
+   os 0/1 descem dentro das letras */
+.logo-body { fill: url(#g-wm-nav); }
+.logo-body--dark { fill: var(--c-black); opacity: var(--matrix, 0); }
+.logo-inner,
+.logo-matrix { opacity: var(--matrix, 0); }
+.logo-inner-glow {
+  fill: none;
+  stroke: var(--c-neon);
+  stroke-width: 11;
+}
+.logo-matrix text {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  fill: #2EFF2E;
+  text-anchor: middle;
+}
+.logo-edge {
+  fill: none;
+  stroke: #3DFF3D;
+  stroke-width: 2.2;
+}
+/* Pulsos de energia no contorno e faíscas (Etapa 3; ocultos no quadro estático) */
+.logo-pulse {
+  fill: none;
+  stroke: #EAFFEA;
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.logo-pulse--halo {
+  stroke: var(--c-neon);
+  stroke-width: 10;
+}
+.logo-sweep { opacity: 0; }
+.logo-spark { opacity: 0; }
+.logo-spark__halo { fill: url(#g-electron); }
+.logo-spark__flare { fill: #F2FFF2; }
+
+
+/* Núcleo */
+.nucleus-core {
+  fill: #F2FFF2;
+  stroke: var(--c-neon);
+  stroke-width: 3;
+}
+.nucleus-ripple {
+  fill: none;
+  stroke: var(--c-neon);
+  stroke-width: 1.6;
+}
+.nucleus-field {
+  fill: none;
+  stroke: var(--c-line);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 9;
+  opacity: 0.45;
+}
+
+/* Elétrons (as cores mudam sozinhas: atom-system.js) */
+.electron__halo { fill: url(#g-electron); }
+.electron__core {
+  fill: #E9FFE9;
+  stroke: var(--c-neon);
+  stroke-width: 2.5;
+}
+
+/* Elementos que só existem em movimento: ocultos no quadro estático
+   (sem JS ou com prefers-reduced-motion), mantendo a composição da referência */
+.electrons,
+.nucleus-ripple,
+.nucleus-field {
+  visibility: hidden;
+}
+.hero.is-animated .electrons,
+.hero.is-animated .nucleus-ripple,
+.hero.is-animated .nucleus-field {
+  visibility: visible;
+}
+
+/* ------------------------------------------------------------------------
+   Área inferior (Access Interface)
+   ------------------------------------------------------------------------ */
+/* "Role para explorar": rodapé da Hero, sem ocupar espaço na composição.
+   O chevron desce e volta devagar (só com movimento ativo: .reveal-on) e o
+   conjunto some assim que a página rola. */
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: max(10px, calc(18 * var(--u)));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.is-scrolled .scroll-hint { opacity: 0; }
+.scroll-hint__label {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  margin-right: -0.16em;
+  color: var(--c-gray-text);
+  white-space: nowrap;
+}
+.scroll-hint__chevron {
+  width: 18px;
+  height: auto;
+  fill: none;
+  stroke: var(--c-tech);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.reveal-on .scroll-hint__chevron { animation: scroll-hint 2s ease-in-out infinite; }
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50%      { transform: translateY(5px); opacity: 1; }
+}
+
+.access {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* mínimo de 50 px: espaço para o "role para explorar" abaixo do ENTER */
+  padding-bottom: max(calc(70 * var(--u)), 50px);
+}
+
+.manifesto {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: max(var(--fs-xs), calc(24 * var(--u)));
+  line-height: 1;
+  letter-spacing: 0.5em;
+  color: var(--c-gray-text);
+  white-space: nowrap;
+  /* compensa o espaçamento após o último caractere para centralizar */
+  margin-right: -0.5em;
+}
+.manifesto__dot { margin-inline: 0.42em; color: var(--c-red); }
+/* Caracteres separados pelo JS para a revelação letra a letra */
+.manifesto__char { display: inline-block; }
+
+.ornament {
+  display: block;
+  width: calc(700 * var(--u));
+  height: calc(95 * var(--u));
+  margin-top: calc(20 * var(--u));
+  overflow: visible;
+}
+.ornament__lines path,
+.ornament__reticle circle,
+.ornament__reticle path:not(.ornament__core) {
+  fill: none;
+  stroke: var(--c-line);
+  stroke-width: 2.6;
+}
+/* Linhas e mira em cinza; anéis da retícula, segmentos e núcleo seguem verdes */
+.ornament__lines path,
+.ornament__reticle path:not(.ornament__core) { stroke: var(--c-gray-line); }
+.ornament__bars path,
+.ornament__bars rect { fill: var(--c-tech); }
+.ornament__core { fill: var(--c-neon); }
+/* brilho pré-desenhado (degradê radial): o núcleo pulsa sem filtro */
+.ornament__reticle .ornament__core-glow { fill: url(#g-ornament-core-glow); stroke: none; }
+
+.enter-row {
+  display: flex;
+  align-items: center;
+  gap: calc(56 * var(--u));
+  margin-top: calc(18 * var(--u));
+}
+
+.enter-row__line {
+  display: block;
+  width: calc(300 * var(--u));
+  height: max(1px, calc(2 * var(--u)));
+  background: var(--c-gray-line);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* As linhas laterais acendem junto com o botão */
+.enter-row:has(.enter:focus-visible) .enter-row__line {
+  background: var(--c-neon);
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.55);
+}
+@media (hover: hover) {
+  .enter-row:has(.enter:hover) .enter-row__line {
+    background: var(--c-neon);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.55);
+  }
+}
+
+/* Botão ENTER */
+.enter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: calc(270 * var(--u));
+  height: calc(74 * var(--u));
+  padding-left: calc(58 * var(--u));
+  color: var(--c-tech);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: color 0.2s ease;
+}
+.enter__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.enter__outline {
+  fill: var(--c-surface);
+  stroke: var(--c-line);
+  stroke-width: max(1.2px, calc(3 * var(--u)));
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.25s ease;
+}
+.enter__accent {
+  fill: none;
+  stroke: var(--c-line);
+  stroke-width: max(1.2px, calc(3.5 * var(--u)));
+  vector-effect: non-scaling-stroke;
+}
+.enter__label {
+  position: relative;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: max(var(--fs-xs), calc(29 * var(--u)));
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+.enter__arrow {
+  position: absolute;
+  left: calc(218 * var(--u));
+  top: 50%;
+  width: calc(19 * var(--u));
+  height: auto;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Preenchimento do hover: uma barra verde atravessa o botão da esquerda para
+   a direita, recortada no mesmo formato chanfrado do contorno (em %, para
+   funcionar também no tamanho mobile) */
+.enter__fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  clip-path: polygon(2.92% 1.6%, 29.82% 1.6%, 30.99% 5.85%, 94.15% 5.85%, 99.56% 25.53%,
+    99.56% 82.98%, 95.32% 98.4%, 67.84% 98.4%, 66.37% 94.15%, 4.97% 94.15%, 0.44% 76.6%, 0.44% 10.64%);
+}
+.enter__fill-bar {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--c-tech), var(--c-neon));
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* Borda que acende em sequência (percorre o contorno) */
+.enter__frame--trace { pointer-events: none; }
+.enter__trace {
+  fill: none;
+  stroke: var(--c-neon);
+  stroke-width: max(1.5px, calc(3.5 * var(--u)));
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.9));
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.enter:focus-visible .enter__fill-bar { transform: translateX(0); }
+.enter:focus-visible .enter__trace { stroke-dashoffset: 0; }
+.enter:focus-visible .enter__arrow { transform: translate(max(4px, calc(10 * var(--u))), -50%); }
+/* Texto escuro sobre o verde: contraste alto e legível */
+.enter:focus-visible { color: var(--c-black); outline-offset: 8px; }
+.enter:active .enter__fill-bar { background: var(--c-neon); }
+
+@media (hover: hover) {
+  .enter:hover .enter__fill-bar { transform: translateX(0); }
+  .enter:hover .enter__trace { stroke-dashoffset: 0; }
+  .enter:hover .enter__arrow { transform: translate(max(4px, calc(10 * var(--u))), -50%); }
+  .enter:hover { color: var(--c-black); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social,
+  .social::after,
+  .nav__brand,
+  .enter__fill-bar,
+  .enter__trace,
+  .enter__arrow { transition: none; }
+  .social:hover,
+  .social:focus-visible,
+  .nav__brand:hover,
+  .nav__brand:focus-visible { transform: none !important; }
+}
+
+/* =========================================================================
+   SEÇÕES DO SITE (após a Hero)
+   Mesma linguagem da Hero: fundo do tema (branco por padrão), verde da
+   paleta, Montserrat nos títulos, Share Tech Mono nos rótulos HUD,
+   chanfros e marcadores como os do botão ENTER e das molduras.
+   Aqui o layout é fluido (px/clamp), não usa a unidade de design --u.
+   ========================================================================= */
+.site-sections {
+  /* pelo menos uma tela: a transição do ENTER rola até o topo do conteúdo */
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--c-bg);
+}
+
+.section {
+  position: relative;
+  padding: clamp(72px, 11vw, 150px) 0;
+}
+/* Divisor HUD no topo de cada seção: linha fina com marcador chanfrado */
+.section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(1240px, calc(100% - 32px));
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--c-line) 0 72px, rgba(18, 201, 46, 0.28) 72px);
+}
+.section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: max(16px, calc(50% - 620px));
+  width: 22px;
+  height: 22px;
+  background: var(--c-line);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.section__inner {
+  width: min(1240px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+/* Fundo interativo de caracteres (js/modules/code-field.js): fica atrás do
+   conteúdo e não captura o mouse (os eventos são ouvidos na seção) */
+.code-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.code-field ~ .section__inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Cabeçalho de seção ---------- */
+.section-head { margin-bottom: clamp(36px, 5vw, 64px); }
+
+.section-head__index {
+  margin: 0 0 14px;
+  font: 400 var(--fs-sm)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+  text-transform: uppercase;
+}
+.section-head__index span { color: var(--c-tech); }
+
+.section-head__title {
+  margin: 0;
+  font: 600 var(--fs-h1)/1 var(--f-display);
+  letter-spacing: 0.22em;
+  /* compensa o espaçamento após a última letra */
+  margin-right: -0.22em;
+  /* títulos neutros: branco no escuro; no claro, a cor do texto (branco
+     sumiria no fundo branco). O verde fica nos detalhes HUD ao redor. */
+  color: var(--c-fg);
+}
+:root[data-theme="dark"] .section-head__title {
+  color: #FFFFFF;
+  text-shadow: 0 0 22px rgba(255, 255, 255, 0.18);
+}
+.section-head__title:focus { outline: none; }
+.section-head__title:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 8px; }
+
+.section-head__rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(18px, 2.4vw, 28px);
+  max-width: 620px;
+}
+/* Espectro animado no lugar das barrinhas (desenhado pelo section-spectrum.js) */
+.section-head__spectrum { width: 128px; height: 28px; flex: none; margin: -1px 0; }
+.section-head__line { flex: 1; height: 1px; background: var(--c-line); }
+/* Orb animado no lugar da mira (desenhado em canvas pelo section-orbs.js) */
+.section-head__orb {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  margin: -11px -6px -11px 0; /* não aumenta a altura da linha (mira tinha 26px) */
+}
+@media (max-width: 768px) {
+  .section-head__orb { width: 40px; height: 40px; margin: -7px -4px -7px 0; }
+  .section-head__spectrum { width: 100px; height: 24px; margin: 0; }
+}
+
+.section-head__lead {
+  margin: 18px 0 0;
+  max-width: 65ch;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.72;
+}
+
+/* ---------- 01 · MUSIC ---------- */
+.music-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+/* Cartão com borda chanfrada: o "corpo" fica 1 px para dentro do contorno
+   verde, e os dois são recortados no mesmo formato (cantos cortados nos
+   mesmos lados do botão ENTER) */
+.player-card {
+  --cut: 20px;
+  position: relative;
+  padding: 1px;
+  background: rgba(18, 201, 46, 0.55);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: background-color 0.3s ease;
+}
+.player-card__body {
+  height: 100%;
+  padding: clamp(14px, 1.8vw, 22px);
+  background: var(--c-bg);
+  clip-path: polygon(calc(var(--cut) - 0.5px) 0, 100% 0, 100% calc(100% - var(--cut) + 0.5px),
+    calc(100% - var(--cut) + 0.5px) 100%, 0 100%, 0 calc(var(--cut) - 0.5px));
+}
+/* Marcador HUD no canto, como na moldura esquerda da Hero */
+.player-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: var(--c-line);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.player-card__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-left: 8px;
+}
+.player-card__label {
+  margin: 0;
+  font: 400 var(--fs-sm)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-tech);
+}
+.player-card__link {
+  font: 600 var(--fs-xs)/1 var(--f-display);
+  letter-spacing: 0.2em;
+  color: var(--c-tech);
+  text-decoration: none;
+  padding: 8px 4px;
+  border-radius: 2px;
+  transition: color 0.25s ease;
+}
+.player-card__link span { display: inline-block; transition: transform 0.25s ease; }
+
+.player-card__screen {
+  /* reserva a altura do player: nada "pula" quando o iframe carrega */
+  min-height: 352px;
+  background: rgba(18, 201, 46, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.player-card__screen iframe {
+  display: block;
+  width: 100%;
+  height: 352px;
+  border: 0;
+}
+
+/* Enquanto o player externo não abre, a caixa mostra o painel escuro com o
+   aviso "CARREGANDO PLAYER…" (atrás do iframe transparente).
+   color-scheme: normal no iframe, igual ao dos players: se os dois forem
+   diferentes (o site declara "dark"), o navegador pinta um fundo opaco atrás
+   do iframe durante o carregamento, que esconderia o aviso.
+   Obs.: o player do SoundCloud é claro por design (não tem versão escura). */
+.player-card__screen,
+.release-player { position: relative; }
+.player-card__screen iframe,
+.release-player iframe {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  color-scheme: normal;
+}
+.embed-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+}
+/* o lazy-embeds.js marca a caixa quando o player termina de carregar */
+.is-loaded > .embed-loading { display: none; }
+
+@media (hover: hover) {
+  .player-card:hover { background: var(--c-neon); }
+  .player-card__link:hover { color: var(--c-deep); }
+  .player-card__link:hover span { transform: translate(2px, -2px); }
+}
+.player-card:focus-within { background: var(--c-neon); }
+:root[data-theme="dark"] .player-card__link:hover { color: var(--c-neon); }
+
+@media (max-width: 900px) {
+  .music-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .section__inner { width: calc(100% - 32px); }
+  /* títulos em português são mais longos (ex.: LANÇAMENTO): fonte acompanha a
+     largura da tela para caber numa linha em celulares estreitos */
+  .section-head__title { font-size: clamp(28px, 9vw, 40px); letter-spacing: 0.14em; margin-right: -0.14em; }
+}
+
+/* ---------- 02 · LATEST RELEASE ---------- */
+.release-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.release-art { margin: 0; }
+/* Mesmo recorte chanfrado dos cartões da MUSIC */
+.release-art__frame {
+  --cut: 24px;
+  padding: 1px;
+  background: rgba(18, 201, 46, 0.55);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+/* <picture> só escolhe o formato (AVIF → WebP → JPG): sem caixa própria, a
+   foto continua dimensionada pela moldura/pelo item como antes */
+.release-art__frame > picture,
+.media-item > picture { display: contents; }
+
+.release-art__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  clip-path: polygon(calc(var(--cut) - 0.5px) 0, 100% 0, 100% calc(100% - var(--cut) + 0.5px),
+    calc(100% - var(--cut) + 0.5px) 100%, 0 100%, 0 calc(var(--cut) - 0.5px));
+}
+
+.release-info__artist {
+  margin: 0 0 10px;
+  font: 400 var(--fs-sm)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+}
+.release-info__title {
+  margin: 0;
+  font: 600 var(--fs-h2)/1.08 var(--f-display);
+  letter-spacing: 0.08em;
+  color: var(--c-fg);
+}
+
+/* Etiquetas HUD (estilo, ano, selo, duração) */
+.release-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.release-meta li {
+  padding: 8px 12px;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-tech);
+  border: 1px solid rgba(18, 201, 46, 0.45);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.release-info__text {
+  margin: 22px 0 0;
+  max-width: 65ch;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.75;
+}
+
+.release-player {
+  margin-top: 26px;
+  min-height: 166px;
+  background: rgba(18, 201, 46, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.release-player iframe { display: block; width: 100%; height: 166px; border: 0; }
+
+.release-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* Botão HUD reutilizável: chanfrado como o ENTER, contorno de 1 px
+   (fundo verde + miolo recortado 1 px para dentro) */
+.hud-btn {
+  --cut: 12px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 22px;
+  font: 600 var(--fs-xs)/1 var(--f-display);
+  letter-spacing: 0.2em;
+  color: var(--c-black);
+  text-decoration: none;
+  background: var(--c-tech);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.hud-btn__icon { display: inline-block; transition: transform 0.25s ease; }
+.hud-btn--ghost {
+  color: var(--c-tech);
+  background: transparent;
+  /* contorno desenhado por uma sombra interna que respeita o recorte */
+  box-shadow: inset 0 0 0 1px var(--c-tech);
+}
+.hud-btn--ghost::before,
+.hud-btn--ghost::after {
+  /* os cantos chanfrados ganham um traço diagonal para fechar o contorno */
+  content: "";
+  position: absolute;
+  width: calc(var(--cut) * 1.4142);
+  height: 1px;
+  background: var(--c-tech);
+}
+.hud-btn--ghost::before { top: 0; left: 0; transform-origin: 0 0; transform: translateY(var(--cut)) rotate(-45deg); }
+.hud-btn--ghost::after { right: 0; bottom: 0; transform-origin: 100% 100%; transform: translateY(calc(var(--cut) * -1)) rotate(-45deg); }
+.hud-btn:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+
+@media (hover: hover) {
+  .hud-btn:hover { background: var(--c-neon); }
+  .hud-btn:hover .hud-btn__icon { transform: translate(2px, -2px); }
+  .hud-btn--ghost:hover { background: var(--c-tech); color: var(--c-black); }
+}
+
+/* Créditos em formato de leitura técnica */
+.release-credits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  margin: 28px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(18, 201, 46, 0.3);
+}
+.release-credits div { display: flex; gap: 10px; align-items: baseline; }
+.release-credits dt {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+}
+.release-credits dd {
+  margin: 0;
+  font: 500 var(--fs-sm)/1 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+  .release-grid { grid-template-columns: minmax(0, 1fr); }
+  .release-art { max-width: 420px; }
+}
+
+/* ---------- 03 · LIVE ---------- */
+.live-block-title {
+  margin: 0;
+  font: 400 var(--fs-sm)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-tech);
+}
+.live-block-title--list { margin: clamp(48px, 6vw, 72px) 0 18px; }
+
+/* Painel "próximas datas": moldura chanfrada como os cartões da MUSIC */
+.live-upcoming {
+  --cut: 18px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px 32px;
+  padding: clamp(20px, 2.6vw, 30px) clamp(20px, 3vw, 36px);
+  background:
+    linear-gradient(var(--c-panel), var(--c-panel)) padding-box;
+  border: 1px solid rgba(18, 201, 46, 0.5);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.live-upcoming__status { display: flex; align-items: center; gap: 14px; }
+.live-upcoming__text {
+  margin: 0;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.75;
+}
+
+/* Sinal "aguardando transmissão": ponto com anel (o anel pulsa só com movimento ativo) */
+.live-upcoming__signal {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--c-neon);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+}
+.live-upcoming__signal::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+.reveal-on .live-upcoming__signal::after { animation: live-signal 2.4s ease-out infinite; }
+@keyframes live-signal {
+  from { transform: scale(0.6); opacity: 0.8; }
+  to { transform: scale(1.8); opacity: 0; }
+}
+
+/* Lista de sets: cada linha é um link para a gravação no SoundCloud */
+.event-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(18, 201, 46, 0.35);
+}
+.event-list li { border-bottom: 1px solid rgba(18, 201, 46, 0.35); }
+
+.event-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 128px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px 24px;
+  padding: 22px 12px;
+  color: var(--c-fg);
+  text-decoration: none;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+/* barra de acento à esquerda que acende no hover/foco */
+.event-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  background: var(--c-neon);
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+.event-row__index {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-red);   /* numeração dos sets em vermelho, como os pontos do manifesto */
+  opacity: 0.9;
+}
+.event-row__date {
+  font: 400 var(--fs-sm)/1 var(--f-mono);
+  letter-spacing: 0.14em;
+  color: var(--c-tech);
+}
+.event-row__name {
+  font: 600 var(--fs-lg)/1.2 var(--f-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.event-row__meta {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-text-muted);
+  white-space: nowrap;
+}
+.event-row__genre { color: #737373; }   /* gêneros em cinza, como o rodapé */
+.event-row__meta > span[aria-hidden="true"] { color: var(--c-red); }   /* ponto separador */
+.event-row__action {
+  font: 600 var(--fs-xs)/1 var(--f-display);
+  letter-spacing: 0.2em;
+  color: var(--c-fg);   /* reserva se o recorte do texto não for suportado */
+  white-space: nowrap;
+}
+
+/* OUVIR SET em vidro branco (como o logo da navbar): o texto é recortado de
+   dois fundos, um reflexo branco que atravessa as letras (animado) e o corpo
+   levemente acinzentado com uma "quebra" de luz no meio; brilho no drop-shadow */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .event-row__action {
+    --glass: linear-gradient(180deg, #FFFFFF 0%, #E9EEEA 45%, #C9D1CB 55%, #DDE3DF 100%);
+    background-image:
+      linear-gradient(110deg, transparent 42%, rgba(255, 255, 255, 0.95) 50%, transparent 58%),
+      var(--glass);
+    background-size: 260% 100%, 100% 100%;
+    background-position: 130% 0, 0 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.45));
+  }
+  /* no fundo branco o vidro é grafite (branco sumiria), com o mesmo reflexo */
+  :root:not([data-theme="dark"]) .event-row__action {
+    --glass: linear-gradient(180deg, #3A443C 0%, #1C241E 45%, #0E1610 55%, #071009 100%);
+    filter: none;
+  }
+  .reveal-on .event-row__action { animation: action-glass 4.5s ease-in-out infinite; }
+  .reveal-on li:nth-child(2n) .event-row__action { animation-delay: -1.5s; }
+  .reveal-on li:nth-child(3n) .event-row__action { animation-delay: -3s; }
+}
+@keyframes action-glass {
+  0%, 55%   { background-position: 130% 0, 0 0; }
+  85%, 100% { background-position: -30% 0, 0 0; }
+}
+.event-row:focus-visible { outline: 2px solid var(--c-tech); outline-offset: -2px; }
+.event-row:focus-visible::before { transform: scaleY(1); }
+
+@media (hover: hover) {
+  .event-row:hover { background: rgba(18, 201, 46, 0.07); padding-left: 20px; }
+  .event-row:hover::before { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-row,
+  .event-row::before { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .live-upcoming { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  .event-row { grid-template-columns: 36px 110px minmax(0, 1fr) auto; }
+  .event-row__meta { display: none; }
+}
+@media (max-width: 560px) {
+  /* duas linhas: data + ação em cima, nome + estilo embaixo */
+  .event-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "date action" "name name" "meta meta";
+    padding: 18px 6px;
+  }
+  .event-row__index { display: none; }
+  .event-row__date { grid-area: date; }
+  .event-row__action { grid-area: action; }
+  .event-row__name { grid-area: name; }
+  .event-row__meta { grid-area: meta; display: block; }
+}
+
+/* ---------- 04 · THE PROJECT ---------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.8fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.project-copy__lead {
+  margin: 0;
+  font: 500 var(--fs-xl)/1.45 var(--f-display);
+  color: var(--c-fg);
+}
+.project-copy__lead em { font-style: normal; color: var(--c-tech); }
+.project-copy__text {
+  margin: 22px 0 0;
+  max-width: 65ch;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.75;
+}
+
+/* Ficha técnica: painel chanfrado como os demais cartões */
+.project-readout {
+  --cut: 18px;
+  padding: clamp(20px, 2.4vw, 28px);
+  background: var(--c-panel);
+  border: 1px solid rgba(18, 201, 46, 0.5);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.project-readout__title {
+  margin: 0 0 18px;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-tech);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+/* afasta o radar da borda para o anel pulsante não encostar no chanfro */
+.project-readout__title .live-upcoming__signal { margin-left: 6px; }
+.project-readout__list { margin: 0; }
+.project-readout__list div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(18, 201, 46, 0.25);
+}
+.project-readout__list dt {
+  font: 400 var(--fs-xs)/1.5 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+}
+.project-readout__list dd {
+  margin: 0;
+  font: 600 var(--fs-sm)/1.4 var(--f-body);
+  color: var(--c-fg);
+}
+.project-readout__signal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(18, 201, 46, 0.25);
+  font: 400 var(--fs-xs)/1.4 var(--f-mono);
+  letter-spacing: 0.12em;
+  color: #A3A3A3;   /* frase em cinza; o orb segue verde */
+}
+/* Orb animado no lugar do ícone do átomo (canvas do section-orbs.js);
+   margem negativa para não aumentar a altura da linha */
+.project-readout__orb {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  margin: -12px -6px -12px -8px;
+}
+
+/* Sequência: circuito VERTICAL de nós (número · losango neon · nome),
+   ligados por uma trilha que se desenha de cima para baixo. */
+.project-sequence { margin-top: clamp(56px, 7vw, 96px); }
+.project-sequence__title {
+  margin: 0 0 28px;
+  max-width: 560px;
+  font: 400 var(--fs-sm)/1.6 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-tech);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+/* o radar fica alinhado à 1ª linha do texto, que pode quebrar */
+.project-sequence__title .live-upcoming__signal { top: -1px; margin-left: 6px; }
+/* Tema escuro: frase "acesa" como o neon do logo da hero, com miolo verde
+   claro e halo verde em camadas. Brilho fixo, sem animação. */
+:root[data-theme="dark"] .project-sequence__text {
+  color: #9DFF9D;
+  text-shadow:
+    0 0 1px rgba(0, 255, 0, 0.9),
+    0 0 6px rgba(0, 255, 0, 0.55),
+    0 0 14px rgba(0, 255, 0, 0.3);
+}
+.sequence {
+  --node: 14px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(18px, 1.8vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* trilha que liga os nós (do 1º ao último) */
+.sequence::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: calc(52px + var(--node) / 2 - 1px);
+  width: 2px;
+  background: var(--c-line);
+  box-shadow: 0 0 6px rgba(0, 255, 0, 0.35);
+  transform-origin: center top;
+}
+.sequence__step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.sequence__index {
+  width: 30px;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-text-muted);
+}
+/* nó: losango neon com anel */
+.sequence__step::before {
+  content: "";
+  order: 1;
+  flex: none;
+  width: var(--node);
+  height: var(--node);
+  background: var(--c-neon);
+  box-shadow: 0 0 0 4px var(--c-bg), 0 0 0 5px var(--c-line), 0 0 14px rgba(0, 255, 0, 0.6);
+  transform: rotate(45deg);
+}
+.sequence__word {
+  order: 2;
+  font: 600 var(--fs-base)/1.2 var(--f-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-fg);
+  overflow-wrap: anywhere;
+}
+.sequence__step:last-child .sequence__word { color: var(--c-tech); }
+
+/* Revelação: a trilha se desenha e os nós acendem em ordem */
+.reveal-on .project-sequence:not(.is-visible) .sequence::before { transform: scaleY(0); }
+.reveal-on .project-sequence:not(.is-visible) .sequence__step { opacity: 0.15; }
+.reveal-on .project-sequence .sequence::before { transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s; }
+.reveal-on .project-sequence .sequence__step {
+  transition: opacity 0.5s ease;
+  transition-delay: calc(0.3s + var(--i) * 0.18s);
+}
+
+@media (max-width: 900px) {
+  .project-grid { grid-template-columns: minmax(0, 1fr); }
+  .project-readout { max-width: 520px; }
+}
+
+/* ---------- 05 · VISUAL IDENTITY — ATOM ---------- */
+/* Canvas de partículas: cobre a seção inteira, atrás do conteúdo e sem
+   bloquear cliques (os eventos são lidos na própria seção) */
+.section--atom { overflow: hidden; }
+.atom-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.section--atom .section__inner { position: relative; z-index: 1; }
+/* núcleo "carregado" por um clique: brilho extra por um instante */
+.atom-diagram__core { transition: filter 0.6s ease; }
+.atom-diagram.is-charged .atom-diagram__core {
+  filter: drop-shadow(0 0 6px #00FF00) drop-shadow(0 0 16px rgba(0, 255, 0, 0.8));
+  transition-duration: 0.08s;
+}
+.atom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: center;
+}
+.atom-copy__lead {
+  margin: 0;
+  font: 500 var(--fs-xl)/1.45 var(--f-display);
+  color: var(--c-fg);
+}
+.atom-copy__lead em { font-style: normal; color: var(--c-tech); }
+.atom-copy__hint {
+  margin: 20px 0 0;
+  max-width: 65ch;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.7;
+}
+/* a dica de cursor não faz sentido em telas de toque */
+@media (hover: none) { .atom-copy__hint { display: none; } }
+
+/* Legenda: número · parte · significado, como uma tabela de instrumento */
+.atom-legend {
+  margin: clamp(28px, 3.5vw, 40px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(18, 201, 46, 0.35);
+}
+.atom-legend li {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(18, 201, 46, 0.35);
+}
+.atom-legend__num {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-tech);
+}
+.atom-legend__part {
+  font: 600 var(--fs-base)/1.2 var(--f-display);
+  letter-spacing: 0.16em;
+  color: var(--c-fg);
+}
+.atom-legend__meaning {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A3A3A3;   /* significados em cinza (matéria, energia...) */
+}
+
+/* Diagrama */
+.atom-diagram {
+  margin: 0;
+  max-width: 520px;
+  justify-self: center;
+  width: 100%;
+}
+.atom-diagram__svg { display: block; width: 100%; height: auto; overflow: visible; }
+.atom-diagram__field {
+  fill: none;
+  stroke: var(--c-gray-orbit);   /* 04 · campo em cinza */
+  stroke-width: 1.2;
+  stroke-dasharray: 2 7;
+  opacity: 0.8;
+}
+.atom-diagram__ticks path { stroke: var(--c-gray-orbit); stroke-width: 2; }
+.atom-diagram__orbit { fill: none; stroke: var(--c-line); stroke-width: 1.8; }
+.atom-diagram__electron { fill: #E9FFE9; stroke: var(--c-neon); stroke-width: 2.4; }
+/* Um elétron de cada cor, um em cada órbita: vermelho, azul e amarelo */
+/* (o brilho de cada um é o círculo .atom-diagram__electron-glow, com degradê) */
+.atom-diagram__sway--1 .atom-diagram__electron { fill: #FFD6DC; stroke: #FF2D3A; }
+.atom-diagram__sway--2 .atom-diagram__electron { fill: #D6EAFF; stroke: #2F7BFF; }
+.atom-diagram__sway--3 .atom-diagram__electron { fill: #FFF7C2; stroke: #FFD000; }
+.atom-diagram__core { fill: #F2FFF2; stroke: var(--c-neon); stroke-width: 3; }
+.atom-diagram__system { transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.atom-diagram__glow { transform-origin: 200px 200px; }
+.reveal-on .atom-diagram__glow { animation: atom-diagram-pulse 3s ease-in-out infinite; }
+/* Órbitas: cada anel oscila de leve (giro + leve "inclinação" 3D),
+   em ritmos diferentes. O ângulo base continua no atributo do grupo externo. */
+.atom-diagram__sway {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+}
+.reveal-on .atom-diagram__sway--1 { animation: atom-sway 4.5s ease-in-out infinite; }
+.reveal-on .atom-diagram__sway--2 { animation: atom-sway 5.5s ease-in-out -1.5s infinite reverse; }
+.reveal-on .atom-diagram__sway--3 { animation: atom-sway 6.5s ease-in-out -3s infinite; }
+@keyframes atom-sway {
+  0%, 100% { transform: rotate(-7deg) scaleY(1); }
+  50% { transform: rotate(7deg) scaleY(0.86); }
+}
+
+/* Campo: o círculo pontilhado pisca suavemente */
+.reveal-on .atom-diagram__field { animation: atom-field-blink 2.4s ease-in-out infinite; }
+@keyframes atom-field-blink {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+/* Núcleo: troca de cor em loop suave (verde → azul → vermelho).
+   Exceção à paleta verde, pedida para este elemento. */
+.reveal-on .atom-diagram__hue { animation: atom-core-hue 9s ease-in-out infinite; }
+.reveal-on .atom-diagram__core { animation: atom-core-stroke 9s ease-in-out infinite; }
+@keyframes atom-core-hue {
+  0%, 100% { stop-color: #00FF00; }
+  33% { stop-color: #2F7BFF; }
+  66% { stop-color: #FF2D3A; }
+}
+@keyframes atom-core-stroke {
+  0%, 100% { stroke: #00FF00; }
+  33% { stroke: #2F7BFF; }
+  66% { stroke: #FF2D3A; }
+}
+
+/* Clique no átomo: giro completo + reconstrução do zero
+   (classe .is-rebuilding colocada por js/modules/atom-diagram.js por ~1,5 s) */
+.atom-diagram__svg { cursor: pointer; }
+.atom-diagram:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 8px; }
+.atom-diagram__system { transform-box: view-box; transform-origin: 200px 200px; }
+.atom-diagram.is-rebuilding .atom-diagram__system {
+  animation: atom-rebuild-spin 1.4s cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+.atom-diagram.is-rebuilding .atom-diagram__orbit {
+  stroke-dasharray: 1 1;
+  animation: atom-orbit-draw 0.9s ease-out both;
+}
+.atom-diagram.is-rebuilding .atom-diagram__sway--2 .atom-diagram__orbit { animation-delay: 0.15s; }
+.atom-diagram.is-rebuilding .atom-diagram__sway--3 .atom-diagram__orbit { animation-delay: 0.3s; }
+.atom-diagram.is-rebuilding :is(.atom-diagram__electron, .atom-diagram__electron-glow) { animation: atom-fade-in 0.4s ease 1s both; }
+.atom-diagram__core,
+.atom-diagram__glow { transform-box: fill-box; transform-origin: center; }
+.reveal-on .atom-diagram.is-rebuilding .atom-diagram__core {
+  animation: atom-core-pop 0.8s cubic-bezier(0.3, 1.6, 0.5, 1) both, atom-core-stroke 9s ease-in-out infinite;
+}
+.reveal-on .atom-diagram.is-rebuilding .atom-diagram__glow {
+  animation: atom-core-pop 1s cubic-bezier(0.3, 1.6, 0.5, 1) 0.1s both;
+}
+@keyframes atom-rebuild-spin {
+  from { transform: rotate(0deg) scale(0.55); }
+  to { transform: rotate(360deg) scale(1); }
+}
+@keyframes atom-orbit-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes atom-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes atom-core-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+@keyframes atom-diagram-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+.atom-diagram__callouts path { fill: none; stroke: var(--c-tech); stroke-width: 1.2; }
+.atom-diagram__callouts circle { fill: var(--c-neon); }
+.atom-diagram__nums text {
+  font: 400 13px var(--f-mono);
+  letter-spacing: 0.12em;
+  fill: var(--c-tech);
+  /* contorno da cor do fundo: o número fica legível mesmo sobre uma órbita */
+  stroke: var(--c-bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+@media (max-width: 900px) {
+  .atom-grid { grid-template-columns: minmax(0, 1fr); }
+  .atom-diagram { order: -1; max-width: 420px; }
+}
+
+/* ---------- 06 · MEDIA ---------- */
+/* Duas fileiras de fotos em loop contínuo (cima → direita, baixo → esquerda).
+   Cada fileira contém as fotos + uma cópia delas; a animação anda exatamente
+   metade da largura (uma cópia) e recomeça — por isso não há emenda.
+   O espaço entre fotos é margem à direita de cada item (e não `gap`), para
+   que as duas metades tenham a mesma largura. */
+.section--media {
+  --photo-h: clamp(200px, 32vh, 360px);
+  --photo-gap: clamp(14px, 1.6vw, 24px);
+}
+.media-rows {
+  display: grid;
+  gap: var(--photo-gap);
+  /* fotos somem suavemente nas bordas da tela */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.media-row {
+  overflow-x: auto;            /* sem animação: dá para arrastar para o lado */
+  scrollbar-width: none;
+}
+.media-row::-webkit-scrollbar { display: none; }
+.media-row__track {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0 0 0 var(--photo-gap);
+  list-style: none;
+}
+.media-item {
+  --cut: 18px;
+  position: relative;
+  flex: none;
+  height: var(--photo-h);
+  margin-right: var(--photo-gap);
+  overflow: hidden;
+  background: var(--c-panel);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.media-item::after {
+  /* contorno verde fino por cima da foto */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(18, 201, 46, 0.6);
+  pointer-events: none;
+}
+.media-item__img {
+  display: block;
+  height: 100%;
+  width: auto;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* As cópias só existem enquanto o loop roda */
+.media-item--clone { display: none; }
+
+/* Loop ligado (JS ativo e movimento permitido) */
+.reveal-on .media-row { overflow: hidden; }
+.reveal-on .media-row__track { padding-left: 0; }
+.reveal-on .media-item--clone { display: block; }
+.reveal-on .media-row--left .media-row__track { animation: media-loop-left 70s linear infinite; }
+.reveal-on .media-row--right .media-row__track { animation: media-loop-right 80s linear infinite; }
+@keyframes media-loop-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes media-loop-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+/* O loop nunca para (nem com o mouse em cima, nem com clique);
+   o hover só aproxima levemente a foto */
+@media (hover: hover) {
+  .media-item:hover .media-item__img { transform: scale(1.05); }
+}
+
+/* Botão "ver" por cima de cada foto (js/modules/media-viewer.js):
+   no hover/foco a foto escurece e aparece um olho neon no centro */
+.media-item__view {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: rgba(4, 8, 5, 0);
+  cursor: zoom-in;
+  transition: background-color 0.3s ease;
+}
+.media-item__eye {
+  width: clamp(44px, 5vw, 64px);
+  fill: none;
+  stroke: var(--c-neon);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.7));
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.media-item__pupil { fill: var(--c-neon); stroke: none; }
+.media-item__view:focus-visible { outline: 2px solid var(--c-neon); outline-offset: -4px; }
+.media-item__view:focus-visible,
+.media-item:hover .media-item__view { background: rgba(4, 8, 5, 0.55); }
+.media-item__view:focus-visible .media-item__eye,
+.media-item:hover .media-item__eye { opacity: 1; transform: scale(1); }
+
+/* Visualizador em tela cheia */
+html.is-viewing { overflow: hidden; }
+.photo-viewer {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(4, 8, 5, 0.97);   /* quase opaco: a navbar não aparece por trás */
+  color: var(--c-fg);
+  overflow: hidden;
+}
+.photo-viewer::backdrop { background: transparent; }
+.photo-viewer[open] { display: grid; place-items: center; }
+.photo-viewer__figure {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 64px 72px 28px;
+  width: 100%;
+  height: 100%;
+  align-content: center;
+}
+.photo-viewer__img {
+  --cut: 22px;
+  display: block;
+  max-width: min(100%, 1400px);
+  max-height: calc(100dvh - 160px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  box-shadow: 0 0 0 1px rgba(18, 201, 46, 0.6);
+}
+.photo-viewer__caption {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  max-width: min(100%, 900px);
+  font: 400 var(--fs-xs)/1.5 var(--f-mono);
+  letter-spacing: 0.12em;
+  color: #A3A3A3;
+  text-align: center;
+}
+.photo-viewer__count { flex: none; color: var(--c-tech); }
+.photo-viewer__btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--c-tech);
+  border-radius: 50%;
+  background: rgba(4, 8, 5, 0.7);
+  color: var(--c-neon);
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.photo-viewer__btn svg {
+  width: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.photo-viewer__btn--close { top: 16px; right: 16px; }
+.photo-viewer__btn--prev { left: 16px; top: 50%; transform: translateY(-50%); }
+.photo-viewer__btn--next { right: 16px; top: 50%; transform: translateY(-50%); }
+.photo-viewer__btn:focus-visible { outline: 2px solid var(--c-neon); outline-offset: 3px; }
+@media (hover: hover) {
+  .photo-viewer__btn:hover { border-color: var(--c-neon); box-shadow: 0 0 12px rgba(0, 255, 0, 0.5); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .photo-viewer[open] { animation: viewer-in 0.3s ease; }
+  .photo-viewer[open] .photo-viewer__img { animation: viewer-img-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+@keyframes viewer-in { from { opacity: 0; } }
+@keyframes viewer-img-in { from { opacity: 0; transform: scale(0.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .media-item__view, .media-item__eye { transition: none; }
+}
+
+@media (max-width: 760px) {
+  .photo-viewer__figure { padding: 64px 12px 24px; }
+  .photo-viewer__btn--prev,
+  .photo-viewer__btn--next { top: auto; bottom: 16px; transform: none; }
+  .photo-viewer__caption { flex-direction: column; gap: 4px; align-items: center; padding-bottom: 56px; }
+}
+
+@media (max-width: 760px) {
+  .section--media { --photo-h: clamp(170px, 26svh, 260px); }
+  .media-item { --cut: 12px; }
+}
+
+/* ---------- 07 · BOOKING ---------- */
+/* Desktop: texto e contatos na coluna da esquerda, formulário na direita.
+   Celular: texto → formulário → contatos (ver @media max-width: 900px). */
+.booking-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  grid-template-areas:
+    "copy    panel"
+    "details panel";
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.booking-copy { grid-area: copy; }
+.booking-details { grid-area: details; }
+.booking-panel { grid-area: panel; }
+.booking-copy__lead {
+  margin: 0;
+  font: 500 var(--fs-xl)/1.45 var(--f-display);
+  color: var(--c-fg);
+}
+.booking-copy__lead em { font-style: normal; color: var(--c-tech); }
+.booking-copy__text {
+  margin: 18px 0 0;
+  max-width: 65ch;
+  font: 400 var(--fs-base)/1.6 var(--f-body);
+  color: var(--c-fg);
+  opacity: 0.72;
+}
+.booking-contacts {
+  margin: 32px 0 0;
+  border-top: 1px solid rgba(18, 201, 46, 0.35);
+}
+.booking-contacts div {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(18, 201, 46, 0.35);
+}
+.booking-contacts dt {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+}
+.booking-contacts dd { margin: 0; overflow-wrap: anywhere; }
+.booking-contacts a {
+  font: 600 var(--fs-base)/1.3 var(--f-display);
+  color: #737373;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.booking-contacts a:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+@media (hover: hover) {
+  .booking-contacts a:hover { border-color: currentColor; }
+}
+
+/* Agência (START BOOKINGS): cartão "representado por" na coluna dos contatos.
+   Fica junto do contato da agência (primeira opção de booking) e preenche o
+   espaço que sobrava ao lado do formulário. Dentro dele, uma faixa com o logo
+   repetido andando sempre para a direita em duas camadas de velocidades
+   diferentes (parallax): atrás, logos grandes, lentos e quase transparentes;
+   na frente, logos menores, mais rápidos e nítidos. Cada camada é uma máscara
+   (o logo) sobre a cor do texto — muda sozinha com o tema. */
+.agency-card {
+  --cut: 16px;
+  display: block;
+  margin-top: 32px;
+  padding: 16px 0 6px;
+  color: var(--c-fg);
+  text-decoration: none;
+  background: var(--c-panel);
+  border: 1px solid rgba(18, 201, 46, 0.45);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+:root[data-theme="dark"] .agency-card { color: #FFFFFF; }
+.agency-card__label {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 18px;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: var(--c-tech);
+}
+.agency-card__arrow { transition: transform 0.25s ease; }
+.agency-card:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+.agency-strip {
+  position: relative;
+  display: block;
+  height: 76px;
+  overflow: hidden;
+  /* logos somem suavemente nas bordas do cartão */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+.agency-strip__layer {
+  --h: 30px;                                   /* altura de cada logo */
+  --tile: calc(var(--h) * 1700 / 419.1);        /* largura do logo + espaço */
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  -webkit-mask: url("../assets/agencia/startbookings-tile.svg") 0 50% / auto var(--h) repeat-x;
+  mask: url("../assets/agencia/startbookings-tile.svg") 0 50% / auto var(--h) repeat-x;
+}
+.agency-strip__layer--back { --h: 66px; opacity: 0.1; }
+.agency-strip__layer--front { opacity: 0.85; }
+.reveal-on .agency-strip__layer--back { animation: agency-slide 14s linear infinite; }
+.reveal-on .agency-strip__layer--front { animation: agency-slide 3.2s linear infinite; }
+@keyframes agency-slide {
+  to {
+    -webkit-mask-position: var(--tile) 50%;
+    mask-position: var(--tile) 50%;
+  }
+}
+@media (hover: hover) {
+  .agency-card:hover { border-color: var(--c-neon); box-shadow: 0 0 14px rgba(0, 255, 0, 0.18); }
+  .agency-card:hover .agency-card__arrow { transform: translate(2px, -2px); }
+  .agency-card:hover .agency-strip__layer--front { opacity: 1; }
+}
+
+/* Painel do formulário: moldura chanfrada como os demais cartões */
+.booking-panel {
+  --cut: 22px;
+  padding: 1px;
+  background: rgba(18, 201, 46, 0.55);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.booking-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+  padding: clamp(20px, 3vw, 36px);
+  background: var(--c-panel);
+  clip-path: polygon(calc(var(--cut) - 0.5px) 0, 100% 0, 100% calc(100% - var(--cut) + 0.5px),
+    calc(100% - var(--cut) + 0.5px) 100%, 0 100%, 0 calc(var(--cut) - 0.5px));
+}
+.booking-form__honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.booking-field { display: flex; flex-direction: column; gap: 8px; }
+.booking-field--full { grid-column: 1 / -1; }
+.booking-field label {
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.16em;
+  color: #737373;
+}
+.booking-field__req { color: var(--c-tech); }
+.booking-field input,
+.booking-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  font: 400 var(--fs-base)/1.4 var(--f-body);   /* ≥ 16 px: o iPhone não dá zoom ao focar */
+  color: var(--c-fg);
+  background: var(--c-bg);
+  border: 1px solid rgba(18, 201, 46, 0.4);
+  border-radius: 0;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color-scheme: light;
+}
+:root[data-theme="dark"] .booking-field input,
+:root[data-theme="dark"] .booking-field textarea { color-scheme: dark; }
+.booking-field textarea { resize: vertical; min-height: 130px; }
+/* Data: texto branco no escuro (no claro, a cor do texto). O Safari pinta as
+   partes da data (dia/mês/ano) à parte, por isso as regras -webkit- */
+.booking-field input[type="date"] { color: var(--c-fg); }
+:root[data-theme="dark"] .booking-field input[type="date"] { color: #FFFFFF; }
+.booking-field input[type="date"]::-webkit-datetime-edit,
+.booking-field input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+.booking-field input[type="date"]::-webkit-datetime-edit-text,
+.booking-field input[type="date"]::-webkit-datetime-edit-day-field,
+.booking-field input[type="date"]::-webkit-datetime-edit-month-field,
+.booking-field input[type="date"]::-webkit-datetime-edit-year-field { color: inherit; }
+.booking-field input:focus,
+.booking-field textarea:focus {
+  border-color: var(--c-neon);
+  box-shadow: 0 0 0 3px rgba(0, 255, 0, 0.18);
+}
+/* erro só depois que a pessoa tenta enviar (classe adicionada pelo JS) */
+.booking-form.was-submitted :invalid { border-color: #E5484D; }
+
+.booking-form__footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.booking-form__note {
+  margin: 0;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.18em;
+  color: var(--c-text-muted);
+}
+.booking-form__note span { color: var(--c-tech); }
+.booking-form__submit { border: 0; cursor: pointer; }
+.booking-form__submit[disabled] { opacity: 0.6; cursor: progress; }
+
+.booking-form__status {
+  grid-column: 1 / -1;
+  margin: 0;
+  font: 500 var(--fs-sm)/1.6 var(--f-body);
+  color: var(--c-fg);
+}
+.booking-form__status:empty { display: none; }
+.booking-form__status.is-success { padding-left: 12px; border-left: 2px solid var(--c-neon); }
+.booking-form__status.is-error { padding-left: 12px; border-left: 2px solid #E5484D; }
+.booking-form__status a { color: var(--c-tech); }
+
+@media (max-width: 900px) {
+  .booking-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "copy" "panel" "details";
+    grid-template-rows: auto;
+    row-gap: clamp(28px, 5vw, 40px);
+  }
+  .booking-contacts { margin-top: 0; }
+}
+@media (max-width: 560px) {
+  .booking-form { grid-template-columns: minmax(0, 1fr); }
+  .booking-contacts div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+
+/* ---------- 08 · CONNECT ---------- */
+.net-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Cartão de rede: moldura chanfrada; acende inteiro no hover/foco */
+.net-card {
+  --cut: 18px;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "index arrow" "icon icon" "label label" "handle handle";
+  gap: 10px;
+  min-height: 210px;
+  padding: 22px;
+  text-decoration: none;
+  color: var(--c-fg);
+  background:
+    linear-gradient(var(--c-panel), var(--c-panel)) padding-box;
+  border: 1px solid rgba(18, 201, 46, 0.5);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.net-card__index {
+  grid-area: index;
+  font: 400 var(--fs-xs)/1 var(--f-mono);
+  letter-spacing: 0.2em;
+  color: var(--c-text-muted);
+}
+.net-card__arrow {
+  grid-area: arrow;
+  justify-self: end;
+  font: 600 16px/1 var(--f-display);
+  color: var(--c-tech);
+  transition: transform 0.3s ease;
+}
+.net-card__icon {
+  grid-area: icon;
+  align-self: end;
+  width: 38px;
+  color: var(--c-tech);
+  margin-top: 18px;
+}
+.net-card__icon svg { display: block; width: 100%; height: auto; }
+.net-card--soundcloud .net-card__icon { width: 58px; }
+.net-card__label {
+  grid-area: label;
+  margin-top: 8px;
+  font: 600 var(--fs-base)/1.2 var(--f-display);
+  letter-spacing: 0.16em;
+}
+.net-card__handle {
+  grid-area: handle;
+  font: 400 var(--fs-xs)/1.3 var(--f-mono);
+  letter-spacing: 0.1em;
+  color: var(--c-text-muted);
+  overflow-wrap: anywhere;
+}
+.net-card:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+.net-card:focus-visible,
+.net-card:active { background: var(--c-tech); color: var(--c-black); }
+.net-card:focus-visible :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
+@media (hover: hover) {
+  .net-card:hover { background: var(--c-tech); color: var(--c-black); border-color: var(--c-neon); }
+  .net-card:hover :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
+  .net-card:hover .net-card__arrow { transform: translate(3px, -3px); }
+}
+
+@media (max-width: 900px) {
+  .net-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Duas colunas: o título acompanha a largura do cartão (≈ metade da tela
+     menos margens), para "SOUNDCLOUD", o nome mais longo, caber no celular.
+     Fica entre 12 px e --fs-base; no tablet o limite é o próprio --fs-base.
+     Obs.: não usar container query (cqi) aqui — ela deixa o recálculo de
+     estilo da página ~4× mais caro e pesava a animação da Hero. */
+  .net-card__label { font-size: max(var(--fs-xs), min(var(--fs-base), calc(4.8vw - 6px))); }
+}
+/* logo acima de 900 px a grade vira 4 colunas estreitas: letras um pouco
+   mais juntas para "SOUNDCLOUD" não encostar na borda */
+@media (min-width: 901px) and (max-width: 1000px) {
+  .net-card__label { letter-spacing: 0.12em; }
+}
+@media (max-width: 420px) {
+  .net-card { min-height: 170px; padding: 18px; }
+}
+/* telas bem estreitas (≈ 320 px): o título já está no mínimo de 12 px; com
+   menos margem interna e letras mais juntas, "SOUNDCLOUD" cabe no cartão */
+@media (max-width: 340px) {
+  .net-card { padding: 12px; }
+  .net-card__label { letter-spacing: 0.08em; }
+}
+
+/* ---------- Rodapé ---------- */
+.site-footer {
+  position: relative;
+  background: var(--c-bg);
+  border-top: 1px solid rgba(18, 201, 46, 0.35);
+}
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  width: min(1240px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 28px 0;
+  font: 500 var(--fs-xs)/1.4 var(--f-display);   /* Orbitron, como o resto do site */
+  letter-spacing: 0.16em;
+  color: #737373;   /* rodapé discreto, igual nos dois temas */
+}
+.site-footer__inner p { margin: 0; }
+.site-footer__top {
+  color: inherit;
+  text-decoration: none;
+  padding: 6px 0;
+}
+.site-footer__top:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
+@media (hover: hover) { .site-footer__top:hover { color: var(--c-neon); } }
+@media (max-width: 560px) {
+  .site-footer__inner { width: calc(100% - 32px); flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- Revelação suave ao rolar ----------
+   Só existe quando o JS ativa (classe .reveal-on no <html>) e o movimento
+   está permitido; sem JS ou com movimento reduzido, tudo já aparece. */
+.reveal-on [data-reveal]:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal-on [data-reveal] {
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal-on .music-grid [data-reveal]:nth-child(2),
+.reveal-on .release-grid [data-reveal]:nth-child(2),
+.reveal-on .project-grid [data-reveal]:nth-child(2),
+.reveal-on .atom-grid [data-reveal]:nth-child(2),
+.reveal-on .booking-grid .booking-panel { transition-delay: 0.12s; }
+
+/* ------------------------------------------------------------------------
+   Controle de pausa das animações (aparece ao receber foco pelo teclado)
+   ------------------------------------------------------------------------ */
+.motion-toggle {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  padding: 0.55em 1em;
+  font: 600 var(--fs-xs)/1 var(--f-display);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-fg);
+  background: var(--c-bg);
+  border: 1px solid var(--c-tech);
+  border-radius: 2px;
+  cursor: pointer;
+  /* oculto visualmente até receber foco */
+  clip-path: inset(50%);
+  opacity: 0;
+}
+.motion-toggle:focus-visible {
+  clip-path: none;
+  opacity: 1;
+}
+
+/* Atalho "Pular introdução" */
+.skip-link {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 30;
+  padding: 0.6em 1.1em;
+  font: 600 var(--fs-sm)/1 var(--f-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-fg);
+  background: var(--c-bg);
+  border: 1px solid var(--c-tech);
+  text-decoration: none;
+  transform: translate(-50%, -200%);
+}
+.skip-link:focus-visible { transform: translate(-50%, 0); }
+
+/* ------------------------------------------------------------------------
+   Responsivo — layout compacto
+   Celular em pé (≤ 760 px) e telas baixas na horizontal (≤ 500 px de altura,
+   ex.: celular deitado): a escala proporcional deixaria textos e ícones
+   pequenos demais, então navbar e área inferior ganham tamanhos em px.
+   ------------------------------------------------------------------------ */
+@media (max-width: 760px), (max-height: 500px) {
+  /* Navbar ocupa a largura toda da janela, não só a moldura da composição */
+  :root { --nav-h: 80px; }
+  .nav {
+    left: 0;
+    width: 100%;
+    transform: none;
+  }
+  .nav::before,
+  .nav::after { display: none; }
+
+  .nav__brand {
+    left: 16px;
+    top: 19px;
+    width: 128px;
+  }
+
+  .nav__social {
+    right: 16px;
+    top: 12px;
+    height: 28px;
+    gap: 10px;   /* cabe também o botão de idioma */
+  }
+  .nav__divider { height: 20px; }
+  /* celulares estreitos: sem os divisores e logo um pouco menor, para os
+     ícones, a chave de tema e o idioma não encostarem no logo */
+  @media (max-width: 380px) {
+    .nav__social .nav__divider { display: none; }
+    .nav__brand { width: 104px; }
+  }
+  .social--spotify    { width: 20px; }
+  .social--soundcloud { width: 30px; }
+  .social--instagram  { width: 18px; }
+  /* área de toque mínima */
+  .social { padding: 6px 0; }
+
+  .nav__segments { display: none; }
+
+  /* Espectro dentro da aba da linha HUD (trapézio entre x 546–1415 e
+     y 91–146 do viewBox 2048 × 160, esticado na largura da tela) */
+  .nav__spectrum {
+    display: block;
+    position: absolute;
+    left: calc(980.5 / 2048 * 100%);   /* centro da aba */
+    top: calc(118.5 / 160 * 100%);     /* meio da altura da aba */
+    width: min(36%, 180px);
+    height: calc(var(--nav-h) * 0.28);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .access { padding-bottom: 48px; }
+
+  .manifesto {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.14em;
+    margin-right: -0.14em;
+  }
+  .manifesto__dot { margin-inline: 0.2em; }
+
+  .ornament {
+    width: min(64vw, 250px);
+    height: auto;
+    margin-top: 12px;
+  }
+
+  .enter-row {
+    width: 100%;
+    gap: 14px;
+    margin-top: 14px;
+    padding-inline: 16px;
+  }
+  .enter-row__line { flex: 1; width: auto; height: 1px; }
+
+  .enter {
+    flex: none;
+    width: 148px;
+    height: 44px;   /* área de toque confortável */
+    padding-left: 32px;
+  }
+  .enter__label { font-size: 15px; }
+  .enter__arrow { left: 116px; width: 13px; }
+}
+
+/* Celular e tablet em pé: o palco é ampliado ~14 % (recorte das bordas
+   laterais) para o logotipo ganhar presença. As molduras laterais, que
+   ficariam cortadas, são omitidas (HUD simplificado); os circuitos seguem
+   até a borda da tela. */
+@media (max-width: 1024px) and (orientation: portrait) {
+  .stage {
+    justify-self: start;
+    width: calc(2048 * 100vw / 1800);
+    height: calc(900 * 100vw / 1800);
+    margin-left: calc(50vw - 1024 * 100vw / 1800);
+  }
+}
+
+/* Telas baixas na horizontal (celular deitado): o palco usa a altura que
+   sobra entre a navbar e o ENTER; o ornamento central é omitido. */
+@media (max-height: 500px) {
+  :root { --u: min(calc(100vw / 2048), calc((100vh - 224px) / 900)); }
+  @supports (height: 100svh) {
+    :root { --u: min(calc(100vw / 2048), calc((100svh - 224px) / 900)); }
+  }
+  :root { --nav-h: 60px; }
+  .nav__brand { top: 16px; }
+  .nav__social { top: 6px; }
+  .hero__stage { padding-block: 4px; }
+  .ornament { display: none; }
+  .enter-row { margin-top: 12px; }
+  .access { padding-bottom: 14px; }
+  .scroll-hint { display: none; }   /* sem espaço abaixo do ENTER */
+}
+
+/* ------------------------------------------------------------------------
+   Preferência de mais contraste (opcional do sistema)
+   A identidade padrão usa #00CC22 sobre branco (contraste ≈ 2,2:1). Quem
+   pede mais contraste recebe textos e ícones em verde escuro (≈ 5,5:1).
+   ------------------------------------------------------------------------ */
+@media (prefers-contrast: more) {
+  :root:not([data-theme="dark"]) :is(.manifesto, .social, .theme-toggle, .enter, .section-head__index, .player-card__label, .player-card__link, .release-meta li, .release-info__artist, .hud-btn--ghost, .live-block-title, .event-row__date, .project-copy__lead em, .project-readout__title, .project-readout__signal, .project-sequence__title, .atom-copy__lead em, .atom-legend__num, .booking-copy__lead em, .net-card__icon, .net-card__arrow, .site-footer__brand, .site-footer__top) { color: #007A14; }
+  :root:not([data-theme="dark"]) :is(.enter__outline, .enter__accent) { stroke: #007A14; }
+  .nav__divider { opacity: 0.8; }
+  /* laranja sólido, sem vidro, quando o sistema pede mais contraste */
+  .event-row__action { background: none; -webkit-text-fill-color: currentColor; filter: none; color: var(--c-fg); }
+}
+
+/* Modo de alto contraste do Windows: cores do sistema */
+@media (forced-colors: active) {
+  .enter__outline { fill: Canvas; stroke: ButtonText; }
+  .enter__fill { display: none; }
+  .enter,
+  .social { color: LinkText; }
+  .enter:focus-visible,
+  .social:focus-visible { outline: 2px solid Highlight; }
+}
