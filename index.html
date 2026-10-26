@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATOMUZ — Psytrance • Science • Technology</title>
+  <meta name="description" content="ATOMUZ — site oficial do projeto de música eletrônica. Psytrance, ciência e tecnologia.">
+  <link rel="canonical" href="https://atomuz-wav.github.io/atomuz.psy/">
+  <meta name="theme-color" content="#040805">
+  <!-- O site abre no tema escuro; o claro é opção do visitante (botão sol/lua) -->
+  <meta name="color-scheme" content="dark">
+
+  <!-- Ícone da aba: o "A" do logo oficial (SVG nos navegadores atuais, PNG nos antigos e no iPhone) -->
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
+  <!--
+    Prévia do link ao compartilhar (WhatsApp, Instagram, Facebook, X).
+    As URLs precisam ser ABSOLUTAS. Se o site ganhar domínio próprio,
+    atualizar canonical, og:url, og:image e o JSON-LD no fim do <head>.
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ATOMUZ">
+  <meta property="og:title" content="ATOMUZ — Progressive Psytrance · Zenonesque">
+  <meta property="og:description" content="Projeto de progressive psytrance e zenonesque de Pernambuco. Música, sets ao vivo e booking.">
+  <meta property="og:url" content="https://atomuz-wav.github.io/atomuz.psy/">
+  <meta property="og:image" content="https://atomuz-wav.github.io/atomuz.psy/assets/og/og-atomuz.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo ATOMUZ em verde neon sobre fundo escuro">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Fontes: Orbitron (logo, títulos, menu e botões), Space Grotesk (parágrafos e textos
+       corridos) e Share Tech Mono (rótulos técnicos HUD) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <link rel="stylesheet" href="css/style.css?v=ce540deb">
+
+  <!--
+    BIBLIOTECAS (módulos ES via importmap, versões minificadas)
+    - three: partículas WebGL. GSAP: sequência de entrada e transição do ENTER.
+    Ambas são carregadas sob demanda com import() dinâmico: se a CDN falhar,
+    a Hero continua funcionando sem elas.
+    Os módulos locais também estão aqui, com "?v=" (carimbo do conteúdo):
+    assim o navegador nunca usa uma cópia antiga. NÃO edite à mão — rode
+    python3 tools/versionar.py depois de alterar CSS ou JS.
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm",
+        "./js/config.js": "./js/config.js?v=0eaf43e4",
+        "./js/core/interaction.js": "./js/core/interaction.js?v=8762fc9a",
+        "./js/core/loop.js": "./js/core/loop.js?v=078b6124",
+        "./js/core/motion.js": "./js/core/motion.js?v=19092605",
+        "./js/core/state.js": "./js/core/state.js?v=e9f4355a",
+        "./js/modules/atom-diagram.js": "./js/modules/atom-diagram.js?v=00d131f4",
+        "./js/modules/atom-system.js": "./js/modules/atom-system.js?v=07651ddc",
+        "./js/modules/booking-form.js": "./js/modules/booking-form.js?v=23349b3a",
+        "./js/modules/circuit-system.js": "./js/modules/circuit-system.js?v=b6c32a80",
+        "./js/modules/code-field.js": "./js/modules/code-field.js?v=66953139",
+        "./js/modules/depth-layers.js": "./js/modules/depth-layers.js?v=54ad5562",
+        "./js/modules/enter-transition.js": "./js/modules/enter-transition.js?v=5840edcf",
+        "./js/modules/hud-system.js": "./js/modules/hud-system.js?v=ed468414",
+        "./js/modules/i18n.js": "./js/modules/i18n.js?v=ddd5de00",
+        "./js/modules/intro-sequence.js": "./js/modules/intro-sequence.js?v=3821b317",
+        "./js/modules/lazy-embeds.js": "./js/modules/lazy-embeds.js?v=67e5f021",
+        "./js/modules/logo-energy.js": "./js/modules/logo-energy.js?v=5a87b636",
+        "./js/modules/logo-matrix.js": "./js/modules/logo-matrix.js?v=44653e71",
+        "./js/modules/media-viewer.js": "./js/modules/media-viewer.js?v=8839a908",
+        "./js/modules/particle-field.js": "./js/modules/particle-field.js?v=888e0e8d",
+        "./js/modules/particle-webgl.js": "./js/modules/particle-webgl.js?v=a1584689",
+        "./js/modules/section-orbs.js": "./js/modules/section-orbs.js?v=e6a6d760",
+        "./js/modules/section-reveal.js": "./js/modules/section-reveal.js?v=2387fcad",
+        "./js/modules/section-spectrum.js": "./js/modules/section-spectrum.js?v=f6606246",
+        "./js/script.js": "./js/script.js?v=516ff85a",
+        "./js/utils/random.js": "./js/utils/random.js?v=296157a1",
+        "./js/utils/svg.js": "./js/utils/svg.js?v=6b6d900b",
+        "./js/vendor/thinking-orbs.js": "./js/vendor/thinking-orbs.js?v=429ddd79"
+      }
+    }
+  </script>
+
+  <!-- Pré-carrega os módulos locais em paralelo (evita a "cascata" de imports) -->
+  <link rel="modulepreload" href="js/script.js?v=516ff85a">
+  <link rel="modulepreload" href="js/core/loop.js?v=078b6124">
+  <link rel="modulepreload" href="js/core/motion.js?v=19092605">
+  <link rel="modulepreload" href="js/core/interaction.js?v=8762fc9a">
+  <link rel="modulepreload" href="js/core/state.js?v=e9f4355a">
+  <link rel="modulepreload" href="js/config.js?v=0eaf43e4">
+  <link rel="modulepreload" href="js/utils/random.js?v=296157a1">
+  <link rel="modulepreload" href="js/utils/svg.js?v=6b6d900b">
+  <link rel="modulepreload" href="js/modules/logo-matrix.js?v=44653e71">
+  <link rel="modulepreload" href="js/modules/logo-energy.js?v=5a87b636">
+  <link rel="modulepreload" href="js/modules/circuit-system.js?v=b6c32a80">
+  <link rel="modulepreload" href="js/modules/hud-system.js?v=ed468414">
+  <link rel="modulepreload" href="js/modules/depth-layers.js?v=54ad5562">
+  <link rel="modulepreload" href="js/modules/particle-field.js?v=888e0e8d">
+  <link rel="modulepreload" href="js/modules/atom-system.js?v=07651ddc">
+  <link rel="modulepreload" href="js/modules/intro-sequence.js?v=3821b317">
+  <link rel="modulepreload" href="js/modules/enter-transition.js?v=5840edcf">
+  <link rel="modulepreload" href="js/modules/section-reveal.js?v=2387fcad">
+  <link rel="modulepreload" href="js/modules/atom-diagram.js?v=00d131f4">
+  <link rel="modulepreload" href="js/modules/booking-form.js?v=23349b3a">
+  <link rel="modulepreload" href="js/modules/code-field.js?v=66953139">
+  <link rel="modulepreload" href="js/modules/i18n.js?v=ddd5de00">
+  <link rel="modulepreload" href="js/modules/media-viewer.js?v=8839a908">
+  <link rel="modulepreload" href="js/modules/lazy-embeds.js?v=67e5f021">
+
+  <!--
+    Bibliotecas da CDN pré-carregadas JUNTO com os módulos locais (antes só
+    começavam a baixar depois de todos eles). A entrada da Hero espera o
+    GSAP, então isso encurta o tempo de tela vazia no primeiro acesso.
+  -->
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" crossorigin>
+
+  <!--
+    Esconde a composição até a sequência de entrada começar (evita "piscar" o
+    layout completo antes da animação). Trava de segurança: se o JS não
+    assumir em 3 s, tudo aparece normalmente. Não roda com movimento reduzido.
+  -->
+  <!--
+    TEMA CLARO/ESCURO (script embutido de propósito)
+    - Aplica o tema salvo antes da primeira pintura (evita piscar branco).
+    - Cuida do botão sol/lua sem depender dos módulos JS: funciona mesmo se
+      eles demorarem, falharem ou vierem desatualizados do cache.
+    - Avisa os demais sistemas com o evento "atomuz:themechange".
+  -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var KEY = 'atomuz:theme';
+      var META = { light: ['light only', '#FFFFFF'], dark: ['dark', '#040805'] };
+
+      function syncButton() {
+        var btn = document.querySelector('.theme-toggle');
+        if (btn) btn.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'dark'));
+      }
+
+      function apply(theme, save) {
+        if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+        else root.removeAttribute('data-theme');
+        var m = META[theme] || META.light;
+        var scheme = document.querySelector('meta[name="color-scheme"]');
+        var color = document.querySelector('meta[name="theme-color"]');
+        if (scheme) scheme.setAttribute('content', m[0]);
+        if (color) color.setAttribute('content', m[1]);
+        syncButton();
+        if (save) {
+          // o escuro é o padrão: só a escolha pelo claro precisa ser lembrada
+          try {
+            if (theme === 'light') localStorage.setItem(KEY, 'light');
+            else localStorage.removeItem(KEY);
+          } catch (e) {}
+        }
+        try { document.dispatchEvent(new CustomEvent('atomuz:themechange', { detail: { theme: theme } })); } catch (e) {}
+      }
+
+      var saved = null;
+      try { saved = localStorage.getItem(KEY); } catch (e) {}
+      apply(saved === 'light' ? 'light' : 'dark', false);
+
+      // Delegação de evento: vale para o botão assim que ele existir na página
+      document.addEventListener('click', function (event) {
+        var btn = event.target.closest && event.target.closest('.theme-toggle');
+        if (!btn) return;
+        apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+      });
+      document.addEventListener('DOMContentLoaded', syncButton);
+    })();
+  </script>
+
+  <script>
+    // Navbar fixa: mostra o fundo dela assim que a página sai do topo
+    (function () {
+      var root = document.documentElement;
+      function sync() { root.classList.toggle('is-scrolled', window.scrollY > 8); }
+      window.addEventListener('scroll', sync, { passive: true });
+      sync();
+    })();
+  </script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      try { if (localStorage.getItem('atomuz:motion') === 'paused') return; } catch (e) {}
+      root.classList.add('is-booting');
+      setTimeout(function () { root.classList.remove('is-booting'); }, 3000);
+    })();
+  </script>
+
+  <script type="module" src="js/script.js?v=516ff85a"></script>
+
+  <!-- Dados estruturados (schema.org): dizem ao Google que o site é de um artista musical -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "ATOMUZ",
+    "genre": ["Progressive Psytrance", "Zenonesque"],
+    "url": "https://atomuz-wav.github.io/atomuz.psy/",
+    "image": "https://atomuz-wav.github.io/atomuz.psy/assets/og/og-atomuz.jpg",
+    "foundingLocation": { "@type": "Place", "name": "Pernambuco, Brasil" },
+    "member": { "@type": "Person", "name": "Luiz Felipe" },
+    "sameAs": [
+      "https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi",
+      "https://soundcloud.com/atomuz",
+      "https://www.instagram.com/atomuz_/"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Atalho de teclado: aparece ao receber foco (primeiro Tab da página) -->
+  <a class="skip-link" href="#explorar">Pular introdução</a>
+
+  <!--
+    SPRITE SVG (definições compartilhadas)
+    #wm-path = LOGO OFICIAL do ATOMUZ, vetorizado a partir do arquivo
+    ATOMUZ-.png (contorno traçado automaticamente). As coordenadas seguem o
+    sistema da imagem de referência da Hero (2048 × 2048 px): o logo ocupa
+    x 188 → 1858 e y 932 → 1090. O ponto central do "O" (≈ 823, 1009) é o
+    núcleo atômico da Hero.
+  -->
+  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <path id="wm-path" fill-rule="evenodd" clip-rule="evenodd" d="
+        M297.6 935.1 L300.7 934.3 L307.0 933.9 L313.2 934.1 L317.9 934.6 L319.5 935.3 L322.6 935.9 L327.3 938.0 L332.0 940.7 L336.6 944.5 L342.1 950.7 L348.0 958.6 L417.0 1050.9 L421.7 1057.2 L423.4 1060.3 L424.1 1065.0 L423.5 1071.3 L421.8 1074.4 L418.1 1078.2 L414.9 1080.0 L411.8 1080.9 L408.7 1081.3 L405.6 1080.8 L402.4 1079.9 L399.3 1077.9 L397.3 1076.0 L392.6 1069.7 L321.1 974.2 L317.9 970.8 L314.8 968.0 L311.6 966.0 L308.5 965.6 L305.4 966.0 L302.3 967.9 L298.7 971.1 L292.5 978.9 L223.1 1071.3 L219.4 1076.0 L217.7 1077.5 L214.6 1079.7 L211.5 1080.7 L208.3 1081.3 L205.2 1081.0 L202.1 1080.0 L199.0 1078.3 L195.1 1074.4 L193.4 1071.3 L192.7 1066.6 L192.7 1065.0 L193.4 1060.3 L195.1 1057.2 L275.4 949.2 L280.3 944.1 L285.0 940.6 L289.7 937.9 L294.4 935.9 L297.6 935.1 Z
+        M425.8 941.4 L427.5 940.6 L432.2 940.3 L654.4 940.3 L659.1 940.6 L663.6 942.9 L665.4 944.3 L666.9 946.1 L668.9 949.2 L670.1 955.4 L669.0 961.7 L667.0 964.8 L665.4 966.6 L663.7 968.0 L660.7 969.8 L659.1 970.4 L654.4 970.9 L591.8 970.9 L582.4 972.3 L577.7 974.0 L573.0 976.9 L569.9 979.6 L566.2 983.6 L563.3 988.3 L562.1 991.3 L560.0 997.7 L558.6 1008.7 L558.6 1065.0 L558.2 1069.7 L557.9 1071.3 L556.2 1074.4 L554.9 1076.0 L552.7 1078.1 L549.5 1079.9 L546.4 1080.9 L543.3 1081.3 L540.2 1080.9 L537.0 1079.9 L533.9 1078.1 L531.7 1076.0 L530.4 1074.4 L528.7 1071.3 L528.3 1069.7 L528.1 1066.6 L528.1 1008.7 L528.4 1000.8 L530.1 991.4 L531.2 988.3 L531.9 985.2 L532.7 983.6 L533.6 980.5 L536.5 974.2 L537.5 972.7 L537.2 971.1 L535.5 970.9 L432.2 970.9 L427.5 970.4 L425.9 970.0 L422.8 968.2 L419.3 964.8 L417.5 961.7 L416.5 957.0 L416.6 953.9 L417.6 949.2 L421.0 944.5 L424.3 942.0 Z
+        M741.7 941.4 L745.2 940.5 L751.4 940.3 L903.3 940.4 L908.0 940.9 L914.2 942.5 L915.8 943.3 L917.4 943.7 L923.6 946.9 L929.9 951.4 L936.1 957.2 L941.4 963.3 L944.6 968.0 L946.4 971.1 L951.0 980.5 L954.1 989.9 L955.6 996.1 L956.8 1005.5 L956.9 1013.3 L955.7 1024.3 L953.9 1032.1 L953.2 1033.7 L952.5 1036.8 L949.3 1044.7 L946.0 1050.9 L942.9 1055.6 L938.0 1061.9 L934.6 1065.4 L931.4 1068.2 L926.7 1071.9 L922.0 1074.9 L915.8 1077.9 L911.1 1079.5 L908.0 1080.0 L901.7 1081.0 L897.0 1081.3 L749.9 1081.3 L740.5 1079.9 L734.2 1078.1 L728.0 1075.1 L723.3 1072.0 L718.6 1068.3 L715.5 1065.5 L712.1 1061.9 L707.2 1055.6 L702.6 1047.8 L699.0 1040.0 L698.7 1038.4 L697.9 1036.8 L695.9 1030.6 L695.5 1027.4 L694.3 1022.7 L693.4 1010.2 L694.4 997.7 L697.6 985.2 L698.4 983.6 L699.3 980.5 L700.2 978.9 L700.7 977.3 L703.9 971.1 L706.9 966.4 L710.4 961.7 L714.7 957.0 L718.6 953.3 L724.8 948.5 L729.5 945.7 L732.7 944.1 L737.4 942.3 L740.5 941.7 Z
+        M1000.2 941.4 L1001.9 940.6 L1008.1 940.4 L1011.3 941.0 L1014.4 942.7 L1016.9 944.5 L1037.9 962.0 L1050.4 971.4 L1059.8 977.7 L1061.3 978.5 L1067.6 982.5 L1069.2 983.0 L1070.7 984.1 L1077.0 987.2 L1078.6 987.7 L1080.1 988.7 L1088.0 991.6 L1091.1 992.3 L1094.2 993.5 L1097.3 993.9 L1100.5 994.8 L1116.1 996.3 L1130.2 996.6 L1141.2 996.3 L1155.3 994.9 L1158.4 994.0 L1161.5 993.5 L1164.6 992.4 L1167.8 991.6 L1169.3 990.8 L1175.6 988.5 L1185.0 983.8 L1192.8 979.2 L1202.2 973.1 L1214.7 963.7 L1222.6 957.5 L1238.2 944.1 L1241.3 942.1 L1244.5 940.7 L1246.0 940.4 L1250.7 940.4 L1253.9 940.9 L1257.0 942.5 L1260.8 946.0 L1262.6 949.2 L1263.8 952.3 L1264.0 953.9 L1264.0 1068.1 L1262.4 1072.8 L1260.1 1076.0 L1258.5 1077.5 L1255.4 1079.7 L1250.7 1081.1 L1246.0 1081.0 L1241.3 1079.5 L1238.7 1077.5 L1235.7 1074.4 L1234.7 1072.8 L1234.1 1071.3 L1233.1 1066.6 L1233.1 1027.4 L1233.1 991.4 L1232.7 989.9 L1231.9 989.5 L1227.3 993.3 L1216.3 1001.2 L1203.8 1009.0 L1197.5 1012.4 L1192.8 1014.5 L1191.3 1015.6 L1189.7 1016.0 L1185.0 1018.3 L1181.9 1019.3 L1180.3 1020.2 L1170.9 1023.5 L1158.4 1026.6 L1147.4 1028.3 L1133.3 1029.3 L1127.1 1029.4 L1106.7 1028.2 L1095.8 1026.6 L1092.6 1025.6 L1089.5 1025.1 L1086.4 1024.1 L1083.3 1023.5 L1073.9 1020.2 L1072.3 1019.3 L1069.2 1018.3 L1064.5 1016.0 L1062.9 1015.6 L1058.2 1012.9 L1056.7 1012.4 L1048.8 1007.9 L1036.3 999.8 L1026.9 992.7 L1022.2 989.4 L1021.8 989.9 L1021.6 991.4 L1021.6 1065.0 L1021.3 1069.7 L1020.0 1072.8 L1017.9 1076.0 L1016.0 1077.8 L1012.8 1079.8 L1008.1 1081.1 L1006.6 1081.3 L1003.4 1081.0 L1000.3 1080.0 L997.2 1078.3 L993.3 1074.4 L991.7 1071.3 L990.8 1065.0 L990.8 955.4 L992.0 949.2 L995.4 944.5 L998.7 942.0 Z
+        M1305.4 941.4 L1307.1 940.6 L1310.2 940.3 L1313.3 940.3 L1316.5 940.8 L1319.6 942.3 L1321.2 943.6 L1324.8 947.6 L1326.2 950.7 L1326.7 953.9 L1326.9 1013.3 L1327.0 1016.5 L1328.8 1025.9 L1330.5 1030.4 L1333.1 1035.3 L1336.8 1039.8 L1338.5 1041.5 L1343.1 1045.1 L1346.2 1046.9 L1349.3 1048.3 L1355.6 1049.9 L1363.4 1050.1 L1491.8 1050.1 L1499.6 1049.8 L1505.8 1048.3 L1512.1 1045.2 L1516.8 1041.7 L1518.6 1040.0 L1523.4 1033.7 L1523.9 1032.1 L1525.0 1030.6 L1526.7 1025.9 L1528.0 1019.6 L1528.5 1013.3 L1528.5 953.9 L1528.8 952.3 L1530.0 949.2 L1531.8 946.0 L1535.6 942.5 L1538.7 940.9 L1540.3 940.5 L1543.4 940.3 L1548.1 940.5 L1549.7 941.1 L1552.8 942.8 L1556.3 946.0 L1558.3 949.2 L1559.5 953.9 L1559.6 980.5 L1559.6 1010.2 L1559.3 1016.5 L1558.3 1024.3 L1556.5 1032.1 L1553.3 1041.5 L1548.5 1050.9 L1545.5 1055.6 L1540.5 1061.9 L1535.6 1066.9 L1529.3 1071.9 L1524.6 1074.9 L1523.1 1075.5 L1521.5 1076.6 L1519.9 1077.0 L1518.4 1077.9 L1512.1 1079.9 L1504.3 1081.0 L1499.6 1081.3 L1354.0 1081.3 L1349.3 1081.0 L1341.5 1079.6 L1336.8 1078.1 L1335.2 1077.2 L1333.7 1076.7 L1327.4 1073.1 L1319.6 1066.9 L1314.7 1061.9 L1309.8 1055.6 L1307.8 1052.5 L1303.6 1044.7 L1301.6 1040.0 L1301.3 1038.4 L1300.0 1035.3 L1299.7 1033.7 L1298.5 1030.6 L1298.1 1027.4 L1296.9 1022.7 L1296.0 1010.2 L1296.0 955.4 L1297.2 949.2 L1300.6 944.5 L1303.9 942.0 Z
+        M1601.2 941.4 L1602.9 940.6 L1607.6 940.3 L1822.0 940.3 L1828.3 940.7 L1833.0 942.1 L1836.1 943.7 L1839.2 945.6 L1843.3 949.2 L1846.2 952.3 L1849.2 957.0 L1851.0 961.7 L1852.4 968.0 L1852.5 971.1 L1852.1 975.8 L1850.6 982.0 L1849.8 983.6 L1849.3 985.2 L1847.5 988.3 L1845.5 990.8 L1841.9 994.6 L1839.2 996.8 L1836.1 998.6 L1833.0 1000.1 L1828.3 1001.6 L1825.1 1002.0 L1822.0 1003.0 L1818.9 1003.5 L1815.7 1004.5 L1804.8 1006.8 L1801.7 1007.9 L1798.5 1008.3 L1795.4 1009.4 L1792.3 1009.8 L1789.1 1010.8 L1786.0 1011.3 L1775.0 1014.2 L1771.9 1014.6 L1768.8 1015.7 L1765.7 1016.1 L1762.5 1017.1 L1759.4 1017.6 L1756.3 1018.6 L1745.3 1020.9 L1742.2 1022.0 L1739.0 1022.4 L1735.9 1023.5 L1732.8 1023.9 L1729.7 1024.9 L1726.5 1025.4 L1715.6 1028.2 L1712.4 1028.7 L1709.3 1029.8 L1706.2 1030.2 L1703.1 1031.2 L1699.9 1031.7 L1696.8 1032.7 L1693.7 1033.2 L1690.5 1034.2 L1685.8 1035.0 L1682.7 1036.1 L1679.6 1036.5 L1676.4 1037.5 L1673.3 1038.0 L1670.2 1039.0 L1667.1 1039.5 L1663.9 1040.5 L1660.8 1041.0 L1656.1 1042.3 L1653.0 1042.8 L1649.8 1043.9 L1646.7 1044.3 L1642.0 1045.9 L1639.9 1047.8 L1642.0 1049.5 L1643.6 1049.8 L1649.8 1050.1 L1839.2 1050.3 L1843.9 1051.8 L1847.1 1054.0 L1848.7 1055.6 L1850.9 1058.7 L1852.4 1063.4 L1852.5 1066.6 L1852.3 1068.1 L1850.8 1072.8 L1848.4 1076.0 L1846.8 1077.5 L1843.9 1079.7 L1839.2 1081.1 L1836.1 1081.3 L1623.2 1081.3 L1620.1 1081.1 L1613.8 1079.9 L1609.1 1078.2 L1606.0 1076.4 L1601.7 1072.8 L1598.2 1069.1 L1596.3 1066.6 L1594.6 1063.4 L1592.8 1058.7 L1591.9 1050.9 L1592.8 1041.5 L1594.4 1036.8 L1595.4 1035.3 L1596.0 1033.7 L1599.3 1029.0 L1600.8 1027.4 L1602.9 1025.5 L1606.0 1023.4 L1609.1 1021.9 L1613.8 1020.6 L1624.8 1018.3 L1627.9 1017.3 L1631.1 1016.8 L1634.2 1015.8 L1637.3 1015.4 L1640.4 1014.3 L1651.4 1012.0 L1654.5 1011.0 L1657.7 1010.6 L1660.8 1009.5 L1663.9 1009.1 L1667.1 1008.1 L1678.0 1005.8 L1681.1 1004.7 L1684.3 1004.3 L1687.4 1003.3 L1690.5 1002.8 L1693.7 1001.8 L1704.6 999.5 L1707.7 998.5 L1710.9 998.1 L1714.0 997.0 L1717.1 996.6 L1720.3 995.6 L1731.2 993.3 L1734.4 992.2 L1737.5 991.8 L1740.6 990.8 L1743.7 990.3 L1746.9 989.3 L1750.0 988.8 L1754.7 987.5 L1757.8 987.0 L1761.0 986.0 L1764.1 985.6 L1767.2 984.5 L1770.4 984.1 L1773.5 983.0 L1776.6 982.6 L1781.3 981.2 L1784.4 980.8 L1787.6 979.7 L1790.7 979.3 L1793.8 978.3 L1797.0 977.8 L1800.1 976.4 L1800.9 975.8 L1802.1 974.2 L1800.1 972.1 L1795.4 971.2 L1790.7 970.9 L1607.6 970.9 L1602.9 970.4 L1601.3 970.0 L1598.2 968.2 L1594.8 964.8 L1592.9 961.7 L1591.9 957.0 L1592.0 953.9 L1593.0 949.2 L1596.4 944.5 L1599.8 942.0 Z
+        M756.4 971.1 L759.3 970.9 L890.7 970.9 L895.4 971.2 L901.7 972.2 L906.4 973.8 L909.5 975.4 L914.2 978.7 L917.8 982.0 L922.1 988.3 L924.2 993.0 L925.6 997.7 L926.9 1005.5 L927.2 1010.2 L926.9 1014.9 L925.5 1024.3 L924.0 1029.0 L920.8 1035.3 L917.4 1039.5 L912.7 1043.7 L908.0 1046.7 L904.8 1048.2 L898.6 1049.8 L893.9 1050.1 L754.6 1050.0 L749.9 1049.4 L745.2 1048.1 L742.1 1046.7 L737.4 1043.6 L733.4 1040.0 L730.6 1036.8 L727.8 1032.1 L725.8 1027.4 L724.5 1022.7 L723.2 1011.8 L723.5 1007.1 L724.4 999.3 L726.1 993.0 L727.4 989.9 L729.1 986.7 L734.2 980.4 L740.5 975.5 L743.6 973.8 L748.3 972.2 L756.1 971.1 Z
+        M818.3 991.4 L820.3 990.8 L821.9 990.7 L826.6 990.8 L831.3 992.2 L834.4 993.9 L837.5 996.7 L839.7 999.3 L841.4 1002.4 L842.5 1005.5 L843.0 1008.7 L842.9 1013.3 L841.4 1018.0 L839.7 1021.2 L837.5 1023.7 L834.4 1026.5 L831.3 1028.2 L828.8 1029.0 L825.0 1029.8 L820.3 1029.6 L815.6 1028.2 L812.5 1026.5 L809.4 1023.7 L807.2 1021.2 L805.5 1018.0 L804.4 1014.9 L803.9 1011.8 L804.0 1007.1 L805.5 1002.4 L807.2 999.3 L809.4 996.7 L812.5 993.9 L815.6 992.3 L817.2 991.9 Z
+        M1425.5 991.4 L1427.6 990.8 L1429.2 990.7 L1433.8 990.8 L1438.5 992.2 L1441.7 993.9 L1444.8 996.7 L1447.0 999.3 L1448.7 1002.4 L1449.8 1005.5 L1450.3 1008.7 L1450.1 1013.3 L1448.7 1018.0 L1447.0 1021.2 L1444.8 1023.7 L1441.7 1026.5 L1438.5 1028.2 L1436.1 1029.0 L1432.3 1029.8 L1427.6 1029.6 L1422.9 1028.2 L1419.8 1026.5 L1416.6 1023.7 L1414.4 1021.2 L1412.7 1018.0 L1411.6 1014.9 L1411.2 1011.8 L1411.3 1007.1 L1412.7 1002.4 L1414.4 999.3 L1416.6 996.7 L1419.8 993.9 L1422.9 992.3 L1424.5 991.9 Z
+        M301.7 1027.4 L303.8 1026.7 L311.6 1026.5 L313.2 1026.7 L317.9 1028.5 L320.8 1030.6 L324.2 1033.9 L326.3 1036.8 L327.5 1040.0 L328.2 1043.1 L328.2 1049.3 L328.1 1050.9 L326.3 1055.6 L322.6 1060.5 L317.9 1064.1 L315.5 1065.0 L313.2 1065.8 L307.0 1066.0 L303.8 1065.8 L299.1 1064.1 L296.0 1062.0 L292.7 1058.7 L290.6 1055.6 L289.3 1052.5 L288.9 1050.9 L288.7 1047.8 L288.9 1041.5 L290.6 1036.8 L294.4 1031.9 L299.1 1028.4 L300.7 1027.9 Z
+        M1123.6 1046.2 L1125.5 1045.8 L1130.2 1045.8 L1134.9 1046.9 L1138.0 1048.5 L1141.2 1050.8 L1142.8 1052.5 L1145.1 1055.6 L1146.6 1058.7 L1147.6 1063.4 L1147.7 1066.6 L1146.6 1072.8 L1145.0 1076.0 L1141.2 1080.5 L1138.0 1083.0 L1134.9 1084.5 L1131.8 1085.1 L1128.6 1085.7 L1125.5 1085.6 L1120.8 1084.6 L1117.7 1083.1 L1114.6 1080.9 L1111.4 1077.3 L1109.6 1074.4 L1108.1 1069.7 L1107.6 1066.6 L1107.8 1063.4 L1109.5 1057.2 L1112.6 1052.5 L1114.6 1050.5 L1119.3 1047.4 L1122.4 1046.6 Z"/>
+
+      <clipPath id="wm-clip" clipPathUnits="userSpaceOnUse">
+        <!-- clip-rule aqui no <use>: alguns navegadores ignoram o do <path>
+             original e acabam "preenchendo" o vazio do O (e de outras letras) -->
+        <use href="#wm-path" clip-rule="evenodd"/>
+      </clipPath>
+
+      <!-- Degradê verde do logotipo (navbar e Hero) -->
+      <linearGradient id="g-wm-nav" x1="0" y1="932" x2="0" y2="1090" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#5CFF5C"/>
+        <stop offset=".55" stop-color="#00E61E"/>
+        <stop offset="1" stop-color="#00B81F"/>
+      </linearGradient>
+
+      <!-- Logo da navbar em "vidro": branco no tema escuro, grafite no claro -->
+      <linearGradient id="g-wm-glass" x1="0" y1="932" x2="0" y2="1090" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#FFFFFF"/>
+        <stop offset=".5" stop-color="#F1F5F2"/>
+        <stop offset=".52" stop-color="#DCE3DE"/>
+        <stop offset="1" stop-color="#C4CDC6"/>
+      </linearGradient>
+      <linearGradient id="g-wm-glass-dark" x1="0" y1="932" x2="0" y2="1090" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#3A443C"/>
+        <stop offset=".5" stop-color="#1C241E"/>
+        <stop offset=".52" stop-color="#0E1610"/>
+        <stop offset="1" stop-color="#071009"/>
+      </linearGradient>
+      <!-- Reflexo que atravessa o vidro -->
+      <linearGradient id="g-brand-shine" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/>
+        <stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ===== NAVEGAÇÃO SUPERIOR (Navigation HUD) =====
+       Fica fora da Hero (filha direta do <body>) para continuar fixa no topo
+       em todos os navegadores durante a rolagem do site inteiro. -->
+  <header class="nav">
+    <span class="nav__backdrop" aria-hidden="true"></span>
+    <svg class="nav__line" viewBox="0 0 2048 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path class="nav__trace" d="M0 146 H490 L546 91 H1415 L1473 146 H2048"/>
+      <!-- Indicadores digitais segmentados -->
+      <g class="nav__segments" data-segments>
+        <path d="M1083 83.5 H1107 L1098 97 H1074 Z"/>
+        <path d="M1115.4 83.5 H1139.4 L1130.4 97 H1106.4 Z"/>
+        <path d="M1147.8 83.5 H1171.8 L1162.8 97 H1138.8 Z"/>
+        <path d="M1180.2 83.5 H1204.2 L1195.2 97 H1171.2 Z"/>
+        <path d="M1212.6 83.5 H1236.6 L1227.6 97 H1203.6 Z"/>
+        <path d="M1245 83.5 H1272 L1263 97 H1236 Z"/>
+      </g>
+    </svg>
+    <!-- Celular: espectro animado no centro da "aba" da linha HUD, que fica
+         vazia quando o menu desce para a linha de baixo (section-spectrum.js) -->
+    <canvas class="nav__spectrum" data-spectrum width="128" height="22" aria-hidden="true"></canvas>
+
+    <a class="nav__brand" href="#inicio" aria-label="ATOMUZ — início">
+      <!-- Brilho do logo numa camada parada, separada das letras animadas: o
+           navegador desenha o desfoque uma vez só, e não a cada quadro -->
+      <svg class="nav__brand-glow" viewBox="184 928 1678 166" aria-hidden="true" focusable="false">
+        <use href="#wm-path"/>
+      </svg>
+      <svg viewBox="184 928 1678 166" aria-hidden="true" focusable="false">
+        <g class="nav__brand-glass">
+          <use class="nav__brand-body" href="#wm-path"/>
+          <!-- reflexo recortado no formato das letras -->
+          <g clip-path="url(#wm-clip)">
+            <rect class="nav__brand-shine" x="-700" y="900" width="260" height="230" fill="url(#g-brand-shine)"/>
+          </g>
+        </g>
+      </svg>
+    </a>
+
+    <!-- Menu de seções: centralizado na "aba" da linha HUD (desktop) ou
+         numa linha logo abaixo da navbar (telas menores) -->
+    <nav class="nav__menu" aria-label="Seções do site">
+      <ul>
+        <li><a href="#music">MÚSICA</a></li>
+        <li><a href="#live">AO VIVO</a></li>
+        <li><a href="#project">SOBRE</a></li>
+        <li><a href="#media">MÍDIA</a></li>
+        <li><a href="#booking">BOOKING</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Redes sociais">
+    <ul class="nav__social">
+      <li>
+        <a class="social social--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+          </svg>
+        </a>
+      </li>
+      <li class="nav__divider" aria-hidden="true"></li>
+      <li>
+        <a class="social social--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
+          <svg viewBox="0 0 44 22" aria-hidden="true" focusable="false">
+            <g fill="currentColor">
+              <rect x="0"    y="12.5" width="2" height="7"  rx="1"/>
+              <rect x="3.3"  y="9.5"  width="2" height="10" rx="1"/>
+              <rect x="6.6"  y="7.5"  width="2" height="12" rx="1"/>
+              <rect x="9.9"  y="5"    width="2" height="14.5" rx="1"/>
+              <rect x="13.2" y="4"    width="2" height="15.5" rx="1"/>
+              <path d="M16.6 19.5 V3.4 C18.1 2.5 19.9 2 21.8 2 C27 2 31.2 5.8 31.8 10.7 C32.5 10.4 33.3 10.3 34.1 10.3 C38.6 10.3 42 13.3 42 15 C42 17.7 39.8 19.5 37.1 19.5 Z"/>
+            </g>
+          </svg>
+        </a>
+      </li>
+      <li class="nav__divider" aria-hidden="true"></li>
+      <li>
+        <a class="social social--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="currentColor" stroke-width="2.3">
+              <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.8"/>
+              <circle cx="12" cy="12" r="5"/>
+            </g>
+            <circle cx="18.1" cy="5.9" r="1.45" fill="currentColor"/>
+          </svg>
+        </a>
+      </li>
+      <li class="nav__divider" aria-hidden="true"></li>
+      <li>
+        <!-- Chave de tema claro/escuro (lógica no script embutido no <head>).
+             Bolinha à esquerda com lua = escuro; à direita com sol = claro. -->
+        <button class="theme-switch theme-toggle" type="button" aria-pressed="false" aria-label="Tema escuro">
+          <span class="theme-switch__knob">
+            <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z"/>
+            </svg>
+            <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
+                <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
+              </g>
+            </svg>
+          </span>
+        </button>
+      </li>
+      <li>
+        <!-- Idioma (js/modules/i18n.js): mostra a bandeira do idioma para o qual
+             o site vai mudar — Reino Unido no português, Brasil no inglês -->
+        <button class="lang-switch" type="button" data-lang-toggle aria-label="Mudar o idioma para inglês" title="English">
+          <svg class="lang-switch__flag lang-switch__flag--en" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+            <clipPath id="flag-uk-diag"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
+            <path d="M0 0v30h60V0z" fill="#012169"/>
+            <path d="M0 0l60 30m0-30L0 30" stroke="#FFFFFF" stroke-width="6"/>
+            <path d="M0 0l60 30m0-30L0 30" clip-path="url(#flag-uk-diag)" stroke="#C8102E" stroke-width="4"/>
+            <path d="M30 0v30M0 15h60" stroke="#FFFFFF" stroke-width="10"/>
+            <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
+          </svg>
+          <svg class="lang-switch__flag lang-switch__flag--pt" viewBox="0 0 20 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+            <rect width="20" height="14" fill="#009C3B"/>
+            <path d="M10 1.6 18.4 7 10 12.4 1.6 7z" fill="#FFDF00"/>
+            <circle cx="10" cy="7" r="3.5" fill="#002776"/>
+            <path d="M6.7 6.2a7 7 0 0 1 6.6 1.6" fill="none" stroke="#FFFFFF" stroke-width="0.6"/>
+          </svg>
+        </button>
+      </li>
+    </ul>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+
+    <!-- Título real da página (o logotipo visual é decorativo para leitores de tela) -->
+    <h1 id="hero-title" class="sr-only">ATOMUZ</h1>
+
+    <!-- Camada de partículas (Three.js; Canvas 2D estático como alternativa) -->
+    <canvas class="hero__particles" data-particles aria-hidden="true"></canvas>
+
+    <!-- Moldura de composição: tudo dentro usa a unidade de design --u (1 px da referência) -->
+    <div class="hero__frame">
+
+
+      <!-- ===== CENTRO (Atomic Identity System) =====
+           O palco é uma PILHA DE SVGs com o mesmo viewBox (faixa y 520 → 1420 da
+           referência). Cada SVG é uma camada de composição própria na GPU:
+             - camadas ESTÁTICAS com brilho (desfoque caro) são desenhadas uma
+               única vez;
+             - camadas ANIMADAS não têm desfoque, então redesenhá-las é barato;
+             - parallax, entrada e oscilação do brilho usam transform/opacity
+               de CSS, que a GPU aplica sem redesenhar nada.
+           (Antes, tudo num único SVG: qualquer movimento refazia todos os
+           desfoques a cada quadro — era isso que deixava a Hero pesada.) -->
+      <div class="hero__stage">
+        <div class="stage" data-stage aria-hidden="true">
+
+          <!-- Definições compartilhadas por todas as camadas -->
+          <svg class="stage-defs" width="0" height="0" focusable="false">
+            <defs>
+              <!-- Brilho neon leve para linhas HUD (userSpaceOnUse evita corte em linhas retas) -->
+              <filter id="f-line-glow" filterUnits="userSpaceOnUse" x="-100" y="400" width="2300" height="1200">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <!-- Halo externo do logotipo -->
+              <filter id="f-logo-halo" filterUnits="userSpaceOnUse" x="0" y="700" width="2048" height="620">
+                <feGaussianBlur stdDeviation="16"/>
+              </filter>
+              <filter id="f-logo-halo-tight" filterUnits="userSpaceOnUse" x="0" y="700" width="2048" height="620">
+                <feGaussianBlur stdDeviation="5"/>
+              </filter>
+              <!-- Brilho interno das bordas das letras (versão com chuva de caracteres) -->
+              <filter id="f-logo-inner" filterUnits="userSpaceOnUse" x="0" y="700" width="2048" height="620">
+                <feGaussianBlur stdDeviation="4"/>
+              </filter>
+              <!-- Brilho de região pequena (caixa do próprio elemento) para peças animadas -->
+              <filter id="f-fx-glow" x="-80%" y="-40%" width="260%" height="180%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+
+              <radialGradient id="g-haze" cx="1024" cy="1010" r="1" gradientUnits="userSpaceOnUse"
+                              gradientTransform="translate(1024 1010) scale(980 300) translate(-1024 -1010)">
+                <stop offset="0" stop-color="#00FF00" stop-opacity=".16"/>
+                <stop offset=".45" stop-color="#00FF00" stop-opacity=".07"/>
+                <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-nucleus">
+                <stop offset="0" stop-color="#E9FFE9"/>
+                <stop offset=".18" stop-color="#00FF00"/>
+                <stop offset=".45" stop-color="#00FF00" stop-opacity=".35"/>
+                <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+              </radialGradient>
+              <!-- Faixa de luz que atravessa o logotipo na entrada -->
+              <linearGradient id="g-sweep" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#B8FFB8" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#D9FFD9" stop-opacity=".85"/>
+                <stop offset="1" stop-color="#B8FFB8" stop-opacity="0"/>
+              </linearGradient>
+              <radialGradient id="g-electron">
+                <stop offset="0" stop-color="#00FF00" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+              </radialGradient>
+              <!-- Brilhos coloridos: terminais dos circuitos e elétrons da Hero -->
+              <radialGradient id="g-glow-white">
+                <stop offset="0" stop-color="#FFFFFF" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-glow-black">
+                <stop offset="0" stop-color="#6E7770" stop-opacity=".45"/>
+                <stop offset="1" stop-color="#6E7770" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-glow-yellow">
+                <stop offset="0" stop-color="#FFE600" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#FFE600" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-glow-blue">
+                <stop offset="0" stop-color="#1F8BFF" stop-opacity=".8"/>
+                <stop offset="1" stop-color="#1F8BFF" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-glow-red">
+                <stop offset="0" stop-color="#FF1F3D" stop-opacity=".8"/>
+                <stop offset="1" stop-color="#FF1F3D" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="g-glow-orange">
+                <stop offset="0" stop-color="#FF8C00" stop-opacity=".8"/>
+                <stop offset="1" stop-color="#FF8C00" stop-opacity="0"/>
+              </radialGradient>
+
+              <!-- Linhas do sistema orbital: definidas uma vez e reutilizadas (atrás do
+                   logo e, bem sutis, sobre as letras como na referência).
+                   data-rotate repete o ângulo do transform: o JS anima a partir dele -->
+              <g id="orbit-lines">
+                <ellipse class="orbit orbit--a" data-orbit cx="1040" cy="965" rx="432" ry="165" data-rotate="-45" transform="rotate(-45 1040 965)"/>
+                <ellipse class="orbit orbit--b" data-orbit cx="988" cy="1040" rx="335" ry="120" data-rotate="46" transform="rotate(46 988 1040)"/>
+              </g>
+            </defs>
+          </svg>
+
+          <!-- Camada 0 · névoa verde suave (opacidade na entrada via CSS) -->
+          <svg class="stage-layer layer-haze" viewBox="0 520 2048 900" focusable="false">
+            <ellipse cx="1024" cy="1010" rx="980" ry="300" fill="url(#g-haze)"/>
+          </svg>
+
+          <!-- Camada 1 · ESTÁTICA: molduras HUD e circuitos (com brilho) -->
+          <svg class="stage-layer layer-base" viewBox="0 520 2048 900" focusable="false">
+            <g class="layer-hud" filter="url(#f-line-glow)">
+              <!-- Pontos de referência -->
+              <g class="hud-dots">
+                <circle cx="6" cy="703" r="2.6"/>
+                <circle cx="2006" cy="703" r="2.6"/>
+                <circle cx="511" cy="788" r="3"/>
+                <circle cx="1377" cy="788" r="5"/>
+                <circle cx="1073" cy="883" r="2.6"/>
+                <circle cx="798" cy="663" r="2.4"/>
+                <circle cx="560" cy="1187" r="2.6"/>
+                <circle cx="878" cy="1188" r="2.4"/>
+                <circle cx="1409" cy="1188" r="2.6"/>
+                <circle cx="1193" cy="788" r="2"/>
+                <circle cx="1455" cy="674" r="2"/>
+                <circle cx="1636" cy="739" r="2.2"/>
+                <circle cx="1856" cy="779" r="2"/>
+                <circle cx="342" cy="1010" r="3"/>
+                <circle cx="553" cy="1010" r="2.4"/>
+                <circle cx="1598" cy="1010" r="2.4"/>
+              </g>
+            </g>
+
+            <!-- Circuitos eletrônicos (cada trilha é um <path> independente) -->
+            <g class="layer-circuits" filter="url(#f-line-glow)">
+              <g class="circuit circuit--upper">
+                <path class="trace" d="M1688 611 H1837 L1871 644 H1984"/>
+                <path class="trace" d="M1462 796 L1610 647 H1834 L1857 670 H1984"/>
+                <path class="trace" d="M1469 841 V825 L1621 669 H1825 L1848 692 H1984"/>
+                <path class="trace" d="M1494 837 L1496 817 L1630 683 H1818 L1841 706 H1984"/>
+                <path class="trace" d="M1455 886 H1488 L1612 761 H1791 L1826 727 H1984"/>
+                <path class="trace" d="M1736 800 H1783 L1837 748 H1984"/>
+                <path class="trace" d="M1647 823 H1791 L1847 766 H1984"/>
+                <circle class="node" cx="1682" cy="611" r="6"/>
+                <circle class="node" cx="1458" cy="800" r="6"/>
+                <circle class="node" cx="1469" cy="847" r="6"/>
+                <circle class="node" cx="1494" cy="843" r="6"/>
+                <circle class="node" cx="1449" cy="886" r="6"/>
+                <circle class="node" cx="1730" cy="800" r="6"/>
+                <circle class="node" cx="1641" cy="823" r="6"/>
+              </g>
+              <g class="circuit circuit--lower">
+                <path class="trace" d="M1502 1321 H1541 L1586 1276 H1984"/>
+                <path class="trace" d="M1444 1349 H1548 L1602 1294 H1984"/>
+                <path class="trace" d="M1365 1347 L1387 1368 H1550 L1610 1308 H1984"/>
+                <path class="trace" d="M1427 1384 H1554 L1615 1323 H1984"/>
+                <path class="trace" d="M1287 1360 L1337 1410 H1577 L1621 1366 H1792 L1817 1342 H1984"/>
+                <path class="trace" d="M1255 1351 L1329 1426 H1596 L1632 1391 H1899 L1912 1378 H1984"/>
+                <circle class="node" cx="1496" cy="1321" r="6"/>
+                <circle class="node" cx="1438" cy="1349" r="6"/>
+                <circle class="node" cx="1361" cy="1343" r="6"/>
+                <circle class="node" cx="1421" cy="1384" r="6"/>
+                <circle class="node" cx="1283" cy="1356" r="6"/>
+                <circle class="node" cx="1251" cy="1347" r="6"/>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Camada 2 · ANIMADA (leve): pulsos de dados e terminais -->
+          <svg class="stage-layer layer-fx" viewBox="0 520 2048 900" focusable="false">
+            <!-- Pulsos de dados e terminais (gerados por js/modules/circuit-system.js) -->
+            <g class="layer-circuits-fx" data-circuit-fx></g>
+          </svg>
+
+          <!-- Camada 3 · ANIMADA (leve): sistema orbital atrás do logo (parallax via CSS) -->
+          <svg class="stage-layer layer-orbits" viewBox="0 520 2048 900" focusable="false">
+            <use href="#orbit-lines"/>
+            <!-- Elétrons (só aparecem com animação ativa; posicionados por atom-system.js).
+                 Ficam atrás do logo: somem ao cruzar as letras, reforçando a profundidade. -->
+            <g class="electrons">
+              <g class="electron" data-electron data-orbit-index="0" data-speed="0.42" data-start="0.9">
+                <circle class="electron__halo" r="16"/><circle class="electron__core" r="4.5"/>
+              </g>
+              <g class="electron" data-electron data-orbit-index="0" data-speed="0.42" data-start="4.04">
+                <circle class="electron__halo" r="16"/><circle class="electron__core" r="4.5"/>
+              </g>
+              <g class="electron" data-electron data-orbit-index="1" data-speed="-0.55" data-start="2.3">
+                <circle class="electron__halo" r="16"/><circle class="electron__core" r="4.5"/>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Grupo do logotipo: parallax, aproximação e entrada aplicados neste
+               contêiner via CSS (a GPU move as camadas já desenhadas) -->
+          <div class="stage-logo" data-logo>
+
+            <!-- Camada 4a · ESTÁTICA: halo (a oscilação do brilho é opacidade CSS) -->
+            <svg class="stage-layer layer-logo-halo" viewBox="0 520 2048 900" focusable="false">
+              <use class="logo-halo" href="#wm-path" filter="url(#f-logo-halo)"/>
+              <use class="logo-halo logo-halo--tight" href="#wm-path" filter="url(#f-logo-halo-tight)"/>
+            </svg>
+
+            <!-- Camada 4b · letras do logo oficial (degradê verde). Na revelação da
+                 chuva (--matrix, js/modules/logo-matrix.js) o corpo escurece e a
+                 borda acende por dentro -->
+            <svg class="stage-layer layer-logo-body" viewBox="0 520 2048 900" focusable="false">
+              <use class="logo-body" href="#wm-path"/>
+              <use class="logo-body logo-body--dark" href="#wm-path"/>
+              <g class="logo-inner" clip-path="url(#wm-clip)">
+                <use class="logo-inner-glow" href="#wm-path" filter="url(#f-logo-inner)"/>
+              </g>
+            </svg>
+
+            <!-- Camada 5 · ANIMADA (sem desfoque): contorno, pulsos de energia,
+                 reflexo das órbitas e núcleo -->
+            <svg class="stage-layer layer-logo-fx" viewBox="0 520 2048 900" focusable="false">
+              <!-- Textura digital (colunas de caracteres) gerada por js/modules/logo-matrix.js -->
+              <g clip-path="url(#wm-clip)">
+                <g class="logo-matrix" data-logo-matrix></g>
+              </g>
+              <use class="logo-edge" href="#wm-path"/>
+              <!-- Pulsos de energia no contorno e faíscas (js/modules/logo-energy.js) -->
+              <g class="logo-energy" data-logo-energy></g>
+
+              <!-- Reflexo sutil das órbitas sobre as letras (como na imagem) -->
+              <g class="layer-orbits-front" clip-path="url(#wm-clip)">
+                <use href="#orbit-lines"/>
+              </g>
+
+              <!-- Núcleo atômico -->
+              <g class="layer-nucleus" data-nucleus>
+                <!-- Campo energético: ondas que se expandem e anel tracejado (só com animação) -->
+                <circle class="nucleus-ripple" data-ripple cx="823" cy="1009" r="12"/>
+                <circle class="nucleus-ripple" data-ripple cx="823" cy="1009" r="12"/>
+                <circle class="nucleus-field" data-field cx="823" cy="1009" r="30"/>
+                <circle class="nucleus-halo" data-halo cx="823" cy="1009" r="70" fill="url(#g-nucleus)"/>
+                <circle class="nucleus-core" data-core cx="823" cy="1009" r="9"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== INFERIOR (Access Interface) ===== -->
+      <div class="access">
+        <p class="manifesto">
+          <span>PSYTRANCE</span><span class="manifesto__dot" aria-hidden="true">•</span><span>SCIENCE</span><span class="manifesto__dot" aria-hidden="true">•</span><span>TECHNOLOGY</span>
+        </p>
+
+        <svg class="ornament" viewBox="560 1714 926 126" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="g-ornament-core-glow">
+              <stop offset=".35" stop-color="#00FF00" stop-opacity=".8"/>
+              <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <g class="ornament__lines">
+            <path d="M573 1777 H933 M1115 1777 H1472"/>
+          </g>
+          <g class="ornament__bars">
+            <g data-segments data-segments-reverse>
+              <path d="M750 1774 H780 L778 1780 H750 Z"/>
+              <path d="M786 1774 H850 L848 1780 H784 Z"/>
+              <path d="M856 1774 H890 V1780 H854 Z"/>
+            </g>
+            <g data-segments>
+              <path d="M1155 1773 H1170 L1166 1781 H1151 Z"/>
+              <path d="M1179 1773 H1194 L1190 1781 H1175 Z"/>
+              <path d="M1203 1773 H1218 L1214 1781 H1199 Z"/>
+              <path d="M1227 1773 H1242 L1238 1781 H1223 Z"/>
+              <path d="M1251 1773 H1266 L1262 1781 H1247 Z"/>
+              <rect x="1270" y="1772.5" width="23" height="9" rx="4.5"/>
+            </g>
+          </g>
+          <g class="ornament__reticle" data-reticle data-cx="1022" data-cy="1777">
+            <circle data-reticle-spin cx="1022" cy="1777" r="38" stroke-dasharray="200 12 27"/>
+            <circle data-reticle-ring cx="1022" cy="1777" r="22"/>
+            <path d="M972 1777 H1072 M1022 1720 V1832"/>
+            <!-- núcleo + brilho pré-desenhado (degradê): pulsam juntos, sem filtro -->
+            <g data-reticle-core>
+              <circle class="ornament__core-glow" cx="1022" cy="1777" r="16"/>
+              <path class="ornament__core" d="M1022 1768 L1028 1777 L1022 1786 L1016 1777 Z"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="enter-row">
+          <span class="enter-row__line" aria-hidden="true"></span>
+          <!-- Sem JS: âncora comum para #explorar.
+               Com JS: transição animada (js/modules/enter-transition.js). -->
+          <a class="enter" href="#explorar">
+            <svg class="enter__frame" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path class="enter__outline" d="M10 1.5 H102 L106 5.5 H322 L340.5 24 V78 L326 92.5 H232 L227 88.5 H17 L1.5 72 V10 Z"/>
+              <path class="enter__accent" d="M13 5 H100 M234 89 H323"/>
+            </svg>
+            <!-- Preenchimento do hover (recortado no formato chanfrado do botão) -->
+            <span class="enter__fill" aria-hidden="true"><span class="enter__fill-bar"></span></span>
+            <!-- Borda que "acende" em sequência no hover -->
+            <svg class="enter__frame enter__frame--trace" viewBox="0 0 342 94" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path class="enter__trace" pathLength="100" d="M10 1.5 H102 L106 5.5 H322 L340.5 24 V78 L326 92.5 H232 L227 88.5 H17 L1.5 72 V10 Z"/>
+            </svg>
+            <span class="enter__label">ENTER</span>
+            <svg class="enter__arrow" viewBox="0 0 24 20" aria-hidden="true" focusable="false">
+              <path d="M2 10 H21 M13.5 2.5 L21 10 L13.5 17.5"/>
+            </svg>
+          </a>
+          <span class="enter-row__line" aria-hidden="true"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Aviso de que a página continua abaixo: some ao rolar (classe is-scrolled).
+         Só visual — o ENTER e o "Pular introdução" já levam ao conteúdo. -->
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="scroll-hint__label">ROLE PARA EXPLORAR</span>
+      <svg class="scroll-hint__chevron" viewBox="0 0 24 14" focusable="false">
+        <path d="M2 2 L12 11 L22 2"/>
+      </svg>
+    </div>
+
+    <!-- Pausa/retoma as animações (exigência WCAG 2.2.2 para movimento contínuo).
+         Visível ao receber foco pelo teclado; controlado por js/script.js. -->
+    <button class="motion-toggle" type="button" aria-pressed="false" hidden>Pausar animações</button>
+  </section>
+
+  <!-- ==================== SEÇÕES DO SITE ====================
+       O id "explorar" é o destino do botão ENTER e do atalho "Pular
+       introdução" da Hero — não renomear. A transição do ENTER rola até o
+       topo deste contêiner e coloca o foco no primeiro título (h2). -->
+  <div class="site-sections" id="explorar">
+
+    <!-- ===== 01 · THE PROJECT =====
+         Textos: arquivo de referência (atomuzVfinal.html) + bio oficial do
+         SoundCloud (origem e proposta do projeto). -->
+    <section class="section section--project" id="project" aria-labelledby="project-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>01</span> / O PROJETO</p>
+          <h2 class="section-head__title" id="project-title" tabindex="-1">PROJETO</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "working"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="working" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <div class="project-grid">
+          <div class="project-copy" data-reveal>
+            <p class="project-copy__lead">
+              Atomuz é um projeto de progressive psytrance e zenonesque que explora o
+              <em>som, ciência, tecnologia e consciência.</em>
+            </p>
+            <p class="project-copy__text">
+              Criado por Luiz Felipe, o projeto explora as profundezas da mente através de paisagens sonoras
+              psicodélicas e imersivas — batidas hipnóticas, falhas interestelares, melodias marcantes e linhas
+              de baixo profundas, inspiradas pela ciência, tecnologia e ficção científica.
+            </p>
+            <p class="project-copy__text">
+              A música é tratada como uma exploração de sistemas: precisa, imersiva e audiovisual, com uma
+              linguagem futurista baseada em psicodelia.
+            </p>
+          </div>
+
+          <!-- Ficha técnica no formato de leitura de instrumento -->
+          <aside class="project-readout" aria-label="Ficha do projeto" data-reveal>
+            <p class="project-readout__title">
+              <!-- Sinal de radar (mesmo ícone de "PRÓXIMAS DATAS", seção 05) -->
+              <span class="live-upcoming__signal" aria-hidden="true"></span>
+              PERFIL DO SISTEMA
+            </p>
+            <dl class="project-readout__list">
+              <div><dt>PROJETO</dt><dd>ATOMUZ</dd></div>
+              <div><dt>ARTISTA</dt><dd>Luiz Felipe</dd></div>
+              <div><dt>ORIGEM</dt><dd>Pernambuco · Brasil</dd></div>
+              <div><dt>ESTILO</dt><dd>Progressive Psytrance · Zenonesque</dd></div>
+            </dl>
+            <p class="project-readout__signal">
+              <!-- Orb animado (thinking-orbs, estado "connecting"): js/modules/section-orbs.js -->
+              <canvas class="project-readout__orb" data-orb="connecting" data-orb-size="64" width="64" height="64" aria-hidden="true"></canvas>
+              Experiência sônica do mundo quântico
+            </p>
+          </aside>
+        </div>
+
+        <!-- Raves em que o ATOMUZ se apresentou (circuito de nós, na ordem informada) -->
+        <div class="project-sequence" data-reveal>
+          <p class="project-sequence__title" id="raves-title">
+            <!-- Sinal de radar (mesmo ícone de "PRÓXIMAS DATAS", seção 05) -->
+            <span class="live-upcoming__signal" aria-hidden="true"></span>
+            <span class="project-sequence__text">Apresentações ao vivo nas maiores raves do Nordeste:</span>
+          </p>
+          <ol class="sequence" aria-labelledby="raves-title">
+            <li class="sequence__step" style="--i: 0"><span class="sequence__index">01</span><span class="sequence__word">Drop</span></li>
+            <li class="sequence__step" style="--i: 1"><span class="sequence__index">02</span><span class="sequence__word">Intense</span></li>
+            <li class="sequence__step" style="--i: 2"><span class="sequence__index">03</span><span class="sequence__word">Samsara</span></li>
+            <li class="sequence__step" style="--i: 3"><span class="sequence__index">04</span><span class="sequence__word">Manipura</span></li>
+            <li class="sequence__step" style="--i: 4"><span class="sequence__index">05</span><span class="sequence__word">Liquid Sky</span></li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== 02 · MUSIC ===== -->
+    <section class="section section--music" id="music" aria-labelledby="music-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>02</span> / SOM</p>
+          <h2 class="section-head__title" id="music-title">MÚSICA</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "listening"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="listening" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+          <p class="section-head__lead">Ouça o ATOMUZ nas plataformas oficiais.</p>
+        </header>
+
+        <div class="music-grid">
+          <!-- Cartão de player: moldura HUD chanfrada (mesma linguagem do botão ENTER) -->
+          <article class="player-card" aria-labelledby="player-spotify-title" data-reveal>
+            <div class="player-card__body">
+              <div class="player-card__bar">
+                <h3 class="player-card__label" id="player-spotify-title">SPOTIFY</h3>
+                <a class="player-card__link" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="Abrir ATOMUZ no Spotify (abre em nova aba)">
+                  ABRIR <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+              <div class="player-card__screen">
+                <span class="embed-loading" aria-hidden="true">CARREGANDO PLAYER…</span>
+                <iframe
+                  title="Player do Spotify — ATOMUZ"
+                  data-src="https://open.spotify.com/embed/artist/55wNhCr9PhSkrum4GwGuZi?utm_source=generator&amp;theme=0"
+                  height="352"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"></iframe>
+              </div>
+            </div>
+          </article>
+
+          <article class="player-card" aria-labelledby="player-soundcloud-title" data-reveal>
+            <div class="player-card__body">
+              <div class="player-card__bar">
+                <h3 class="player-card__label" id="player-soundcloud-title">SOUNDCLOUD</h3>
+                <a class="player-card__link" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="Abrir ATOMUZ no SoundCloud (abre em nova aba)">
+                  ABRIR <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+              <div class="player-card__screen">
+                <span class="embed-loading" aria-hidden="true">CARREGANDO PLAYER…</span>
+                <iframe
+                  title="Player do SoundCloud — ATOMUZ"
+                  data-src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/atomuz&amp;color=%2300cc22&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"
+                  height="352"
+                  allow="autoplay"
+                  loading="lazy"></iframe>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== 03 · LATEST RELEASE =====
+         Dados reais da página oficial da faixa no SoundCloud
+         (soundcloud.com/atomuz/atomuz-primordial-particle). -->
+    <section class="section section--release" id="release" aria-labelledby="release-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>03</span> / ÚLTIMO LANÇAMENTO</p>
+          <h2 class="section-head__title" id="release-title">LANÇAMENTO</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "composing"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="composing" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <div class="release-grid">
+
+          <!-- Capa oficial do lançamento (arte de Oberas) -->
+          <figure class="release-art" data-reveal>
+            <div class="release-art__frame">
+              <picture>
+                <source type="image/avif" srcset="assets/releases/primordial-particle-sm.avif 500w, assets/releases/primordial-particle.avif 1000w" sizes="(max-width: 900px) 90vw, 420px">
+                <source type="image/webp" srcset="assets/releases/primordial-particle-sm.webp 500w, assets/releases/primordial-particle.webp 1000w" sizes="(max-width: 900px) 90vw, 420px">
+                <img class="release-art__img"
+                  src="assets/releases/primordial-particle.jpg"
+                  srcset="assets/releases/primordial-particle-sm.jpg 500w, assets/releases/primordial-particle.jpg 1000w"
+                  sizes="(max-width: 900px) 90vw, 420px"
+                  width="1000" height="1000"
+                  alt="Capa de Primordial Particle: figura tecnológica inspirada em Kokopelli segurando um átomo luminoso no deserto, sob o logo ATOMUZ, com seres dançando ao redor"
+                  loading="lazy" decoding="async">
+              </picture>
+            </div>
+          </figure>
+
+          <div class="release-info" data-reveal>
+            <p class="release-info__artist">ATOMUZ</p>
+            <h3 class="release-info__title">PRIMORDIAL PARTICLE</h3>
+
+            <ul class="release-meta" aria-label="Informações do lançamento">
+              <li>PSYTRANCE</li>
+              <li>2026</li>
+              <li>DENSE NEBULA RECORDS</li>
+              <li><span class="sr-only">Duração: </span>8:20</li>
+            </ul>
+
+            <p class="release-info__text">
+              Primordial Particle, como o nome já diz, é a Partícula Primordial de muitas outras que estão
+              surgindo. A faixa é desenvolvida através de atmosferas introspectivas, groove imersivo, melodias
+              marcantes e sound design inteligente, levando o ouvinte a um cenário biotecnológico.
+            </p>
+
+            <!-- Player da própria faixa (SoundCloud) -->
+            <div class="release-player">
+              <span class="embed-loading" aria-hidden="true">CARREGANDO PLAYER…</span>
+              <iframe
+                title="Player do SoundCloud — Primordial Particle"
+                data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F2276823767&amp;color=%2300cc22&amp;auto_play=false&amp;hide_related=true&amp;show_comments=false&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;visual=false"
+                height="166"
+                allow="autoplay; encrypted-media"
+                loading="lazy"></iframe>
+            </div>
+
+            <div class="release-actions">
+              <a class="hud-btn" href="https://soundcloud.com/atomuz/atomuz-primordial-particle" target="_blank" rel="noopener noreferrer" aria-label="Ouvir Primordial Particle no SoundCloud (abre em nova aba)">
+                <span class="hud-btn__label">SOUNDCLOUD</span><span class="hud-btn__icon" aria-hidden="true">↗</span>
+              </a>
+              <a class="hud-btn hud-btn--ghost" href="https://open.spotify.com/track/0SYnEsjQkyAkiezz9Cr7uy" target="_blank" rel="noopener noreferrer" aria-label="Ouvir Primordial Particle no Spotify (abre em nova aba)">
+                <span class="hud-btn__label">SPOTIFY</span><span class="hud-btn__icon" aria-hidden="true">↗</span>
+              </a>
+            </div>
+
+            <dl class="release-credits">
+              <div><dt>MASTERIZAÇÃO</dt><dd>Fractal Joke</dd></div>
+              <div><dt>ARTE</dt><dd>Oberas</dd></div>
+              <div><dt>SELO</dt><dd>Dense Nebula Records</dd></div>
+            </dl>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 04 · CONNECT ===== (links oficiais; YouTube omitido até haver link real) -->
+    <section class="section section--connect" id="connect" aria-labelledby="connect-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>04</span> / REDES</p>
+          <h2 class="section-head__title" id="connect-title">CONECTE</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "connecting"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="connecting" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <ul class="net-grid" data-reveal>
+          <li>
+            <a class="net-card net-card--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
+              <span class="net-card__index" aria-hidden="true">01</span>
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <g fill="none" stroke="currentColor" stroke-width="2.3">
+                  <rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.8"/>
+                  <circle cx="12" cy="12" r="5"/>
+                </g>
+                <circle cx="18.1" cy="5.9" r="1.45" fill="currentColor"/>
+              </svg></span>
+              <span class="net-card__label">INSTAGRAM</span>
+              <span class="net-card__handle">@atomuz_</span>
+              <span class="net-card__arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="net-card net-card--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
+              <span class="net-card__index" aria-hidden="true">02</span>
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+              </svg></span>
+              <span class="net-card__label">SPOTIFY</span>
+              <span class="net-card__handle">Atomuz</span>
+              <span class="net-card__arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="net-card net-card--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
+              <span class="net-card__index" aria-hidden="true">03</span>
+              <span class="net-card__icon"><svg viewBox="0 0 44 22" aria-hidden="true" focusable="false">
+                <g fill="currentColor">
+                  <rect x="0"    y="12.5" width="2" height="7"  rx="1"/>
+                  <rect x="3.3"  y="9.5"  width="2" height="10" rx="1"/>
+                  <rect x="6.6"  y="7.5"  width="2" height="12" rx="1"/>
+                  <rect x="9.9"  y="5"    width="2" height="14.5" rx="1"/>
+                  <rect x="13.2" y="4"    width="2" height="15.5" rx="1"/>
+                  <path d="M16.6 19.5 V3.4 C18.1 2.5 19.9 2 21.8 2 C27 2 31.2 5.8 31.8 10.7 C32.5 10.4 33.3 10.3 34.1 10.3 C38.6 10.3 42 13.3 42 15 C42 17.7 39.8 19.5 37.1 19.5 Z"/>
+                </g>
+              </svg></span>
+              <span class="net-card__label">SOUNDCLOUD</span>
+              <span class="net-card__handle">soundcloud.com/atomuz</span>
+              <span class="net-card__arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="net-card net-card--mail" href="mailto:atomuz.audio@gmail.com" aria-label="Enviar e-mail para atomuz.audio@gmail.com">
+              <span class="net-card__index" aria-hidden="true">04</span>
+              <span class="net-card__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round">
+                  <rect x="2" y="4.5" width="20" height="15" rx="2"/>
+                  <path d="M3 6 L12 13 L21 6"/>
+                </g>
+              </svg></span>
+              <span class="net-card__label">E-MAIL</span>
+              <span class="net-card__handle">atomuz.audio@gmail.com</span>
+              <span class="net-card__arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- ===== 05 · LIVE =====
+         Eventos reais: sets ao vivo publicados no SoundCloud oficial
+         (título, data, estilo e duração de cada gravação). -->
+    <section class="section section--live" id="live" aria-labelledby="live-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>05</span> / TRANSMISSÕES</p>
+          <h2 class="section-head__title" id="live-title">AO VIVO</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "solving"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="solving" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <!-- Próximas datas: sem datas anunciadas (não inventamos eventos) -->
+        <div class="live-upcoming" data-reveal>
+          <div class="live-upcoming__status">
+            <span class="live-upcoming__signal" aria-hidden="true"></span>
+            <h3 class="live-block-title">PRÓXIMAS DATAS</h3>
+          </div>
+          <p class="live-upcoming__text">Nenhuma data anunciada no momento. As novas apresentações são divulgadas primeiro no Instagram.</p>
+          <a class="hud-btn hud-btn--ghost" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="Acompanhar ATOMUZ no Instagram (abre em nova aba)">
+            <span class="hud-btn__label">ACOMPANHAR</span><span class="hud-btn__icon" aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <h3 class="live-block-title live-block-title--list" data-reveal>SETS AO VIVO</h3>
+
+        <ol class="event-list" data-reveal>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-in-dub-psydub-psychill" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">01</span>
+              <time class="event-row__date" datetime="2026-09-20">20.09.2026</time>
+              <span class="event-row__name">Atomuz in Dub</span>
+              <span class="event-row__meta"><span class="event-row__genre">PSYDUB · PSYCHILL</span> <span aria-hidden="true">·</span> 73 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-samsara-leave-170125" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">02</span>
+              <time class="event-row__date" datetime="2026-01-17">17.01.2026</time>
+              <span class="event-row__name">Samsara Leave</span>
+              <span class="event-row__meta"><span class="event-row__genre">PSYTRANCE</span> <span aria-hidden="true">·</span> 63 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-intense-open-air-06092025" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">03</span>
+              <time class="event-row__date" datetime="2025-09-06">06.09.2025</time>
+              <span class="event-row__name">Intense Open Air</span>
+              <span class="event-row__meta"><span class="event-row__genre">PSYTRANCE</span> <span aria-hidden="true">·</span> 59 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-i-multiverso-open-air-i-20072025" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">04</span>
+              <time class="event-row__date" datetime="2025-07-20">20.07.2025</time>
+              <span class="event-row__name">Multiverso Open Air</span>
+              <span class="event-row__meta"><span class="event-row__genre">PSYTRANCE</span> <span aria-hidden="true">·</span> 61 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-i-drop-open-air-i-03052025" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">05</span>
+              <time class="event-row__date" datetime="2025-05-03">03.05.2025</time>
+              <span class="event-row__name">Drop Open Air</span>
+              <span class="event-row__meta"><span class="event-row__genre">PSYTRANCE</span> <span aria-hidden="true">·</span> 57 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+          <li>
+            <a class="event-row" href="https://soundcloud.com/atomuz/atomuz-l-pulse-for-friends-l" target="_blank" rel="noopener noreferrer">
+              <span class="event-row__index" aria-hidden="true">06</span>
+              <time class="event-row__date" datetime="2024-09-15">15.09.2024</time>
+              <span class="event-row__name">Pulse For Friends</span>
+              <span class="event-row__meta"><span class="event-row__genre">ZENONESQUE</span> <span aria-hidden="true">·</span> 59 MIN</span>
+              <span class="event-row__action">OUVIR SET <span aria-hidden="true">↗</span><span class="sr-only"> no SoundCloud (abre em nova aba)</span></span>
+            </a>
+          </li>
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ===== 06 · MEDIA =====
+         Fotos reais de apresentações (assets/media), em duas fileiras que
+         correm em loop contínuo: a de cima para a direita, a de baixo para a
+         esquerda. Cada fileira tem uma cópia de si mesma no fim, então a
+         animação (CSS) volta ao início sem emenda visível. O movimento é
+         contínuo (não pausa no hover/clique); com movimento desligado, as fileiras ficam paradas
+         e podem ser arrastadas para o lado. -->
+    <section class="section section--media" id="media" aria-labelledby="media-title">
+      <div class="section__inner">
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>06</span> / AUDIOVISUAL</p>
+          <h2 class="section-head__title" id="media-title">MÍDIA</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "searching"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="searching" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+      </div>
+
+      <div class="media-rows">
+        <div class="media-row media-row--right">
+          <ul class="media-row__track" aria-label="Fotos de apresentações do ATOMUZ — parte 1">
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-01-sm.avif 800w, assets/media/media-01.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-01-sm.webp 800w, assets/media/media-01.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-01.jpg"
+                    srcset="assets/media/media-01-sm.jpg 800w, assets/media/media-01.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="ATOMUZ na cabine de som, com painel neon verde ao fundo"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-02-sm.avif 800w, assets/media/media-02.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-02-sm.webp 800w, assets/media/media-02.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-02.jpg"
+                    srcset="assets/media/media-02-sm.jpg 800w, assets/media/media-02.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt="ATOMUZ no palco da Samsara Leave, sob a decoração colorida do evento"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-03-sm.avif 800w, assets/media/media-03.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-03-sm.webp 800w, assets/media/media-03.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-03.jpg"
+                    srcset="assets/media/media-03-sm.jpg 800w, assets/media/media-03.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="Palco da Samsara Leave iluminado, com público em primeiro plano"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-04-sm.avif 800w, assets/media/media-04.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-04-sm.webp 800w, assets/media/media-04.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-04.jpg"
+                    srcset="assets/media/media-04-sm.jpg 800w, assets/media/media-04.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt="ATOMUZ de fone de ouvido, mixando diante de um painel psicodélico"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-05-sm.avif 800w, assets/media/media-05.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-05-sm.webp 800w, assets/media/media-05.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-05.jpg"
+                    srcset="assets/media/media-05-sm.jpg 800w, assets/media/media-05.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="Pista lotada sob tendas vermelhas iluminadas"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-06-sm.avif 800w, assets/media/media-06.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-06-sm.webp 800w, assets/media/media-06.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-06.jpg"
+                    srcset="assets/media/media-06-sm.jpg 800w, assets/media/media-06.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1200"
+                    alt="Palco em forma de penas de pavão iluminado em azul e verde"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+            <!-- cópia da fileira (só visual) para o loop não ter emenda -->
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-01-sm.avif 800w, assets/media/media-01.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-01-sm.webp 800w, assets/media/media-01.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-01.jpg"
+                    srcset="assets/media/media-01-sm.jpg 800w, assets/media/media-01.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-02-sm.avif 800w, assets/media/media-02.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-02-sm.webp 800w, assets/media/media-02.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-02.jpg"
+                    srcset="assets/media/media-02-sm.jpg 800w, assets/media/media-02.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-03-sm.avif 800w, assets/media/media-03.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-03-sm.webp 800w, assets/media/media-03.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-03.jpg"
+                    srcset="assets/media/media-03-sm.jpg 800w, assets/media/media-03.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-04-sm.avif 800w, assets/media/media-04.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-04-sm.webp 800w, assets/media/media-04.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-04.jpg"
+                    srcset="assets/media/media-04-sm.jpg 800w, assets/media/media-04.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-05-sm.avif 800w, assets/media/media-05.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-05-sm.webp 800w, assets/media/media-05.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-05.jpg"
+                    srcset="assets/media/media-05-sm.jpg 800w, assets/media/media-05.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-06-sm.avif 800w, assets/media/media-06.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-06-sm.webp 800w, assets/media/media-06.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-06.jpg"
+                    srcset="assets/media/media-06-sm.jpg 800w, assets/media/media-06.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1200"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+          </ul>
+        </div>
+        <div class="media-row media-row--left">
+          <ul class="media-row__track" aria-label="Fotos de apresentações do ATOMUZ — parte 2">
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-07-sm.avif 800w, assets/media/media-07.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-07-sm.webp 800w, assets/media/media-07.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-07.jpg"
+                    srcset="assets/media/media-07-sm.jpg 800w, assets/media/media-07.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt="ATOMUZ de costas na cabine, olhando para a pista colorida"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-08-sm.avif 800w, assets/media/media-08.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-08-sm.webp 800w, assets/media/media-08.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-08.jpg"
+                    srcset="assets/media/media-08-sm.jpg 800w, assets/media/media-08.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="ATOMUZ com o braço erguido na cabine, sob decoração psicodélica"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-09-sm.avif 800w, assets/media/media-09.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-09-sm.webp 800w, assets/media/media-09.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-09.jpg"
+                    srcset="assets/media/media-09-sm.jpg 800w, assets/media/media-09.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt="ATOMUZ no palco da Samsara Leave, iluminado em tons quentes"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-10-sm.avif 800w, assets/media/media-10.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-10-sm.webp 800w, assets/media/media-10.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-10.jpg"
+                    srcset="assets/media/media-10-sm.jpg 800w, assets/media/media-10.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="Fachada do palco da Samsara Leave com palmeiras e projeções"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-11-sm.avif 800w, assets/media/media-11.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-11-sm.webp 800w, assets/media/media-11.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-11.jpg"
+                    srcset="assets/media/media-11-sm.jpg 800w, assets/media/media-11.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="ATOMUZ de costas com camiseta verde, de frente para a pista"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-12-sm.avif 800w, assets/media/media-12.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-12-sm.webp 800w, assets/media/media-12.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-12.jpg"
+                    srcset="assets/media/media-12-sm.jpg 800w, assets/media/media-12.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt="Público dançando sob tendas iluminadas em vermelho e laranja"
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+            <!-- cópia da fileira (só visual) para o loop não ter emenda -->
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-07-sm.avif 800w, assets/media/media-07.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-07-sm.webp 800w, assets/media/media-07.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-07.jpg"
+                    srcset="assets/media/media-07-sm.jpg 800w, assets/media/media-07.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-08-sm.avif 800w, assets/media/media-08.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-08-sm.webp 800w, assets/media/media-08.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-08.jpg"
+                    srcset="assets/media/media-08-sm.jpg 800w, assets/media/media-08.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-09-sm.avif 800w, assets/media/media-09.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-09-sm.webp 800w, assets/media/media-09.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-09.jpg"
+                    srcset="assets/media/media-09-sm.jpg 800w, assets/media/media-09.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1066" height="1600"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-10-sm.avif 800w, assets/media/media-10.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-10-sm.webp 800w, assets/media/media-10.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-10.jpg"
+                    srcset="assets/media/media-10-sm.jpg 800w, assets/media/media-10.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-11-sm.avif 800w, assets/media/media-11.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-11-sm.webp 800w, assets/media/media-11.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-11.jpg"
+                    srcset="assets/media/media-11-sm.jpg 800w, assets/media/media-11.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+              <li class="media-item media-item--clone" aria-hidden="true">
+                <picture>
+                  <source type="image/avif" srcset="assets/media/media-12-sm.avif 800w, assets/media/media-12.avif 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <source type="image/webp" srcset="assets/media/media-12-sm.webp 800w, assets/media/media-12.webp 1600w" sizes="(max-width: 760px) 70vw, 40vw">
+                  <img class="media-item__img"
+                    src="assets/media/media-12.jpg"
+                    srcset="assets/media/media-12-sm.jpg 800w, assets/media/media-12.jpg 1600w"
+                    sizes="(max-width: 760px) 70vw, 40vw"
+                    width="1600" height="1066"
+                    alt=""
+                    loading="lazy" decoding="async">
+                </picture>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 07 · VISUAL IDENTITY — ATOM =====
+         Diagrama técnico do símbolo: cada parte numerada corresponde a um
+         conceito da frase da referência (matéria, energia, movimento,
+         transformação). Elétrons e reação ao cursor: js/modules/atom-diagram.js -->
+    <section class="section section--atom" id="atom" aria-labelledby="atom-title">
+      <!-- Partículas interativas (rastro do cursor e explosão no clique) -->
+      <canvas class="atom-particles" data-atom-particles aria-hidden="true"></canvas>
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>07</span> / IDENTIDADE VISUAL</p>
+          <h2 class="section-head__title" id="atom-title">ÁTOMO</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "weaving"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="weaving" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <div class="atom-grid">
+          <div class="atom-copy" data-reveal>
+            <p class="atom-copy__lead">
+              O átomo é o símbolo central do Atomuz — uma representação visual de
+              <em>matéria, energia, movimento e transformação.</em>
+            </p>
+            <p class="atom-copy__hint">Mova o cursor ou clique pelo campo: o sistema responde sutilmente, como uma interface científica experimental.</p>
+
+            <!-- Legenda do diagrama -->
+            <ol class="atom-legend" aria-label="Partes do símbolo">
+              <li><span class="atom-legend__num">01</span><span class="atom-legend__part">NÚCLEO</span><span class="atom-legend__meaning">Matéria</span></li>
+              <li><span class="atom-legend__num">02</span><span class="atom-legend__part">ÓRBITAS</span><span class="atom-legend__meaning">Energia</span></li>
+              <li><span class="atom-legend__num">03</span><span class="atom-legend__part">ELÉTRONS</span><span class="atom-legend__meaning">Movimento</span></li>
+              <li><span class="atom-legend__num">04</span><span class="atom-legend__part">CAMPO</span><span class="atom-legend__meaning">Transformação</span></li>
+            </ol>
+          </div>
+
+          <figure class="atom-diagram" data-reveal data-atom-diagram>
+            <svg class="atom-diagram__svg" viewBox="0 0 400 400" role="img" aria-label="Diagrama do átomo do ATOMUZ: núcleo, três órbitas com elétrons e o campo ao redor">
+              <defs>
+                <radialGradient id="g-diagram-core">
+                  <stop offset="0" stop-color="#F2FFF2"/>
+                  <stop class="atom-diagram__hue" offset=".22" stop-color="#00FF00"/>
+                  <stop class="atom-diagram__hue" offset=".5" stop-color="#00FF00" stop-opacity=".3"/>
+                  <stop offset="1" stop-color="#00FF00" stop-opacity="0"/>
+                </radialGradient>
+                <!-- brilho dos elétrons pré-desenhado (um degradê por cor): mais leve
+                     que um filtro drop-shadow recalculado a cada quadro do movimento -->
+                <radialGradient id="g-electron-1"><stop offset=".4" stop-color="#FF2D3A" stop-opacity=".7"/><stop offset="1" stop-color="#FF2D3A" stop-opacity="0"/></radialGradient>
+                <radialGradient id="g-electron-2"><stop offset=".4" stop-color="#2F7BFF" stop-opacity=".7"/><stop offset="1" stop-color="#2F7BFF" stop-opacity="0"/></radialGradient>
+                <radialGradient id="g-electron-3"><stop offset=".4" stop-color="#FFD000" stop-opacity=".7"/><stop offset="1" stop-color="#FFD000" stop-opacity="0"/></radialGradient>
+                <!-- órbita base (elipse escrita como path para os elétrons seguirem) -->
+                <path id="diagram-orbit" pathLength="1" d="M50 200 A150 56 0 1 1 350 200 A150 56 0 1 1 50 200"/>
+              </defs>
+
+              <!-- 04 · campo -->
+              <circle class="atom-diagram__field" cx="200" cy="200" r="185"/>
+              <g class="atom-diagram__ticks">
+                <path d="M200 8 V22 M200 378 V392 M8 200 H22 M378 200 H392"/>
+              </g>
+
+              <!-- grupo que reage ao cursor (deslocamento leve via JS) -->
+              <g class="atom-diagram__system" data-atom-system>
+                <!-- 02 · órbitas (0°, 60°, 120°) com 03 · elétrons percorrendo cada uma -->
+                <g transform="rotate(0 200 200)">
+                  <g class="atom-diagram__sway atom-diagram__sway--1">
+                  <use class="atom-diagram__orbit" href="#diagram-orbit"/>
+                  <g class="atom-diagram__electron-group">
+                    <animateMotion dur="4.5s" repeatCount="indefinite" begin="0s"><mpath href="#diagram-orbit"/></animateMotion>
+                    <circle class="atom-diagram__electron-glow" r="12" fill="url(#g-electron-1)"/>
+                    <circle class="atom-diagram__electron" r="5"/>
+                  </g>
+                  </g>
+                </g>
+                <g transform="rotate(60 200 200)">
+                  <g class="atom-diagram__sway atom-diagram__sway--2">
+                  <use class="atom-diagram__orbit" href="#diagram-orbit"/>
+                  <g class="atom-diagram__electron-group">
+                    <animateMotion dur="6s" repeatCount="indefinite" begin="-2s"><mpath href="#diagram-orbit"/></animateMotion>
+                    <circle class="atom-diagram__electron-glow" r="12" fill="url(#g-electron-2)"/>
+                    <circle class="atom-diagram__electron" r="5"/>
+                  </g>
+                  </g>
+                </g>
+                <g transform="rotate(120 200 200)">
+                  <g class="atom-diagram__sway atom-diagram__sway--3">
+                  <use class="atom-diagram__orbit" href="#diagram-orbit"/>
+                  <g class="atom-diagram__electron-group">
+                    <animateMotion dur="7.5s" repeatCount="indefinite" begin="-4.5s"><mpath href="#diagram-orbit"/></animateMotion>
+                    <circle class="atom-diagram__electron-glow" r="12" fill="url(#g-electron-3)"/>
+                    <circle class="atom-diagram__electron" r="5"/>
+                  </g>
+                  </g>
+                </g>
+
+                <!-- 01 · núcleo -->
+                <circle class="atom-diagram__glow" cx="200" cy="200" r="58" fill="url(#g-diagram-core)" data-atom-glow/>
+                <circle class="atom-diagram__core" cx="200" cy="200" r="9"/>
+              </g>
+
+              <!-- marcadores numerados (estáticos, apontam para cada parte) -->
+              <g class="atom-diagram__callouts">
+                <path d="M207 193 L246 154 H268"/>
+                <path d="M330 228 L352 262 H372"/>
+                <path d="M125 330 L100 356 H74"/>
+                <path d="M69 69 L48 48 H26"/>
+                <circle cx="207" cy="193" r="2.5"/><circle cx="330" cy="228" r="2.5"/>
+                <circle cx="125" cy="330" r="2.5"/><circle cx="69" cy="69" r="2.5"/>
+              </g>
+              <g class="atom-diagram__nums">
+                <text x="272" y="158">01</text>
+                <text x="376" y="266">02</text>
+                <text x="70" y="360" text-anchor="end">03</text>
+                <text x="22" y="52" text-anchor="end">04</text>
+              </g>
+            </svg>
+          </figure>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== 08 · BOOKING =====
+         Envio pelo FormSubmit (formsubmit.co) para atomuz.audio@gmail.com.
+         Com JS: envio sem sair da página (js/modules/booking-form.js).
+         Sem JS: o formulário envia normalmente e o FormSubmit mostra a
+         própria página de confirmação.
+         ATIVAÇÃO: a primeira solicitação dispara um e-mail do FormSubmit
+         pedindo confirmação do endereço; só depois disso as mensagens chegam. -->
+    <section class="section section--booking" id="booking" aria-labelledby="booking-title">
+      <div class="section__inner">
+
+        <header class="section-head" data-reveal>
+          <p class="section-head__index"><span>08</span> / CONTATO</p>
+          <h2 class="section-head__title" id="booking-title">BOOKING</h2>
+          <div class="section-head__rule" aria-hidden="true">
+            <!-- Espectro de frequências animado: js/modules/section-spectrum.js -->
+            <canvas class="section-head__spectrum" data-spectrum width="128" height="28"></canvas>
+            <span class="section-head__line"></span>
+            <!-- Orb animado (thinking-orbs, estado "breathing"): js/modules/section-orbs.js -->
+            <canvas class="section-head__orb" data-orb="breathing" data-orb-size="64" width="64" height="64"></canvas>
+          </div>
+        </header>
+
+        <div class="booking-grid">
+          <div class="booking-copy" data-reveal>
+            <p class="booking-copy__lead">Para bookings, festivais, clubes, eventos e <em>colaborações.</em></p>
+            <p class="booking-copy__text">Preencha o formulário com os detalhes do evento. A resposta chega pelo e-mail informado.</p>
+          </div>
+
+          <!-- Contatos e agência: bloco separado para, no celular, ficar abaixo
+               do formulário (a ordem é definida no CSS, em .booking-grid) -->
+          <div class="booking-details" data-reveal>
+            <dl class="booking-contacts">
+              <div>
+                <dt>AGÊNCIA</dt>
+                <dd><a href="https://www.instagram.com/startbookings/" target="_blank" rel="noopener noreferrer">@startbookings<span class="sr-only"> (abre em nova aba)</span></a></dd>
+              </div>
+              <div>
+                <dt>INSTAGRAM</dt>
+                <dd><a href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer">@atomuz_<span class="sr-only"> (abre em nova aba)</span></a></dd>
+              </div>
+              <div>
+                <dt>E-MAIL</dt>
+                <dd><a href="mailto:atomuz.audio@gmail.com">atomuz.audio@gmail.com</a></dd>
+              </div>
+            </dl>
+
+            <!-- Agência (START BOOKINGS): cartão "representado por" com o logo repetido
+                 andando para a direita em duas camadas de velocidades diferentes
+                 (parallax). Os logos são máscaras CSS (assets/agencia/startbookings-tile.svg). -->
+            <a class="agency-card" href="https://www.instagram.com/startbookings/" target="_blank" rel="noopener noreferrer"
+               aria-label="Start Bookings, agência do ATOMUZ, no Instagram (abre em nova aba)">
+              <span class="agency-card__label">REPRESENTADO POR<span class="agency-card__arrow" aria-hidden="true">↗</span></span>
+              <span class="agency-strip" aria-hidden="true">
+                <span class="agency-strip__layer agency-strip__layer--back"></span>
+                <span class="agency-strip__layer agency-strip__layer--front"></span>
+              </span>
+            </a>
+          </div>
+
+          <div class="booking-panel" data-reveal>
+            <form class="booking-form" data-booking-form
+                  action="https://formsubmit.co/atomuz.audio@gmail.com" method="POST">
+              <!-- configurações do FormSubmit -->
+              <input type="hidden" name="_subject" value="Booking ATOMUZ — nova solicitação pelo site">
+              <input type="hidden" name="_template" value="table">
+              <!-- armadilha contra robôs: invisível para pessoas -->
+              <input class="booking-form__honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+              <div class="booking-field">
+                <label for="bk-name">NOME COMPLETO <span class="booking-field__req" aria-hidden="true">*</span></label>
+                <input id="bk-name" name="Nome Completo" type="text" autocomplete="name" required>
+              </div>
+              <div class="booking-field">
+                <label for="bk-email">E-MAIL <span class="booking-field__req" aria-hidden="true">*</span></label>
+                <input id="bk-email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div class="booking-field">
+                <label for="bk-whatsapp">WHATSAPP</label>
+                <input id="bk-whatsapp" name="Whatsapp" type="tel" autocomplete="tel">
+              </div>
+              <div class="booking-field">
+                <label for="bk-event">NOME DO EVENTO</label>
+                <input id="bk-event" name="Nome Do Evento" type="text">
+              </div>
+              <div class="booking-field">
+                <label for="bk-date">DATA</label>
+                <input id="bk-date" name="Data" type="date">
+              </div>
+              <div class="booking-field">
+                <label for="bk-country">PAÍS</label>
+                <input id="bk-country" name="País" type="text" autocomplete="country-name">
+              </div>
+              <div class="booking-field">
+                <label for="bk-city">CIDADE</label>
+                <input id="bk-city" name="Cidade" type="text" autocomplete="address-level2">
+              </div>
+              <div class="booking-field">
+                <label for="bk-state">ESTADO</label>
+                <input id="bk-state" name="Estado" type="text" autocomplete="address-level1">
+              </div>
+              <div class="booking-field booking-field--full">
+                <label for="bk-site">INSTAGRAM / SITE</label>
+                <input id="bk-site" name="Instagram / Site" type="text" autocomplete="url">
+              </div>
+              <div class="booking-field booking-field--full">
+                <label for="bk-message">MENSAGEM</label>
+                <textarea id="bk-message" name="Mensagem" rows="5"></textarea>
+              </div>
+
+              <div class="booking-form__footer">
+                <p class="booking-form__note"><span aria-hidden="true">*</span> campos obrigatórios</p>
+                <button class="hud-btn booking-form__submit" type="submit">
+                  <span class="hud-btn__label" data-submit-label>ENVIAR SOLICITAÇÃO</span><span class="hud-btn__icon" aria-hidden="true">→</span>
+                </button>
+              </div>
+
+              <p class="booking-form__status" data-booking-status role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__brand">ATOMUZ © 2026</p>
+      <p class="site-footer__tag">PROGRESSIVE PSYTRANCE · ZENONESQUE</p>
+      <a class="site-footer__top" href="#inicio">VOLTAR AO TOPO <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+
+
+</body>
+</html>
