@@ -2179,6 +2179,17 @@ body {
 .media-item:hover .media-item__view { background: rgba(4, 8, 5, 0.55); }
 .media-item__view:focus-visible .media-item__eye,
 .media-item:hover .media-item__eye { opacity: 1; transform: scale(1); }
+/* Telas de toque não têm hover: o olho fica sempre visível (sem escurecer a
+   foto inteira, só uma sombra atrás do ícone para ler sobre fotos claras).
+   Antes ele só aparecia por acaso, quando o navegador "grudava" o hover
+   depois de um toque (Firefox), e nunca no Safari */
+@media (hover: none) {
+  .media-item__view,
+  .media-item:hover .media-item__view {
+    background: radial-gradient(circle, rgba(4, 8, 5, 0.6) 0, rgba(4, 8, 5, 0.35) 28px, rgba(4, 8, 5, 0) 64px);
+  }
+  .media-item__eye { width: 40px; opacity: 1; transform: none; }
+}
 
 /* Onda líquida no hover (js/modules/image-wave.js — só no computador).
    O canvas ondulado aparece por cima da foto, a foto some e, nos picos da
