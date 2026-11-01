@@ -2630,11 +2630,16 @@ html.is-viewing { overflow: hidden; }
 .net-card:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
 .net-card:focus-visible,
 .net-card:active { background: var(--c-tech); color: var(--c-black); }
-.net-card:focus-visible :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle),
-.net-card:active :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
+.net-card:focus-visible :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
 /* Sob o dedo acende na hora: o toque é curto e, no tema claro, o começo do
    fade quase não aparece sobre o fundo branco */
 .net-card:active { transition-duration: 0s; }
+/* Telas de toque, nos dois temas: cartão verde só com o nome da rede.
+   visibility (e não cor) para valer também com "mais contraste" e não mexer
+   no tamanho do cartão */
+@media (hover: none) {
+  .net-card:active :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { visibility: hidden; }
+}
 @media (hover: hover) {
   .net-card:hover { background: var(--c-tech); color: var(--c-black); border-color: var(--c-neon); }
   .net-card:hover :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
@@ -2649,6 +2654,21 @@ html.is-viewing { overflow: hidden; }
      Obs.: não usar container query (cqi) aqui — ela deixa o recálculo de
      estilo da página ~4× mais caro e pesava a animação da Hero. */
   .net-card__label { font-size: max(var(--fs-xs), min(var(--fs-base), calc(4.8vw - 6px))); }
+  /* Duas colunas: link e e-mail sempre em uma linha só */
+  .net-card__handle { min-width: 0; white-space: nowrap; overflow-wrap: normal; }
+}
+/* Celular: --handle-room é o espaço do texto no cartão (metade da tela menos
+   margens, borda e parte da margem direita, onde o texto pode entrar). Fonte
+   e espaçamento acompanham esse espaço para "atomuz.audio@gmail.com", o texto
+   mais longo (22 caracteres de 0,54 em), caber: primeiro as letras se juntam
+   (de 1,2 px até 0); só depois a fonte desce abaixo de 12 px. */
+@media (max-width: 560px) {
+  .net-card { --handle-room: calc(50vw - 54px); }
+  .net-card__handle {
+    margin-right: -8px;
+    font-size: min(var(--fs-xs), calc(var(--handle-room) / 11.9));
+    letter-spacing: clamp(0px, calc((var(--handle-room) - 143px) / 22), 1.2px);
+  }
 }
 /* logo acima de 900 px a grade vira 4 colunas estreitas: letras um pouco
    mais juntas para "SOUNDCLOUD" não encostar na borda */
@@ -2656,13 +2676,17 @@ html.is-viewing { overflow: hidden; }
   .net-card__label { letter-spacing: 0.12em; }
 }
 @media (max-width: 420px) {
-  .net-card { min-height: 170px; padding: 18px; }
+  .net-card { --handle-room: calc(50vw - 50px); min-height: 170px; padding: 18px; }
+  /* o ícone do SoundCloud é 9 px mais baixo: compensa acima dele para os
+     quatro cartões terem a mesma altura e os títulos ficarem alinhados */
+  .net-card--soundcloud .net-card__icon { margin-top: 27px; }
 }
 /* telas bem estreitas (≈ 320 px): o título já está no mínimo de 12 px; com
    menos margem interna e letras mais juntas, "SOUNDCLOUD" cabe no cartão */
 @media (max-width: 340px) {
-  .net-card { padding: 12px; }
+  .net-card { --handle-room: calc(50vw - 42px); padding: 12px; }
   .net-card__label { letter-spacing: 0.08em; }
+  .net-card__handle { margin-right: -6px; }
 }
 
 /* ---------- Rodapé ---------- */
