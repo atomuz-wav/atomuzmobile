@@ -1,6 +1,7 @@
 /* =========================================================================
-   CAMPO DE CÓDIGO (fundo interativo das seções 01–04, 07 e 08; só no
-   desktop — no celular e em aparelhos fracos fica só a onda da Hero)
+   CAMPO DE CÓDIGO (fundo interativo das seções 01–04, 07 e 08 no desktop;
+   em celular e tablet, todas menos a 07 / IDENTIDADE VISUAL ficam só com a
+   onda do toque, igual à Hero)
    -------------------------------------------------------------------------
    Uma grade de caracteres (0, 1 e as letras de ATOMUZ) cobre o fundo da
    seção, quase invisível em repouso, com a palavra ATOMUZ escondida em
@@ -20,6 +21,9 @@
 
    Modo "só onda" (Hero): nada aparece em repouso nem sob o cursor; só o
    clique revela a grade, dentro da onda, que some logo depois.
+
+   Modo "sob demanda" (seções em aparelhos de toque): o canvas só é criado no
+   primeiro toque na seção, para a rolagem não pagar por grades nunca usadas.
 
    Leitura: atrás dos textos da seção a grade fica rarefeita e mais fraca
    (só ~1 em cada 7 células aparece), para não competir com o conteúdo.
@@ -57,7 +61,7 @@ function palette() {
     : { base: '#008C18', baseAlpha: 0.12, low: '#008C18', high: '#008C18', hotAlpha: 0.6, glint: 0.55 };
 }
 
-function createField(section, { rippleOnly = false } = {}) {
+function createField(section, { rippleOnly = false, onDemand = false } = {}) {
   const canvas = document.createElement('canvas');
   canvas.className = 'code-field';
   canvas.setAttribute('aria-hidden', 'true');
@@ -189,6 +193,7 @@ function createField(section, { rippleOnly = false } = {}) {
     canvas.height = 0;
     ctx = null;
     cols = rows = 0;
+    rings.length = 0;
     stop();
   }
 
@@ -364,9 +369,15 @@ function createField(section, { rippleOnly = false } = {}) {
     pointer = null;
   }
   function onDown(event) {
-    if (!interactive || !ctx) return;
+    if (!interactive) return;
     // não distrai quem está digitando no formulário
     if (event.target.closest('input, textarea, select')) return;
+    // tocar na seção prova que ela está na tela, mesmo antes do observador avisar
+    if (!ctx && onDemand) {
+      near = true;
+      build();
+    }
+    if (!ctx) return;
     const p = local(event);
     rings.push({ x: p.x, y: p.y, r: 0 });
     if (rings.length > 4) rings.shift();
@@ -383,6 +394,7 @@ function createField(section, { rippleOnly = false } = {}) {
       if (value === near) return;
       near = value;
       if (near) {
+        if (onDemand) return;
         build();
         if (!rippleOnly) start();
         // a revelação das seções desloca os textos ao entrar: remarca depois
@@ -395,7 +407,7 @@ function createField(section, { rippleOnly = false } = {}) {
       if (visible && !rippleOnly) start();
     },
     resize() {
-      if (!near) return;
+      if (!near || !ctx) return;
       const w = Math.round(section.getBoundingClientRect().width);
       const h = Math.round(section.offsetHeight);
       if (w !== width || Math.abs(h - height) > 2) build();
@@ -423,6 +435,7 @@ function createField(section, { rippleOnly = false } = {}) {
  * Cria o campo nas seções indicadas. Retorna { enable, disable } para
  * seguir a preferência de movimento do site.
  * options.rippleOnly: só a onda do clique (usado na Hero).
+ * options.onDemand: canvas criado só no primeiro toque (usar com rippleOnly).
  */
 export function createCodeField(sections, options = {}) {
   const fields = new Map();
