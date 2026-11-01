@@ -2630,7 +2630,11 @@ html.is-viewing { overflow: hidden; }
 .net-card:focus-visible { outline: 2px solid var(--c-tech); outline-offset: 4px; }
 .net-card:focus-visible,
 .net-card:active { background: var(--c-tech); color: var(--c-black); }
-.net-card:focus-visible :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
+.net-card:focus-visible :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle),
+.net-card:active :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
+/* Sob o dedo acende na hora: o toque é curto e, no tema claro, o começo do
+   fade quase não aparece sobre o fundo branco */
+.net-card:active { transition-duration: 0s; }
 @media (hover: hover) {
   .net-card:hover { background: var(--c-tech); color: var(--c-black); border-color: var(--c-neon); }
   .net-card:hover :is(.net-card__icon, .net-card__arrow, .net-card__index, .net-card__handle) { color: var(--c-black); }
