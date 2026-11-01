@@ -2179,16 +2179,22 @@ body {
 .media-item:hover .media-item__view { background: rgba(4, 8, 5, 0.55); }
 .media-item__view:focus-visible .media-item__eye,
 .media-item:hover .media-item__eye { opacity: 1; transform: scale(1); }
-/* Telas de toque não têm hover: o olho fica sempre visível (sem escurecer a
-   foto inteira, só uma sombra atrás do ícone para ler sobre fotos claras).
-   Antes ele só aparecia por acaso, quando o navegador "grudava" o hover
-   depois de um toque (Firefox), e nunca no Safari */
+/* Telas de toque não têm hover: o olho só aparece na foto sob o dedo (classe
+   .is-touched, ver media-viewer.js), sem escurecer a foto inteira, só uma
+   sombra atrás do ícone para ler sobre fotos claras. .is-touch (na seção)
+   desliga o hover e o foco, que alguns navegadores deixam "grudados" depois
+   de um toque, e com isso o olho nunca fica preso na foto */
+.is-touch .media-item__view,
+.is-touch .media-item:hover .media-item__view,
+.is-touch .media-item__view:focus-visible { background: rgba(4, 8, 5, 0); }
+.is-touch .media-item:hover .media-item__eye,
+.is-touch .media-item__view:focus-visible .media-item__eye { opacity: 0; transform: scale(0.7); }
+.is-touch .media-item.is-touched .media-item__view {
+  background: radial-gradient(circle, rgba(4, 8, 5, 0.6) 0, rgba(4, 8, 5, 0.35) 28px, rgba(4, 8, 5, 0) 64px);
+}
+.is-touch .media-item.is-touched .media-item__eye { opacity: 1; transform: scale(1); }
 @media (hover: none) {
-  .media-item__view,
-  .media-item:hover .media-item__view {
-    background: radial-gradient(circle, rgba(4, 8, 5, 0.6) 0, rgba(4, 8, 5, 0.35) 28px, rgba(4, 8, 5, 0) 64px);
-  }
-  .media-item__eye { width: 40px; opacity: 1; transform: none; }
+  .media-item__eye { width: 40px; }
 }
 
 /* Onda líquida no hover (js/modules/image-wave.js — só no computador).

@@ -4,7 +4,8 @@ import { t } from './i18n.js';
    VISUALIZADOR DE FOTOS (seção MÍDIA)
    -------------------------------------------------------------------------
    1. Cada foto ganha um botão invisível por cima: no hover (ou foco pelo
-      teclado) a foto escurece e aparece um ícone de olho no centro.
+      teclado) a foto escurece e aparece um ícone de olho no centro. Em telas
+      de toque o olho só aparece na foto sob o dedo.
    2. Clique/toque abre a foto grande num <dialog> (tela cheia escura), com
       contador, setas e botão fechar.
       - Teclado: ← → navegam, Esc fecha (o próprio <dialog> cuida do Esc e
@@ -15,6 +16,7 @@ import { t } from './i18n.js';
    fora da ordem do Tab para não duplicar a navegação por teclado.
    ========================================================================= */
 const SWIPE_MIN = 50;   // px — deslize mínimo para trocar de foto
+const EYE_LINGER = 900; // ms — tempo que o olho fica depois que o dedo sai
 
 const EYE_SVG = `
   <svg class="media-item__eye" viewBox="0 0 48 48" aria-hidden="true">
@@ -69,6 +71,43 @@ export function createMediaViewer(section) {
   function labelButtons() {
     // o alt da foto já é traduzido pelo i18n; aqui só o prefixo
     for (const { button, img } of buttons) button.setAttribute('aria-label', `${t('Ampliar foto')}: ${img.alt}`);
+  }
+
+  /* Olho sob o dedo. Usa eventos de toque (e não :hover ou :active) porque
+     cada navegador trata esses estados de um jeito no celular: o Safari quase
+     não os aplica e o Chrome/Firefox os deixam grudados depois do toque.
+     elementFromPoint acha a foto sob o dedo, já que o touchmove sempre aponta
+     para o elemento onde o toque começou */
+  let touched = null;
+  let lingerId = 0;
+
+  function touchItem(item) {
+    clearTimeout(lingerId);
+    if (item === touched) return;
+    touched?.classList.remove('is-touched');
+    item?.classList.add('is-touched');
+    touched = item;
+  }
+
+  function itemUnder(touch) {
+    return document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.media-item') ?? null;
+  }
+
+  function releaseTouch(event) {
+    if (event.touches.length) return;
+    clearTimeout(lingerId);
+    lingerId = setTimeout(touchItem, EYE_LINGER, null);
+  }
+
+  // Só no celular/tablet: computadores (mesmo com tela de toque) têm hover
+  // e mantêm o olho do mouse, sem nenhuma mudança
+  if (matchMedia('(hover: none)').matches) {
+    section.classList.add('is-touch');
+    const onTouch = (event) => touchItem(itemUnder(event.touches[0]));
+    section.addEventListener('touchstart', onTouch, { passive: true });
+    section.addEventListener('touchmove', onTouch, { passive: true });
+    section.addEventListener('touchend', releaseTouch, { passive: true });
+    section.addEventListener('touchcancel', releaseTouch, { passive: true });
   }
 
   /* ---------- 2. Visualizador ---------- */
