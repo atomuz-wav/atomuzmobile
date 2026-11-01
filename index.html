@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark">
 <head>
+  <!-- ===== BÁSICO ===== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ATOMUZ — Psytrance • Science • Technology</title>
@@ -10,12 +11,13 @@
   <!-- O site abre no tema escuro; o claro é opção do visitante (botão sol/lua) -->
   <meta name="color-scheme" content="dark">
 
+  <!-- ===== ÍCONES ===== -->
   <!-- Ícone da aba: o "A" do logo oficial (SVG nos navegadores atuais, PNG nos antigos e no iPhone) -->
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 
-  <!--
+  <!-- ===== COMPARTILHAMENTO =====
     Prévia do link ao compartilhar (WhatsApp, Instagram, Facebook, X).
     As URLs precisam ser ABSOLUTAS. Se o site ganhar domínio próprio,
     atualizar canonical, og:url, og:image e o JSON-LD no fim do <head>.
@@ -33,7 +35,8 @@
   <meta property="og:locale:alternate" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Fontes: Orbitron (logo, títulos, menu e botões), Space Grotesk (parágrafos e textos
+  <!-- ===== FONTES E ESTILOS =====
+       Fontes: Orbitron (logo, títulos, menu e botões), Space Grotesk (parágrafos e textos
        corridos) e Share Tech Mono (rótulos técnicos HUD) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,9 +44,9 @@
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  <link rel="stylesheet" href="css/style.css?v=64736959">
+  <link rel="stylesheet" href="css/style.css?v=88bff00b">
 
-  <!--
+  <!-- ===== JAVASCRIPT =====
     BIBLIOTECAS (módulos ES via importmap, versões minificadas)
     - three: partículas WebGL. GSAP: sequência de entrada e transição do ENTER.
     Ambas são carregadas sob demanda com import() dinâmico: se a CDN falhar,
@@ -66,7 +69,7 @@
         "./js/modules/atom-system.js": "./js/modules/atom-system.js?v=07651ddc",
         "./js/modules/booking-form.js": "./js/modules/booking-form.js?v=23349b3a",
         "./js/modules/circuit-system.js": "./js/modules/circuit-system.js?v=b6c32a80",
-        "./js/modules/code-field.js": "./js/modules/code-field.js?v=03598b28",
+        "./js/modules/code-field.js": "./js/modules/code-field.js?v=66953139",
         "./js/modules/depth-layers.js": "./js/modules/depth-layers.js?v=54ad5562",
         "./js/modules/enter-transition.js": "./js/modules/enter-transition.js?v=5840edcf",
         "./js/modules/hud-system.js": "./js/modules/hud-system.js?v=ed468414",
@@ -83,7 +86,7 @@
         "./js/modules/section-reveal.js": "./js/modules/section-reveal.js?v=2387fcad",
         "./js/modules/section-spectrum.js": "./js/modules/section-spectrum.js?v=f6606246",
         "./js/modules/ticket-picker.js": "./js/modules/ticket-picker.js?v=561747f8",
-        "./js/script.js": "./js/script.js?v=36a81666",
+        "./js/script.js": "./js/script.js?v=c3cb43a4",
         "./js/utils/random.js": "./js/utils/random.js?v=296157a1",
         "./js/utils/svg.js": "./js/utils/svg.js?v=6b6d900b",
         "./js/vendor/thinking-orbs.js": "./js/vendor/thinking-orbs.js?v=429ddd79"
@@ -92,7 +95,7 @@
   </script>
 
   <!-- Pré-carrega os módulos locais em paralelo (evita a "cascata" de imports) -->
-  <link rel="modulepreload" href="js/script.js?v=36a81666">
+  <link rel="modulepreload" href="js/script.js?v=c3cb43a4">
   <link rel="modulepreload" href="js/core/loop.js?v=078b6124">
   <link rel="modulepreload" href="js/core/motion.js?v=19092605">
   <link rel="modulepreload" href="js/core/interaction.js?v=8762fc9a">
@@ -112,10 +115,16 @@
   <link rel="modulepreload" href="js/modules/section-reveal.js?v=2387fcad">
   <link rel="modulepreload" href="js/modules/atom-diagram.js?v=00d131f4">
   <link rel="modulepreload" href="js/modules/booking-form.js?v=23349b3a">
-  <link rel="modulepreload" href="js/modules/code-field.js?v=03598b28">
+  <link rel="modulepreload" href="js/modules/code-field.js?v=66953139">
   <link rel="modulepreload" href="js/modules/i18n.js?v=6ef46a4d">
   <link rel="modulepreload" href="js/modules/media-viewer.js?v=9553b598">
   <link rel="modulepreload" href="js/modules/lazy-embeds.js?v=67e5f021">
+  <link rel="modulepreload" href="js/modules/ticket-picker.js?v=561747f8">
+  <link rel="modulepreload" href="js/modules/image-wave.js?v=855420e9">
+  <link rel="modulepreload" href="js/modules/section-orbs.js?v=e6a6d760">
+  <link rel="modulepreload" href="js/vendor/thinking-orbs.js?v=429ddd79">
+  <link rel="modulepreload" href="js/modules/section-spectrum.js?v=f6606246">
+  <link rel="modulepreload" href="js/modules/particle-webgl.js?v=a1584689">
 
   <!--
     Bibliotecas da CDN pré-carregadas JUNTO com os módulos locais (antes só
@@ -125,11 +134,6 @@
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm" crossorigin>
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" crossorigin>
 
-  <!--
-    Esconde a composição até a sequência de entrada começar (evita "piscar" o
-    layout completo antes da animação). Trava de segurança: se o JS não
-    assumir em 3 s, tudo aparece normalmente. Não roda com movimento reduzido.
-  -->
   <!--
     TEMA CLARO/ESCURO (script embutido de propósito)
     - Aplica o tema salvo antes da primeira pintura (evita piscar branco).
@@ -189,8 +193,10 @@
       window.addEventListener('scroll', sync, { passive: true });
       sync();
     })();
-  </script>
-  <script>
+
+    // Esconde a composição até a sequência de entrada começar (evita "piscar" o
+    // layout completo antes da animação). Trava de segurança: se o JS não
+    // assumir em 3 s, tudo aparece normalmente. Não roda com movimento reduzido.
     (function () {
       var root = document.documentElement;
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -200,7 +206,7 @@
     })();
   </script>
 
-  <script type="module" src="js/script.js?v=36a81666"></script>
+  <script type="module" src="js/script.js?v=c3cb43a4"></script>
 
   <!-- Dados estruturados (schema.org): dizem ao Google que o site é de um artista musical -->
   <script type="application/ld+json">
@@ -356,63 +362,63 @@
     </nav>
 
     <nav aria-label="Redes sociais">
-    <ul class="nav__social">
-      <li>
-        <a class="social social--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spotify"/></svg>
-        </a>
-      </li>
-      <li class="nav__divider" aria-hidden="true"></li>
-      <li>
-        <a class="social social--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
-          <svg viewBox="0 0 44 22" aria-hidden="true"><use href="#i-soundcloud"/></svg>
-        </a>
-      </li>
-      <li class="nav__divider" aria-hidden="true"></li>
-      <li>
-        <a class="social social--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>
-        </a>
-      </li>
-      <li class="nav__divider" aria-hidden="true"></li>
-      <li>
-        <!-- Chave de tema claro/escuro (lógica no script embutido no <head>).
-             Bolinha à esquerda com lua = escuro; à direita com sol = claro. -->
-        <button class="theme-switch theme-toggle" type="button" aria-pressed="false" aria-label="Tema escuro">
-          <span class="theme-switch__knob">
-            <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z"/>
+      <ul class="nav__social">
+        <li>
+          <a class="social social--spotify" href="https://open.spotify.com/intl-pt/artist/55wNhCr9PhSkrum4GwGuZi" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Spotify (abre em nova aba)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spotify"/></svg>
+          </a>
+        </li>
+        <li class="nav__divider" aria-hidden="true"></li>
+        <li>
+          <a class="social social--soundcloud" href="https://soundcloud.com/atomuz" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no SoundCloud (abre em nova aba)">
+            <svg viewBox="0 0 44 22" aria-hidden="true"><use href="#i-soundcloud"/></svg>
+          </a>
+        </li>
+        <li class="nav__divider" aria-hidden="true"></li>
+        <li>
+          <a class="social social--instagram" href="https://www.instagram.com/atomuz_/" target="_blank" rel="noopener noreferrer" aria-label="ATOMUZ no Instagram (abre em nova aba)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>
+          </a>
+        </li>
+        <li class="nav__divider" aria-hidden="true"></li>
+        <li>
+          <!-- Chave de tema claro/escuro (lógica no script embutido no <head>).
+               Bolinha à esquerda com lua = escuro; à direita com sol = claro. -->
+          <button class="theme-switch theme-toggle" type="button" aria-pressed="false" aria-label="Tema escuro">
+            <span class="theme-switch__knob">
+              <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z"/>
+              </svg>
+              <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
+                <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
+                  <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
+                </g>
+              </svg>
+            </span>
+          </button>
+        </li>
+        <li>
+          <!-- Idioma (js/modules/i18n.js): mostra a bandeira do idioma para o qual
+               o site vai mudar — Reino Unido no português, Brasil no inglês -->
+          <button class="lang-switch" type="button" data-lang-toggle aria-label="Mudar o idioma para inglês" title="English">
+            <svg class="lang-switch__flag lang-switch__flag--en" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <clipPath id="flag-uk-diag"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
+              <path d="M0 0v30h60V0z" fill="#012169"/>
+              <path d="M0 0l60 30m0-30L0 30" stroke="#FFFFFF" stroke-width="6"/>
+              <path d="M0 0l60 30m0-30L0 30" clip-path="url(#flag-uk-diag)" stroke="#C8102E" stroke-width="4"/>
+              <path d="M30 0v30M0 15h60" stroke="#FFFFFF" stroke-width="10"/>
+              <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
             </svg>
-            <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
-              <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
-                <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
-                <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
-              </g>
+            <svg class="lang-switch__flag lang-switch__flag--pt" viewBox="0 0 20 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="20" height="14" fill="#009C3B"/>
+              <path d="M10 1.6 18.4 7 10 12.4 1.6 7z" fill="#FFDF00"/>
+              <circle cx="10" cy="7" r="3.5" fill="#002776"/>
+              <path d="M6.7 6.2a7 7 0 0 1 6.6 1.6" fill="none" stroke="#FFFFFF" stroke-width="0.6"/>
             </svg>
-          </span>
-        </button>
-      </li>
-      <li>
-        <!-- Idioma (js/modules/i18n.js): mostra a bandeira do idioma para o qual
-             o site vai mudar — Reino Unido no português, Brasil no inglês -->
-        <button class="lang-switch" type="button" data-lang-toggle aria-label="Mudar o idioma para inglês" title="English">
-          <svg class="lang-switch__flag lang-switch__flag--en" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <clipPath id="flag-uk-diag"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
-            <path d="M0 0v30h60V0z" fill="#012169"/>
-            <path d="M0 0l60 30m0-30L0 30" stroke="#FFFFFF" stroke-width="6"/>
-            <path d="M0 0l60 30m0-30L0 30" clip-path="url(#flag-uk-diag)" stroke="#C8102E" stroke-width="4"/>
-            <path d="M30 0v30M0 15h60" stroke="#FFFFFF" stroke-width="10"/>
-            <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
-          </svg>
-          <svg class="lang-switch__flag lang-switch__flag--pt" viewBox="0 0 20 14" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <rect width="20" height="14" fill="#009C3B"/>
-            <path d="M10 1.6 18.4 7 10 12.4 1.6 7z" fill="#FFDF00"/>
-            <circle cx="10" cy="7" r="3.5" fill="#002776"/>
-            <path d="M6.7 6.2a7 7 0 0 1 6.6 1.6" fill="none" stroke="#FFFFFF" stroke-width="0.6"/>
-          </svg>
-        </button>
-      </li>
-    </ul>
+          </button>
+        </li>
+      </ul>
     </nav>
   </header>
 
@@ -429,7 +435,6 @@
 
     <!-- Moldura de composição: tudo dentro usa a unidade de design --u (1 px da referência) -->
     <div class="hero__frame">
-
 
       <!-- ===== CENTRO (Atomic Identity System) =====
            O palco é uma PILHA DE SVGs com o mesmo viewBox (faixa y 520 → 1420 da
@@ -462,11 +467,6 @@
               <!-- Brilho interno das bordas das letras (versão com chuva de caracteres) -->
               <filter id="f-logo-inner" filterUnits="userSpaceOnUse" x="0" y="700" width="2048" height="620">
                 <feGaussianBlur stdDeviation="4"/>
-              </filter>
-              <!-- Brilho de região pequena (caixa do próprio elemento) para peças animadas -->
-              <filter id="f-fx-glow" x="-80%" y="-40%" width="260%" height="180%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
 
               <radialGradient id="g-haze" cx="1024" cy="1010" r="1" gradientUnits="userSpaceOnUse"
@@ -1634,7 +1634,6 @@
       <a class="site-footer__top" href="#inicio">VOLTAR AO TOPO <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
-
 
 </body>
 </html>

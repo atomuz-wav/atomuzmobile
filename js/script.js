@@ -66,11 +66,12 @@ function debounce(fn, wait) {
 const isMobileWidth = window.matchMedia('(max-width: 768px)').matches;
 const cores = navigator.hardwareConcurrency || 8;
 const isLowPower = isMobileWidth || cores <= 4;
-const skipCodeField = isMobileWidth || cores <= 2;
-/* Celular ou tablet. A largura com toque cobre aparelhos (alguns Samsung) que
-   se anunciam com hover; notebook com tela de toque segue como computador. */
+/* Celular ou tablet: fica só a onda da Hero. A largura com toque cobre aparelhos
+   (alguns Samsung) que se anunciam com hover; notebook com tela de toque segue
+   como computador. */
 const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches
   || (isMobileWidth && navigator.maxTouchPoints > 0);
+const skipCodeField = isMobileWidth || isTouchDevice || cores <= 2;
 
 /* ---------- Densidade de partículas conforme o dispositivo ---------- */
 function particleDensity() {
@@ -215,18 +216,10 @@ const navSpectrum = createSectionSpectrum(document.querySelector('.nav'), { fps:
 // No celular era o efeito mais caro (~40 % do JS das animações nos primeiros
 // segundos). Lista vazia = sem grade: createCodeField devolve um objeto com
 // enable/disable que não fazem nada.
-// Em celular e tablet é só a onda ao tocar, como na Hero (sem grade em repouso,
-// que era o que pesava), e também na MÍDIA; a seção 07 tem efeito próprio.
-const codeField = isTouchDevice
-  ? createCodeField(
-    ['#project', '#music', '#release', '#connect', '#live', '#media', '#booking']
-      .map((id) => document.querySelector(id)),
-    { rippleOnly: true, onDemand: true },
-  )
-  : createCodeField(
-    skipCodeField ? [] : ['#music', '#release', '#live', '#project', '#booking', '#connect']
-      .map((id) => document.querySelector(id)),
-  );
+const codeField = createCodeField(
+  skipCodeField ? [] : ['#music', '#release', '#live', '#project', '#booking', '#connect']
+    .map((id) => document.querySelector(id)),
+);
 // Na Hero, só a onda de caracteres ao clicar (sem grade em repouso)
 const heroWave = createCodeField([hero], { rippleOnly: true });
 // Idioma antes do formulário (ele lê os textos no idioma atual)
